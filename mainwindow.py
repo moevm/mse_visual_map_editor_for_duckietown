@@ -14,7 +14,7 @@ class ExampleApp(QtWidgets.QMainWindow):
         # self.setupUi(self)
         hwidget = QtWidgets.QWidget(self)
         layout = QtWidgets.QHBoxLayout(hwidget)
-        viewer = mapviewer.MapViewer(hwidget)
+        viewer = mapviewer.MapViewer()
         viewer.setTiles(self.tiles)
         viewer.setMinimumSize(400, 400)
         label = QtWidgets.QLabel("тут панель плитки", hwidget)
