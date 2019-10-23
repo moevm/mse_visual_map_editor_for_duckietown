@@ -1,6 +1,7 @@
 class DuckietownMap:
     tiles = [[]]
     items = []
+    gridSize = 64
 
     def addtile(self, posX, posY, tile):
         # TODO insertion only
