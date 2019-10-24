@@ -4,6 +4,7 @@ import map
 from main_design import *
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QMessageBox, QDesktopWidget
+from IOManager import open_map
 
 
 class duck_window(QtWidgets.QMainWindow):
@@ -52,27 +53,37 @@ class duck_window(QtWidgets.QMainWindow):
         self.move(qr.topLeft())
 
     def open_map_triggered(self):
+        #TODO Действия по открытию карты
         print("кнопка открыть файл нажата")
+        open_map(self)
+
 
     def save_map_triggered(self):
+        #TODO Сохранение карты
         print("кнопка сохранить файл нажата")
 
     def save_map_as_triggered(self):
+        #TODO Сохранение карт с новым именем
         print("кнопка сохранить файл как нажата")
 
     def export_png_triggered(self):
+        #TODO Экспорт в png
         pass
 
     def calc_param_triggered(self):
+        #TODO Подсчёт характеристик карт
         pass
 
     def calc_materials_triggered(self):
+        #TODO Расчёт требуемых материалов
         pass
 
     def help_info_triggered(self):
+        #TODO Вывод справки по работе с программой
         pass
 
     def about_author_triggered(self):
+        #TODO Информация о великих создателях
         pass
 
     def exit_triggered(self):

@@ -1,8 +1,4 @@
 import re
-import sys
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QFileDialog
-from mainwindow import ExampleApp
 
 
 def get_tiles(name):
@@ -90,13 +86,5 @@ def get_tile_size(name):
     f.close()
     return float(map_line[1])
 
-if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
-    window = ExampleApp()
-    input_map = QFileDialog.getOpenFileName(window, 'Open file', '.')[0]
-    tiles_array = get_tiles(input_map)
-    objects_array = get_objects(input_map)
-    tile_size = get_tile_size(input_map)
-    print(tiles_array)
-    print(objects_array)
-    print(tile_size)
+
+
