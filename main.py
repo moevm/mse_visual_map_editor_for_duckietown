@@ -1,11 +1,11 @@
 import sys
 from PyQt5 import QtWidgets
-from mainwindow import ExampleApp
+from mainwindow import duck_window
 
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
-    window = ExampleApp()
+    window = duck_window()
     window.show()
     app.exec_()
 
