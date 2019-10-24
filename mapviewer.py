@@ -69,7 +69,7 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
             self.scene().update()
 
     def drawBackground(self, painter: QtGui.QPainter, rect: QtCore.QRectF):
-        painter.fillRect(-700, -700, 1400, 1400, QtGui.QColor('white'))
+        #painter.fillRect(-750, -750, 1450, 1450, QtGui.QColor('darkGray'))
         globalTransform = QtGui.QTransform()
         globalTransform.translate(self.offsetX, self.offsetY)
         painter.setTransform(globalTransform, False)
