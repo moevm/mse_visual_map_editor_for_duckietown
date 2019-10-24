@@ -1,6 +1,8 @@
 import re
-
-import easygui
+import sys
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QFileDialog
+from mainwindow import ExampleApp
 
 
 def get_tiles(name):
@@ -13,11 +15,29 @@ def get_tiles(name):
             break
 
     map_line = f.readline()
-
     while map_line[0] == '-':
         map_line = re.sub(r"[ \t\[\]\-\n]", "", map_line)
         tiles = map_line.split(',')
-        tiles_array.append(tiles)
+
+        tile_string = []
+        for tile in tiles:
+            tile_object = {}
+            if '/' in tile != -1:
+                kind, rotate = tile.split('/')
+                tile_object['kind'] = kind
+                if rotate == 'N':
+                    tile_object['rotate'] = 0
+                elif rotate == 'E':
+                    tile_object['rotate'] = 90
+                elif rotate == 'S':
+                    tile_object['rotate'] = 180
+                elif rotate == 'W':
+                    tile_object['rotate'] = 270
+            else:
+                tile_object['kind'] = tile
+                tile_object['rotate'] = 0
+            tile_string.append(tile_object)
+        tiles_array.append(tile_string)
         map_line = f.readline()
 
     f.close()
@@ -35,6 +55,7 @@ def get_objects(name):
         map_line = f.readline()
 
     if not map_line:
+        f.close()
         return None
 
     while map_line[0] != 't':
@@ -69,11 +90,13 @@ def get_tile_size(name):
     f.close()
     return float(map_line[1])
 
-
-input_map = easygui.fileopenbox(filetypes=["*.yaml"])
-tiles_array = get_tiles(input_map)
-objects_array = get_objects(input_map)
-tile_size = get_tile_size(input_map)
-print(tiles_array)
-print(objects_array)
-print(tile_size)
+if __name__ == '__main__':
+    app = QtWidgets.QApplication(sys.argv)
+    window = ExampleApp()
+    input_map = QFileDialog.getOpenFileName(window, 'Open file', '.')[0]
+    tiles_array = get_tiles(input_map)
+    objects_array = get_objects(input_map)
+    tile_size = get_tile_size(input_map)
+    print(tiles_array)
+    print(objects_array)
+    print(tile_size)
