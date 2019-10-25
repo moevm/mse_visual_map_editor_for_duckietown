@@ -3,7 +3,11 @@ import re
 
 def get_tiles(name):
     tiles_array = []
-    f = open(name, 'r')
+    try:
+        f = open(name, 'r')
+    except IOError:
+        print("Could not open file!")
+        return None
 
     while True:
         map_line = f.readline()
@@ -42,7 +46,11 @@ def get_tiles(name):
 
 def get_objects(name):
     objects_array = []
-    f = open(name, 'r')
+    try:
+        f = open(name, 'r')
+    except IOError:
+        print("Could not open file!")
+        return None
 
     map_line = f.readline()
     while map_line:
@@ -75,7 +83,11 @@ def get_objects(name):
 
 
 def get_tile_size(name):
-    f = open(name, 'r')
+    try:
+        f = open(name, 'r')
+    except IOError:
+        print("Could not open file!")
+        return None
 
     while True:
         map_line = f.readline()
@@ -85,6 +97,3 @@ def get_tile_size(name):
 
     f.close()
     return float(map_line[1])
-
-
-

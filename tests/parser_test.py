@@ -21,5 +21,9 @@ class TestMapParser(unittest.TestCase):
       tile_size = get_tile_size('../maps/small_loop.yaml')
       self.assertEqual(tile_size, 0.585)
 
+  def test_empty_file(self):
+      tile_size = get_tile_size('urrr.yaml')
+      self.assertEqual(tile_size, None)
+
 if __name__ == '__main__':
     unittest.main()
