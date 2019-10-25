@@ -9,6 +9,7 @@ from IOManager import open_map
 
 class duck_window(QtWidgets.QMainWindow):
     tiles = None
+    mapviewer = None
 
     def __init__(self):
         super().__init__()
@@ -17,6 +18,7 @@ class duck_window(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         viewer = mapviewer.MapViewer()
         viewer.setTiles(self.tiles)
+        self.mapviewer = viewer
         viewer.setMinimumSize(540, 540)
         self.ui.horizontalLayout.addWidget(viewer)
         viewer.repaint()
@@ -53,37 +55,37 @@ class duck_window(QtWidgets.QMainWindow):
         self.move(qr.topLeft())
 
     def open_map_triggered(self):
-        #TODO Действия по открытию карты
+        # TODO Действия по открытию карты
         print("кнопка открыть файл нажата")
         open_map(self)
-
+        self.mapviewer.scene().update()
 
     def save_map_triggered(self):
-        #TODO Сохранение карты
+        # TODO Сохранение карты
         print("кнопка сохранить файл нажата")
 
     def save_map_as_triggered(self):
-        #TODO Сохранение карт с новым именем
+        # TODO Сохранение карт с новым именем
         print("кнопка сохранить файл как нажата")
 
     def export_png_triggered(self):
-        #TODO Экспорт в png
+        # TODO Экспорт в png
         pass
 
     def calc_param_triggered(self):
-        #TODO Подсчёт характеристик карт
+        # TODO Подсчёт характеристик карт
         pass
 
     def calc_materials_triggered(self):
-        #TODO Расчёт требуемых материалов
+        # TODO Расчёт требуемых материалов
         pass
 
     def help_info_triggered(self):
-        #TODO Вывод справки по работе с программой
+        # TODO Вывод справки по работе с программой
         pass
 
     def about_author_triggered(self):
-        #TODO Информация о великих создателях
+        # TODO Информация о великих создателях
         pass
 
     def exit_triggered(self):

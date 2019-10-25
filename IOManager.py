@@ -5,11 +5,11 @@ from PyQt5.QtWidgets import QFileDialog
 from map_parser import *
 
 
-def open_map(self):
-    input_map = QFileDialog.getOpenFileName(self, 'Open file', '.')[0]
-    tiles_array = get_tiles(input_map)
+def open_map(parent: QtWidgets.QWidget):
+    input_map = QFileDialog.getOpenFileName(parent, 'Open file', '.')[0]
+    parent.tiles.tiles = get_tiles(input_map)
     objects_array = get_objects(input_map)
-    tile_size = get_tile_size(input_map)
-    print(tiles_array)
+    parent.tiles.gridSize = 100*get_tile_size(input_map)
+    print(parent.tiles.tiles)
     print(objects_array)
-    print(tile_size)
+    print(parent.tiles.gridSize)
