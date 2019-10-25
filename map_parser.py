@@ -26,13 +26,13 @@ def get_tiles(name):
                 kind, rotate = tile.split('/')
                 tile_object['kind'] = kind
                 if rotate == 'N':
-                    tile_object['rotate'] = 0
-                elif rotate == 'E':
-                    tile_object['rotate'] = 90
-                elif rotate == 'S':
-                    tile_object['rotate'] = 180
-                elif rotate == 'W':
                     tile_object['rotate'] = 270
+                elif rotate == 'E':
+                    tile_object['rotate'] = 0
+                elif rotate == 'S':
+                    tile_object['rotate'] = 90
+                elif rotate == 'W':
+                    tile_object['rotate'] = 180
             else:
                 tile_object['kind'] = tile
                 tile_object['rotate'] = 0
