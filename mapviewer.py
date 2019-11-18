@@ -80,15 +80,15 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
                 painter.scale(self.sc, self.sc)
                 painter.translate(x * self.tiles.gridSize, y * self.tiles.gridSize)
                 painter.drawRect(QtCore.QRectF(0,0,self.tiles.gridSize,self.tiles.gridSize))
-                if self.tiles.tiles[y][x]['rotate'] == 90:
+                if self.tiles.tiles[y][x].rotation == 90:
                     painter.rotate(90)
                     painter.translate(0, -self.tiles.gridSize)
-                elif self.tiles.tiles[y][x]['rotate'] == 180:
+                elif self.tiles.tiles[y][x].rotation == 180:
                     painter.rotate(180)
                     painter.translate(-self.tiles.gridSize, -self.tiles.gridSize)
-                elif self.tiles.tiles[y][x]['rotate'] == 270:
+                elif self.tiles.tiles[y][x].rotation == 270:
                     painter.rotate(270)
                     painter.translate(-self.tiles.gridSize, 0)
                 painter.drawImage(QtCore.QRectF(0, 0, self.tiles.gridSize, self.tiles.gridSize),
-                                  self.tileSprites[self.tiles.tiles[y][x]['kind']])
+                                  self.tileSprites[self.tiles.tiles[y][x].kind])
                 painter.setTransform(globalTransform, False)
