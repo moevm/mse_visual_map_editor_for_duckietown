@@ -1,68 +1,4 @@
 import re
-from maptile import MapTile
-from mapobject import MapObject
-from mapclass import Map
-
-
-def map_to_yaml(map, map_name):
-    f = open(map_name + '.yaml', 'w')
-    f.write('tiles:\n')
-    for tile_string in map.tiles:
-        f.write('- [')
-        for tile in tile_string:
-            f.write(tile.kind)
-            if tile.rotation == 0:
-                if tile.kind != 'asphalt' and tile.kind != 'grass' and tile.kind != 'floor' and tile.kind != '4way':
-                    f.write('/E')
-            elif tile.rotation == 90:
-                f.write('/S')
-            elif tile.rotation == 180:
-                f.write('/W')
-            elif tile.rotation == 270:
-                f.write('/N')
-            if tile_string.index(tile) != len(tile_string) - 1:
-                f.write(' , ')
-        f.write(']\n')
-    if map.objects is not None:
-        f.write('\nobjects:')
-        for map_object in map.objects:
-            f.write('\n- ')
-            f.write('kind: ' + map_object.kind)
-            f.write('\n  pos: [' + str(map_object.position[0]) + ', ' + str(map_object.position[1]) + ']')
-            f.write('\n  rotate: ' + str(map_object.rotation))
-            f.write('\n  height: ' + str(map_object.height))
-            if map_object.optional:
-                f.write('\n  optional: true')
-            if not map_object.static:
-                f.write('\n  static: False')
-            f.write('\n')
-    f.write('\ntile_size: 0.585')
-    f.close()
-
-
-def tiles_to_objects(tiles):
-    tiles_objects_array = []
-    for tile_string in tiles:
-        tiles_object_string = []
-        for tile in tile_string:
-            tiles_object_string.append(MapTile(tile['kind'], tile['rotate']))
-        tiles_objects_array.append(tiles_object_string)
-    return tiles_objects_array
-
-
-def map_objects_to_objects(map_objects):
-    map_objects_array = []
-    if map_objects == None:
-        return None
-    for object in map_objects:
-        x, y = re.sub(r"[\[\]]", "", object['pos']).split(',')
-        position = [float(x), float(y)]
-        rotation = float(object['rotate'])
-        height = float(object['height'])
-        optional = True if object['optional'] == 'true' else False
-        static = True if object['static'] == 'True' else False
-        map_objects_array.append(MapObject(object['kind'], position, rotation, height, optional, static))
-    return map_objects_array
 
 
 def get_tiles(name):
@@ -138,8 +74,6 @@ def get_objects(name):
                 if map_line[0] == '-' or map_line[0] == 't' or map_line[0] == "\n":
                     if 'optional' not in map_object:
                         map_object['optional'] = 'false'
-                    if 'static' not in map_object:
-                        map_object['static'] = 'True'
                     objects_array.append(map_object)
                     break
         else:
