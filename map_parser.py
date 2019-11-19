@@ -1,7 +1,8 @@
 import re
 from maptile import MapTile
 from mapobject import MapObject
-from mapclass import Map
+
+rotation_val = {0: 'E', 90: 'S', 180: 'W', 270: 'N'}
 
 
 def map_to_yaml(map, map_name):
@@ -14,12 +15,8 @@ def map_to_yaml(map, map_name):
             if tile.rotation == 0:
                 if tile.kind != 'asphalt' and tile.kind != 'grass' and tile.kind != 'floor' and tile.kind != '4way':
                     f.write('/E')
-            elif tile.rotation == 90:
-                f.write('/S')
-            elif tile.rotation == 180:
-                f.write('/W')
-            elif tile.rotation == 270:
-                f.write('/N')
+            else:
+                f.write('/' + rotation_val[tile.rotation])
             if tile_string.index(tile) != len(tile_string) - 1:
                 f.write(' , ')
         f.write(']\n')
@@ -28,7 +25,7 @@ def map_to_yaml(map, map_name):
         for map_object in map.objects:
             f.write('\n- ')
             f.write('kind: ' + map_object.kind)
-            f.write('\n  pos: [' + str(map_object.position[0]) + ', ' + str(map_object.position[1]) + ']')
+            f.write('\n  pos: [' + str(map_object.position['x']) + ', ' + str(map_object.position['y']) + ']')
             f.write('\n  rotate: ' + str(map_object.rotation))
             f.write('\n  height: ' + str(map_object.height))
             if map_object.optional:
@@ -52,7 +49,7 @@ def tiles_to_objects(tiles):
 
 def map_objects_to_objects(map_objects):
     map_objects_array = []
-    if map_objects == None:
+    if not map_objects:
         return None
     for object in map_objects:
         x, y = re.sub(r"[\[\]]", "", object['pos']).split(',')
@@ -89,14 +86,9 @@ def get_tiles(name):
             if '/' in tile != -1:
                 kind, rotate = tile.split('/')
                 tile_object['kind'] = kind
-                if rotate == 'N':
-                    tile_object['rotate'] = 270
-                elif rotate == 'E':
-                    tile_object['rotate'] = 0
-                elif rotate == 'S':
-                    tile_object['rotate'] = 90
-                elif rotate == 'W':
-                    tile_object['rotate'] = 180
+                for angle, word in rotation_val.items():
+                    if word == rotate:
+                        tile_object['rotate'] = angle
             else:
                 tile_object['kind'] = tile
                 tile_object['rotate'] = 0
