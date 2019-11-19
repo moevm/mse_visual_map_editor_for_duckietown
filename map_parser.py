@@ -14,7 +14,7 @@ def map_to_yaml(map, map_name):
             f.write(tile.kind)
             if tile.rotation == 0:
                 if tile.kind != 'asphalt' and tile.kind != 'grass' and tile.kind != 'floor' and tile.kind != '4way':
-                    f.write('/E')
+                    f.write('/' + rotation_val[tile.rotation])
             else:
                 f.write('/' + rotation_val[tile.rotation])
             if tile_string.index(tile) != len(tile_string) - 1:
