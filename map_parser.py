@@ -20,9 +20,9 @@ def map_to_yaml(map, map_name):
             if tile_string.index(tile) != len(tile_string) - 1:
                 f.write(' , ')
         f.write(']\n')
-    if map.objects is not None:
+    if map.items is not None:
         f.write('\nobjects:')
-        for map_object in map.objects:
+        for map_object in map.items:
             f.write('\n- ')
             f.write('kind: ' + map_object.kind)
             f.write('\n  pos: [' + str(map_object.position['x']) + ', ' + str(map_object.position['y']) + ']')

@@ -8,7 +8,7 @@ from maptile import MapTile
 
 
 class MapViewer(QGraphicsView, QtWidgets.QWidget):
-    tiles = None
+    map = None
     tileSprites = {'empty': QtGui.QImage()}
     offsetX = 0
     offsetY = 0
@@ -39,9 +39,9 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
         self.tileSprites['floor'] = QtGui.QImage()
         self.tileSprites['floor'].load('./img/tiles/floor.png')
 
-    def setTiles(self, tiles: DuckietownMap):
+    def setMap(self, map: DuckietownMap):
         # print('tiles set')
-        self.tiles = tiles
+        self.map = map
         # print(self.tiles.tiles)
         # print(self.tiles.gridSize)
         self.scene().update()
@@ -75,20 +75,20 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
         globalTransform = QtGui.QTransform()
         globalTransform.translate(self.offsetX, self.offsetY)
         painter.setTransform(globalTransform, False)
-        for y in range(len(self.tiles.tiles)):
-            for x in range(len(self.tiles.tiles[y])):
+        for y in range(len(self.map.tiles)):
+            for x in range(len(self.map.tiles[y])):
                 painter.scale(self.sc, self.sc)
-                painter.translate(x * self.tiles.gridSize, y * self.tiles.gridSize)
-                painter.drawRect(QtCore.QRectF(0,0,self.tiles.gridSize,self.tiles.gridSize))
-                if self.tiles.tiles[y][x].rotation == 90:
+                painter.translate(x * self.map.gridSize, y * self.map.gridSize)
+                painter.drawRect(QtCore.QRectF(0,0,self.map.gridSize,self.map.gridSize))
+                if self.map.tiles[y][x].rotation == 90:
                     painter.rotate(90)
-                    painter.translate(0, -self.tiles.gridSize)
-                elif self.tiles.tiles[y][x].rotation == 180:
+                    painter.translate(0, -self.map.gridSize)
+                elif self.map.tiles[y][x].rotation == 180:
                     painter.rotate(180)
-                    painter.translate(-self.tiles.gridSize, -self.tiles.gridSize)
-                elif self.tiles.tiles[y][x].rotation == 270:
+                    painter.translate(-self.map.gridSize, -self.map.gridSize)
+                elif self.map.tiles[y][x].rotation == 270:
                     painter.rotate(270)
-                    painter.translate(-self.tiles.gridSize, 0)
-                painter.drawImage(QtCore.QRectF(0, 0, self.tiles.gridSize, self.tiles.gridSize),
-                                  self.tileSprites[self.tiles.tiles[y][x].kind])
+                    painter.translate(-self.map.gridSize, 0)
+                painter.drawImage(QtCore.QRectF(0, 0, self.map.gridSize, self.map.gridSize),
+                                  self.tileSprites[self.map.tiles[y][x].kind])
                 painter.setTransform(globalTransform, False)
