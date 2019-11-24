@@ -6,12 +6,11 @@ from map_parser import *
 
 
 
+
 def open_map(parent: QtWidgets.QWidget):
     input_map = QFileDialog.getOpenFileName(parent, 'Open file', '.', filter=('YAML file (*.yaml)'))[0]
-    parent.tiles.tiles = get_tiles(input_map)
 
-    objects_array = get_objects(input_map)
-    parent.tiles.gridSize = 100*get_tile_size(input_map)
-    print(parent.tiles.tiles)
-    print(objects_array)
-    print(parent.tiles.gridSize)
+    parent.map.tiles = tiles_to_objects(get_tiles(input_map))
+    parent.map.items = map_objects_to_objects(get_objects(input_map))
+
+    parent.map.gridSize = 100*get_tile_size(input_map)

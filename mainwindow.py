@@ -8,16 +8,16 @@ from IOManager import open_map
 
 
 class duck_window(QtWidgets.QMainWindow):
-    tiles = None
+    map = None
     mapviewer = None
 
     def __init__(self):
         super().__init__()
-        self.tiles = map.DuckietownMap()
+        self.map = map.DuckietownMap()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         viewer = mapviewer.MapViewer()
-        viewer.setTiles(self.tiles)
+        viewer.setMap(self.map)
         self.mapviewer = viewer
         viewer.setMinimumSize(540, 540)
         self.ui.horizontalLayout.addWidget(viewer)
