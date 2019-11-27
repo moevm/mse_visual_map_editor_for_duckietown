@@ -166,6 +166,7 @@
     <property name="title">
      <string>Файл</string>
     </property>
+    <addaction name="create_new"/>
     <addaction name="open_map"/>
     <addaction name="save_map"/>
     <addaction name="save_map_as"/>
@@ -188,12 +189,20 @@
     <addaction name="help_info"/>
     <addaction name="about_author"/>
    </widget>
+   <widget class="QMenu" name="menuDbl">
+    <property name="title">
+     <string>Вид</string>
+    </property>
+    <addaction name="change_blocks"/>
+    <addaction name="change_info"/>
+    <addaction name="change_map"/>
+   </widget>
    <addaction name="file"/>
+   <addaction name="menuDbl"/>
    <addaction name="maps"/>
    <addaction name="help"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QToolBar" name="toolBar">
+  <widget class="QToolBar" name="tool_bar">
    <property name="palette">
     <palette>
      <active>
@@ -265,7 +274,7 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>false</bool>
+    <bool>true</bool>
    </attribute>
   </widget>
   <widget class="QDockWidget" name="block_widget">
@@ -352,7 +361,7 @@
     <bool>false</bool>
    </property>
    <property name="features">
-    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+    <set>QDockWidget::AllDockWidgetFeatures</set>
    </property>
    <property name="allowedAreas">
     <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea|Qt::TopDockWidgetArea</set>
@@ -366,6 +375,12 @@
    <widget class="QWidget" name="dockWidgetContents"/>
   </widget>
   <widget class="QDockWidget" name="info_widget">
+   <property name="minimumSize">
+    <size>
+     <width>175</width>
+     <height>360</height>
+    </size>
+   </property>
    <property name="palette">
     <palette>
      <active>
@@ -443,7 +458,7 @@
     <bool>true</bool>
    </property>
    <property name="features">
-    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+    <set>QDockWidget::AllDockWidgetFeatures</set>
    </property>
    <property name="allowedAreas">
     <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea|Qt::TopDockWidgetArea</set>
@@ -506,6 +521,94 @@
     </layout>
    </widget>
   </widget>
+  <widget class="QDockWidget" name="map_info_widget">
+   <property name="minimumSize">
+    <size>
+     <width>175</width>
+     <height>245</height>
+    </size>
+   </property>
+   <property name="palette">
+    <palette>
+     <active>
+      <colorrole role="Base">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="Window">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </active>
+     <inactive>
+      <colorrole role="Base">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>255</red>
+         <green>255</green>
+         <blue>255</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="Window">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </inactive>
+     <disabled>
+      <colorrole role="Base">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
+        </color>
+       </brush>
+      </colorrole>
+      <colorrole role="Window">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>211</red>
+         <green>215</green>
+         <blue>207</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </disabled>
+    </palette>
+   </property>
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
+   <property name="floating">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Редактор карты</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_3"/>
+  </widget>
   <action name="open_map">
    <property name="text">
     <string>Открыть карту</string>
@@ -531,6 +634,9 @@
   <action name="export_png">
    <property name="text">
     <string>Экпортировать в png</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
   <action name="calc_param">
@@ -560,10 +666,60 @@
    <property name="text">
     <string>Сохранить карту как</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+S</string>
+   </property>
   </action>
   <action name="exit">
    <property name="text">
     <string>Выйти</string>
+   </property>
+  </action>
+  <action name="change_blocks">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Блоки</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::TextHeuristicRole</enum>
+   </property>
+  </action>
+  <action name="change_info">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Информация</string>
+   </property>
+  </action>
+  <action name="create_new">
+   <property name="text">
+    <string>Создать новую</string>
+   </property>
+   <property name="toolTip">
+    <string>Создать новую карту</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="change_map">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Редактор карт</string>
    </property>
   </action>
  </widget>
