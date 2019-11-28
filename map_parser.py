@@ -1,9 +1,38 @@
 import re
+import time
 
 from maptile import MapTile
 from mapobject import MapObject
+from PyQt5 import QtGui, QtCore
+from mapviewer import MapViewer
 
 rotation_val = {0: 'E', 90: 'S', 180: 'W', 270: 'N'}
+
+def map_to_png(map, map_name):
+    height = len(map.tiles)
+    width = len(map.tiles[0])
+    mergedImage = QtGui.QImage(width * map.gridSize, height * map.gridSize, QtGui.QImage.Format_RGB32)
+    pt = QtGui.QPainter(mergedImage)
+    transform = QtGui.QTransform()
+    transform.translate(0, 0)
+    pt.setTransform(transform, False)
+    for y in range(len(map.tiles)):
+        for x in range(len(map.tiles[y])):
+            angle = map.tiles[y][x].rotation
+            pt.translate(x * map.gridSize, y * map.gridSize)
+            pt.drawRect(QtCore.QRectF(0, 0, map.gridSize, map.gridSize))
+            pt.rotate(angle)
+            if angle == 90:
+                pt.translate(0, -map.gridSize)
+            elif angle == 180:
+                pt.translate(-map.gridSize, -map.gridSize)
+            elif angle == 270:
+                pt.translate(-map.gridSize, 0)
+            pt.drawImage(QtCore.QRectF(0, 0, map.gridSize, map.gridSize),
+                              MapViewer.tileSprites[map.tiles[y][x].kind])
+            pt.setTransform(transform, False)
+    mergedImage.save(map_name)
+
 
 
 def map_to_yaml(map, map_name):
