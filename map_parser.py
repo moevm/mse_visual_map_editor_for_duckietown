@@ -1,4 +1,5 @@
 import re
+
 from maptile import MapTile
 from mapobject import MapObject
 
@@ -6,7 +7,7 @@ rotation_val = {0: 'E', 90: 'S', 180: 'W', 270: 'N'}
 
 
 def map_to_yaml(map, map_name):
-    f = open(map_name + '.yaml', 'w')
+    f = open(map_name, 'w')
     f.write('tiles:\n')
     for tile_string in map.tiles:
         f.write('- [')

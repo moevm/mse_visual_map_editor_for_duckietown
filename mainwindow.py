@@ -4,7 +4,7 @@ import map
 from main_design import *
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QMessageBox, QDesktopWidget
-from IOManager import open_map
+from IOManager import open_map, save_map_as, save_map, export_png
 import functools
 
 
@@ -113,18 +113,18 @@ class duck_window(QtWidgets.QMainWindow):
 
     # Сохранение карты
     def save_map_triggered(self):
-        # TODO Сохранение карты
+        save_map(self)
         print("кнопка сохранить файл нажата")
 
     # Сохранение карт с новым именем
     def save_map_as_triggered(self):
-        # TODO Сохранение карт с новым именем
+        save_map_as(self)
         print("кнопка сохранить файл как нажата")
 
     # Экспорт в png
     def export_png_triggered(self):
-        # TODO Экспорт в png
-        pass
+        export_png(self)
+        print("кнопка сохранить в png")
 
     # Подсчёт характеристик карт
     def calc_param_triggered(self):
