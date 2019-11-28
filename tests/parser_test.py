@@ -71,7 +71,7 @@ class TestMapParser(unittest.TestCase):
         map.tiles = tiles_to_objects(get_tiles('../maps/regress_4way_adam.yaml'))
         map.items = map_objects_to_objects(get_objects('../maps/regress_4way_adam.yaml'))
 
-        map_to_yaml(map, '../maps/test_result')
+        map_to_yaml(map, '../maps/test_result.yaml')
 
         new_map = DuckietownMap()
         new_map.tiles = tiles_to_objects(get_tiles('../maps/test_result.yaml'))
@@ -95,7 +95,7 @@ class TestMapParser(unittest.TestCase):
         map.tiles = tiles_to_objects(get_tiles('../maps/test.yaml'))
         map.items = map_objects_to_objects(get_objects('../maps/test.yaml'))
 
-        map_to_yaml(map, '../maps/test_result')
+        map_to_yaml(map, '../maps/test_result.yaml')
 
         new_map = DuckietownMap()
         new_map.tiles = tiles_to_objects(get_tiles('../maps/test_result.yaml'))
@@ -119,7 +119,7 @@ class TestMapParser(unittest.TestCase):
         map.tiles = tiles_to_objects(get_tiles('../maps/regress_4way_drivable.yaml'))
         map.items = map_objects_to_objects(get_objects('../maps/regress_4way_drivable.yaml'))
 
-        map_to_yaml(map, '../maps/test_result')
+        map_to_yaml(map, '../maps/test_result.yaml')
 
         new_map = DuckietownMap()
         new_map.tiles = tiles_to_objects(get_tiles('../maps/test_result.yaml'))
