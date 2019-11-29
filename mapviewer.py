@@ -64,8 +64,8 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
                                          ) / self.map.gridSize)
             if self.tileSelection[0] < 0:
                 self.tileSelection[0] = -1
-            if self.tileSelection[0] > len(self.map.tiles[0]):
-                self.tileSelection[0] = len(self.map.tiles[0])
+            if self.tileSelection[0] > (len(self.map.tiles[0]) if len(self.map.tiles) > 0 else 0):
+                self.tileSelection[0] = (len(self.map.tiles[0]) if len(self.map.tiles) > 0 else 0)
             self.tileSelection[1] = int(((min(self.mouseStartY, self.mouseCurY) - self.offsetY) / self.sc
                                          ) / self.map.gridSize)
             if self.tileSelection[1] < 0:
@@ -76,16 +76,17 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
                 ((max(self.mouseStartX, self.mouseCurX) - self.offsetX) / self.sc) / self.map.gridSize)
             if self.tileSelection[2] < 0:
                 self.tileSelection[2] = -1
-            if self.tileSelection[2] > len(self.map.tiles[0]):
-                self.tileSelection[2] = len(self.map.tiles[0])
+            if self.tileSelection[2] > (len(self.map.tiles[0]) if len(self.map.tiles) > 0 else 0):
+                self.tileSelection[2] = (len(self.map.tiles[0]) if len(self.map.tiles) > 0 else 0)
             self.tileSelection[3] = int(
                 ((max(self.mouseStartY, self.mouseCurY) - self.offsetY) / self.sc) / self.map.gridSize)
             if self.tileSelection[3] < 0:
                 self.tileSelection[3] = -1
             if self.tileSelection[3] > len(self.map.tiles):
                 self.tileSelection[3] = len(self.map.tiles)
+            print(self.tileSelection)
             if self.tileSelection != oldSelection:
-                print(self.tileSelection)
+
                 self.selectionChanged.emit()
         else:
             self.rmbPressed = False
