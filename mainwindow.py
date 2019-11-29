@@ -4,7 +4,7 @@ import map
 from main_design import *
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QMessageBox, QDesktopWidget
-from IOManager import open_map, save_map_as, save_map, export_png
+from IOManager import open_map, save_map_as, save_map, export_png, new_map
 import functools
 
 
@@ -100,9 +100,10 @@ class duck_window(QtWidgets.QMainWindow):
 
     # Действие по созданию новой карты
     def create_map_triggered(self):
-        # TODO Действие по созданию новой карты
+        new_map(self)
+        print(self.map.tiles, self.map.items)
+        self.mapviewer.scene().update()
         print("создание новой карты")
-        pass
 
     # Действия по открытию карты
     def open_map_triggered(self):
