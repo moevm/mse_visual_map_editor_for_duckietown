@@ -31,3 +31,13 @@ def export_png(parent: QtWidgets.QWidget):
         output_map = QFileDialog.getSaveFileName(parent, 'Save file', '.', filter=('PNG file (*.png)'))[0]
         if output_map:
             map_to_png(parent.map, output_map)
+
+
+def new_map(parent: QtWidgets.QWidget):
+    new_map = QFileDialog.getSaveFileName(parent, 'Save file', '.', filter=('YAML file (*.yaml)'))[0]
+    if new_map:
+        parent.map.name = new_map
+        parent.map.tiles = []
+        parent.map.items = []
+        parent.map.gridSize = 58.5
+        map_to_yaml(parent.map, new_map)
