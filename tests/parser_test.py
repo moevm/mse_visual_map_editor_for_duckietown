@@ -130,6 +130,30 @@ class TestMapParser(unittest.TestCase):
             self.assertEqual(tile.rotation, new_tile.rotation)
         self.assertEqual(map.items, new_map.items)
 
+    def test_map_to_yaml_without_yaml(self):
+        map = DuckietownMap()
+        map.tiles = tiles_to_objects(get_tiles('../maps/regress_4way_adam.yaml'))
+        map.items = map_objects_to_objects(get_objects('../maps/regress_4way_adam.yaml'))
+
+        map_to_yaml(map, '../maps/test_result')
+
+        new_map = DuckietownMap()
+        new_map.tiles = tiles_to_objects(get_tiles('../maps/test_result.yaml'))
+        new_map.items = map_objects_to_objects(get_objects('../maps/test_result.yaml'))
+
+
+        for tile, new_tile in zip(np.array(map.tiles).flat, np.array(new_map.tiles).flat):
+            self.assertEqual(tile.kind, new_tile.kind)
+            self.assertEqual(tile.rotation, new_tile.rotation)
+
+        for obj, new_obj in zip(map.items, new_map.items):
+            self.assertEqual(obj.kind, new_obj.kind)
+            self.assertEqual(obj.position, new_obj.position)
+            self.assertEqual(obj.rotation, new_obj.rotation)
+            self.assertEqual(obj.height, new_obj.height)
+            self.assertEqual(obj.optional, new_obj.optional)
+            self.assertEqual(obj.static, new_obj.static)
+
 
 if __name__ == '__main__':
     unittest.main()

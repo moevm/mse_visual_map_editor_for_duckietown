@@ -1,5 +1,4 @@
 import re
-import time
 
 from maptile import MapTile
 from mapobject import MapObject
@@ -9,6 +8,8 @@ from mapviewer import MapViewer
 rotation_val = {0: 'E', 90: 'S', 180: 'W', 270: 'N'}
 
 def map_to_png(map, map_name):
+    if '.png' not in map_name:
+        map_name = map_name + '.png'
     height = len(map.tiles)
     width = len(map.tiles[0])
     mergedImage = QtGui.QImage(width * map.gridSize, height * map.gridSize, QtGui.QImage.Format_RGB32)
@@ -32,10 +33,13 @@ def map_to_png(map, map_name):
                               MapViewer.tileSprites[map.tiles[y][x].kind])
             pt.setTransform(transform, False)
     mergedImage.save(map_name)
+    pt.end()
 
 
 
 def map_to_yaml(map, map_name):
+    if '.yaml' not in map_name:
+        map_name = map_name + '.yaml'
     f = open(map_name, 'w')
     f.write('tiles:\n')
     for tile_string in map.tiles:
