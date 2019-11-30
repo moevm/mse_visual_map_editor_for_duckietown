@@ -4,17 +4,23 @@ from map import DuckietownMap
 from maptile import MapTile
 
 
-# Пока на карте только один элемент - для тестирования функций виевера
-
-
 class MapViewer(QGraphicsView, QtWidgets.QWidget):
-    tiles = None
+    map = None
     tileSprites = {'empty': QtGui.QImage()}
     offsetX = 0
     offsetY = 0
     sc = 1
     rmbPressed = False
+    lmbPressed = False
     rmbPrevPos = [0, 0]
+    mouseStartX, mouseStartY = 0, 0
+    mouseCurX, mouseCurY = 0, 0
+    # Хранит верхнюю левую и нижнюю правую координаты выделения мышью (в тч нулевого размера) в виде индексов массива
+    # Если выделение выходит за пределы массива слева, содержит -1
+    # Если за пределы справа - ширину/высоту
+    tileSelection = [0] * 4
+    selectionChanged = QtCore.pyqtSignal()
+    lmbClicked = QtCore.pyqtSignal(int, int)  # координаты клика в виде индекса нажатой плитки
 
     def __init__(self):
         QGraphicsView.__init__(self)
@@ -29,7 +35,7 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
         self.tileSprites['3way_left'] = QtGui.QImage()
         self.tileSprites['3way_left'].load('./img/tiles/three_way_left.png')
         self.tileSprites['3way_right'] = QtGui.QImage()
-        self.tileSprites['3way_right'].load('./img/tiles/three_way_left.png')
+        self.tileSprites['3way_right'].load('./img/tiles/three_way_right.png')
         self.tileSprites['4way'] = QtGui.QImage()
         self.tileSprites['4way'].load('./img/tiles/four_way_center.png')
         self.tileSprites['asphalt'] = QtGui.QImage()
@@ -39,11 +45,9 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
         self.tileSprites['floor'] = QtGui.QImage()
         self.tileSprites['floor'].load('./img/tiles/floor.png')
 
-    def setTiles(self, tiles: DuckietownMap):
-        # print('tiles set')
-        self.tiles = tiles
-        # print(self.tiles.tiles)
-        # print(self.tiles.gridSize)
+    def setMap(self, tiles: DuckietownMap):
+        self.map = tiles
+        self.tileSelection = [0] * 4
         self.scene().update()
 
     def wheelEvent(self, event: QtGui.QWheelEvent) -> None:
@@ -54,18 +58,64 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
         self.scene().update()
 
     def mouseReleaseEvent(self, event: QtGui.QMouseEvent) -> None:
-        self.rmbPressed = False
+        if event.button() == QtCore.Qt.LeftButton:
+            self.lmbPressed = False
+            if int((self.mouseStartX - self.offsetX) / self.sc * self.map.gridSize) == int(
+                    (self.mouseCurX - self.offsetX) / self.sc * self.map.gridSize) and int(
+                (self.mouseStartY - self.offsetY) / self.sc * self.map.gridSize) == int(
+                (self.mouseCurY - self.offsetY) / self.sc * self.map.gridSize):
+                self.lmbClicked.emit(int((self.mouseStartX - self.offsetX) / self.sc * self.map.gridSize),
+                                     int((self.mouseStartY - self.offsetY) / self.sc * self.map.gridSize))
+            oldSelection = self.tileSelection.copy()
+            self.tileSelection[0] = int(((min(self.mouseStartX, self.mouseCurX) - self.offsetX) / self.sc
+                                         ) / self.map.gridSize)
+            if self.tileSelection[0] < 0:
+                self.tileSelection[0] = -1
+            if self.tileSelection[0] > (len(self.map.tiles[0]) if len(self.map.tiles) > 0 else 0):
+                self.tileSelection[0] = (len(self.map.tiles[0]) if len(self.map.tiles) > 0 else 0)
+            self.tileSelection[1] = int(((min(self.mouseStartY, self.mouseCurY) - self.offsetY) / self.sc
+                                         ) / self.map.gridSize)
+            if self.tileSelection[1] < 0:
+                self.tileSelection[1] = -1
+            if self.tileSelection[1] > len(self.map.tiles):
+                self.tileSelection[1] = len(self.map.tiles)
+            self.tileSelection[2] = int(
+                ((max(self.mouseStartX, self.mouseCurX) - self.offsetX) / self.sc) / self.map.gridSize)
+            if self.tileSelection[2] < 0:
+                self.tileSelection[2] = -1
+            if self.tileSelection[2] > (len(self.map.tiles[0]) if len(self.map.tiles) > 0 else 0):
+                self.tileSelection[2] = (len(self.map.tiles[0]) if len(self.map.tiles) > 0 else 0)
+            self.tileSelection[3] = int(
+                ((max(self.mouseStartY, self.mouseCurY) - self.offsetY) / self.sc) / self.map.gridSize)
+            if self.tileSelection[3] < 0:
+                self.tileSelection[3] = -1
+            if self.tileSelection[3] > len(self.map.tiles):
+                self.tileSelection[3] = len(self.map.tiles)
+            print(self.tileSelection)
+            if self.tileSelection != oldSelection:
+                self.selectionChanged.emit()
+        else:
+            self.rmbPressed = False
+        self.scene().update()
 
     def mousePressEvent(self, event: QtGui.QMouseEvent) -> None:
         if event.buttons() == QtCore.Qt.RightButton:
             self.rmbPrevPos = [event.x(), event.y()]
             self.rmbPressed = True
+        elif event.buttons() == QtCore.Qt.LeftButton:
+            self.lmbPressed = True
+            self.mouseCurX = self.mouseStartX = event.x()
+            self.mouseCurY = self.mouseStartY = event.y()
 
     def mouseMoveEvent(self, event: QtGui.QMouseEvent) -> None:
         if self.rmbPressed:
             self.offsetX += event.x() - self.rmbPrevPos[0]
             self.offsetY += event.y() - self.rmbPrevPos[1]
             self.rmbPrevPos = [event.x(), event.y()]
+            self.scene().update()
+        elif self.lmbPressed:
+            self.mouseCurX = event.x()
+            self.mouseCurY = event.y()
             self.scene().update()
 
     def drawBackground(self, painter: QtGui.QPainter, rect: QtCore.QRectF):
@@ -75,20 +125,31 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
         globalTransform = QtGui.QTransform()
         globalTransform.translate(self.offsetX, self.offsetY)
         painter.setTransform(globalTransform, False)
-        for y in range(len(self.tiles.tiles)):
-            for x in range(len(self.tiles.tiles[y])):
+        for y in range(len(self.map.tiles)):
+            for x in range(len(self.map.tiles[y])):
                 painter.scale(self.sc, self.sc)
-                painter.translate(x * self.tiles.gridSize, y * self.tiles.gridSize)
-                painter.drawRect(QtCore.QRectF(0,0,self.tiles.gridSize,self.tiles.gridSize))
-                if self.tiles.tiles[y][x]['rotate'] == 90:
+                painter.translate(x * self.map.gridSize, y * self.map.gridSize)
+                if self.map.tiles[y][x].rotation == 90:
                     painter.rotate(90)
-                    painter.translate(0, -self.tiles.gridSize)
-                elif self.tiles.tiles[y][x]['rotate'] == 180:
+                    painter.translate(0, -self.map.gridSize)
+                elif self.map.tiles[y][x].rotation == 180:
                     painter.rotate(180)
-                    painter.translate(-self.tiles.gridSize, -self.tiles.gridSize)
-                elif self.tiles.tiles[y][x]['rotate'] == 270:
+                    painter.translate(-self.map.gridSize, -self.map.gridSize)
+                elif self.map.tiles[y][x].rotation == 270:
                     painter.rotate(270)
-                    painter.translate(-self.tiles.gridSize, 0)
-                painter.drawImage(QtCore.QRectF(0, 0, self.tiles.gridSize, self.tiles.gridSize),
-                                  self.tileSprites[self.tiles.tiles[y][x]['kind']])
+                    painter.translate(-self.map.gridSize, 0)
+                painter.drawImage(QtCore.QRectF(0, 0, self.map.gridSize, self.map.gridSize),
+                                  self.tileSprites[self.map.tiles[y][x].kind])
+                if self.tileSelection[0] <= x < self.tileSelection[2] and self.tileSelection[1] <= y < \
+                        self.tileSelection[3]:
+                    painter.setPen(QtGui.QColor('green'))
+                    painter.drawRect(QtCore.QRectF(1, 1, self.map.gridSize - 1, self.map.gridSize - 1))
+                else:
+                    painter.setPen(QtGui.QColor('white'))
+                    painter.drawRect(QtCore.QRectF(0, 0, self.map.gridSize, self.map.gridSize))
                 painter.setTransform(globalTransform, False)
+        painter.resetTransform()
+        painter.setPen(QtGui.QColor('black'))
+        if self.lmbPressed:
+            painter.drawRect(0 + self.mouseStartX, 0 + self.mouseStartY
+                             , self.mouseCurX - self.mouseStartX, self.mouseCurY - self.mouseStartY)

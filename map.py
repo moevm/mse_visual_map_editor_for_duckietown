@@ -1,14 +1,11 @@
 class DuckietownMap:
-    tiles = [[]]
+    name = None
+    tiles = []
     items = []
     gridSize = 64
 
     def addtile(self, posX, posY, tile):
         # TODO insertion only
-        return
-
-    def removetile(self, tile):
-        # TODO change tile to empty & delete if last/first
         return
 
     def gettile(self, posX, posY):
