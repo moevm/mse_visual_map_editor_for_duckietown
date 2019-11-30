@@ -7,6 +7,7 @@ from mapviewer import MapViewer
 
 rotation_val = {0: 'E', 90: 'S', 180: 'W', 270: 'N'}
 
+
 def map_to_png(map, map_name):
     if '.png' not in map_name:
         map_name = map_name + '.png'
@@ -32,7 +33,8 @@ def map_to_png(map, map_name):
             pt.drawImage(QtCore.QRectF(0, 0, map.gridSize, map.gridSize),
                               MapViewer.tileSprites[map.tiles[y][x].kind])
             pt.setTransform(transform, False)
-    mergedImage.save(map_name)
+
+    mergedImage.save(map_name, "png")
     pt.end()
 
 

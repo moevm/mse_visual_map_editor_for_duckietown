@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>950</width>
+    <width>1010</width>
     <height>650</height>
    </rect>
   </property>
@@ -158,7 +158,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>950</width>
+     <width>1010</width>
      <height>22</height>
     </rect>
    </property>
@@ -274,14 +274,20 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>true</bool>
+    <bool>false</bool>
    </attribute>
   </widget>
   <widget class="QDockWidget" name="block_widget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="minimumSize">
     <size>
-     <width>100</width>
-     <height>58</height>
+     <width>150</width>
+     <height>107</height>
     </size>
    </property>
    <property name="palette">
@@ -372,9 +378,34 @@
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents"/>
+   <widget class="QWidget" name="dockWidgetContents">
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QListWidget" name="block_list">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QDockWidget" name="info_widget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="minimumSize">
     <size>
      <width>175</width>
@@ -522,6 +553,12 @@
    </widget>
   </widget>
   <widget class="QDockWidget" name="map_info_widget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="minimumSize">
     <size>
      <width>175</width>
@@ -640,16 +677,25 @@
    </property>
   </action>
   <action name="calc_param">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Расчитать характеристики</string>
    </property>
   </action>
   <action name="calc_materials">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Рассчитать материалы</string>
    </property>
   </action>
   <action name="help_info">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Справка о программе</string>
    </property>
@@ -658,6 +704,9 @@
    </property>
   </action>
   <action name="about_author">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Об авторах</string>
    </property>
