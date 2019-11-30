@@ -20,6 +20,7 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
     # Если за пределы справа - ширину/высоту
     tileSelection = [0] * 4
     selectionChanged = QtCore.pyqtSignal()
+    lmbClicked = QtCore.pyqtSignal(int, int)  # координаты клика в виде индекса нажатой плитки
 
     def __init__(self):
         QGraphicsView.__init__(self)
@@ -34,7 +35,7 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
         self.tileSprites['3way_left'] = QtGui.QImage()
         self.tileSprites['3way_left'].load('./img/tiles/three_way_left.png')
         self.tileSprites['3way_right'] = QtGui.QImage()
-        self.tileSprites['3way_right'].load('./img/tiles/three_way_left.png')
+        self.tileSprites['3way_right'].load('./img/tiles/three_way_right.png')
         self.tileSprites['4way'] = QtGui.QImage()
         self.tileSprites['4way'].load('./img/tiles/four_way_center.png')
         self.tileSprites['asphalt'] = QtGui.QImage()
@@ -59,6 +60,12 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
     def mouseReleaseEvent(self, event: QtGui.QMouseEvent) -> None:
         if event.button() == QtCore.Qt.LeftButton:
             self.lmbPressed = False
+            if int((self.mouseStartX - self.offsetX) / self.sc * self.map.gridSize) == int(
+                    (self.mouseCurX - self.offsetX) / self.sc * self.map.gridSize) and int(
+                (self.mouseStartY - self.offsetY) / self.sc * self.map.gridSize) == int(
+                (self.mouseCurY - self.offsetY) / self.sc * self.map.gridSize):
+                self.lmbClicked.emit(int((self.mouseStartX - self.offsetX) / self.sc * self.map.gridSize),
+                                     int((self.mouseStartY - self.offsetY) / self.sc * self.map.gridSize))
             oldSelection = self.tileSelection.copy()
             self.tileSelection[0] = int(((min(self.mouseStartX, self.mouseCurX) - self.offsetX) / self.sc
                                          ) / self.map.gridSize)
@@ -86,7 +93,6 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
                 self.tileSelection[3] = len(self.map.tiles)
             print(self.tileSelection)
             if self.tileSelection != oldSelection:
-
                 self.selectionChanged.emit()
         else:
             self.rmbPressed = False
