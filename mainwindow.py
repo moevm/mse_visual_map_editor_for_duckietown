@@ -16,6 +16,7 @@ class duck_window(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.closeEvent = functools.partial(self.quit_program_event)
         self.map = map.DuckietownMap()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
@@ -92,6 +93,29 @@ class duck_window(QtWidgets.QMainWindow):
         tool_bar.addAction(a4)
         tool_bar.addAction(a5)
 
+        # обработка элементов списка
+        block_list_widget = self.ui.block_list
+        block_list_widget.itemClicked.connect(self.item_list_clicked)
+        block_list_widget.itemDoubleClicked.connect(self.item_list_double_clicked)
+
+        # Заполнение списка
+        blocks_list = [
+            ("empty", "img/tiles/empty.png"),
+            ("straight", "img/tiles/straight.png"),
+            ("curve_left", "img/tiles/curve_left.png"),
+            ("curve_right", "img/tiles/curve_right.png"),
+            ("3way_left", "img/tiles/three_way_left.png"),
+            ("3way_right", "img/tiles/three_way_left.png"),
+            ("4way", "img/tiles/four_way_center.png"),
+            ("asphalt", "img/tiles/asphalt.png"),
+            ("grass", "img/tiles/grass.png"),
+            ("floor", "img/tiles/floor.png")
+        ]
+
+        for name, icon in blocks_list:
+            widget = QtWidgets.QListWidgetItem(QtGui.QIcon(icon), name)
+            block_list_widget.addItem(widget)
+
     def center(self):
         qr = self.frameGeometry()
         cp = QDesktopWidget().availableGeometry().center()
@@ -106,25 +130,20 @@ class duck_window(QtWidgets.QMainWindow):
 
     # Действия по открытию карты
     def open_map_triggered(self):
-        # TODO Действия по открытию карты
-        print("кнопка открыть файл нажата")
         open_map(self)
         self.mapviewer.scene().update()
 
     # Сохранение карты
     def save_map_triggered(self):
         save_map(self)
-        print("кнопка сохранить файл нажата")
 
     # Сохранение карт с новым именем
     def save_map_as_triggered(self):
         save_map_as(self)
-        print("кнопка сохранить файл как нажата")
 
     # Экспорт в png
     def export_png_triggered(self):
         export_png(self)
-        print("кнопка сохранить в png")
 
     # Подсчёт характеристик карт
     def calc_param_triggered(self):
@@ -148,10 +167,12 @@ class duck_window(QtWidgets.QMainWindow):
 
     # Выход из программы
     def exit_triggered(self):
-        reply = QMessageBox.question(self, "Выход из программы", "Вы точно хотите выйти?",
-                                     QMessageBox.No | QMessageBox.Yes, QMessageBox.No)
-        if reply == QMessageBox.Yes:
-            QtCore.QCoreApplication.instance().quit()
+        ret = self.quit_MessageBox()
+        if ret == QMessageBox.Cancel:
+            return
+        if ret == QMessageBox.Save:
+            save_map(self)
+        QtCore.QCoreApplication.instance().quit()
 
     # скрытие меню о блоках
     def change_blocks_toggled(self):
@@ -194,3 +215,37 @@ class duck_window(QtWidgets.QMainWindow):
     def map_event(self, event):
         self.ui.change_map.setChecked(False)
         event.accept()
+
+    # MessageBox для выхода
+    def quit_MessageBox(self):
+        reply = QMessageBox(self)
+        reply.setIcon(QMessageBox.Question)
+        reply.setWindowTitle("Выход")
+        reply.setText("Выход из программы")
+        reply.setInformativeText("Выйти и сохранить?")
+        reply.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
+        reply.setDefaultButton(QMessageBox.Save)
+        ret = reply.exec()
+        return ret
+
+    # Событие выхода из программы
+    def quit_program_event(self, event):
+        ret = self.quit_MessageBox()
+        if ret == QMessageBox.Cancel:
+            event.ignore()
+            return
+        if ret == QMessageBox.Save:
+            save_map(self)
+        event.accept()
+
+    # обработка клика по элементу из списка списку
+    def item_list_clicked(self):
+        name = self.ui.block_list.currentItem().text()
+        # TODO Отрисовка блока на поле доп. информации по 1 клику( файл с информацией tiles.yaml)
+        print(name)
+
+    # 2й клик также перехватывается одинарным
+    def item_list_double_clicked(self):
+        name = self.ui.block_list.currentItem().text()
+        # TODO Добавление блока на карту по 2 клику
+        print(name)
