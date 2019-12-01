@@ -153,3 +153,32 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
         if self.lmbPressed:
             painter.drawRect(0 + self.mouseStartX, 0 + self.mouseStartY
                              , self.mouseCurX - self.mouseStartX, self.mouseCurY - self.mouseStartY)
+
+
+# class small_wigget(QGraphicsView, QtWidgets.QWidget):
+#     image = None
+#
+#     def __init__(self):
+#         super().__init__()
+#
+#         self.initUI()
+#         self.setFixedSize(120, 120)
+#
+#
+#     def initUI(self):
+#         QGraphicsView.__init__(self)
+#         #self.setScene(QtWidgets.QGraphicsScene())
+#         #self.setGeometry(120,120, 0, 0)
+#         self.show()
+#
+#     def paintEvent(self, event):
+#         qp = QtGui.QPainter()
+#         qp.begin(self)
+#         self.draw(qp)
+#         qp.end()
+#
+#     def draw(self, qp):
+#
+#         qp.setPen(QtGui.QColor(168, 34, 3))
+#
+#         qp.drawPoint(10, 10)
