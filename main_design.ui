@@ -373,7 +373,7 @@
     <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea|Qt::TopDockWidgetArea</set>
    </property>
    <property name="windowTitle">
-    <string>Блоки</string>
+    <string>Карты, знаки и объекты</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>1</number>

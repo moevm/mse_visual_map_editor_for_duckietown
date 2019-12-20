@@ -133,30 +133,68 @@ class duck_window(QtWidgets.QMainWindow):
 
         # Заполнение списка
         blocks_list = [
-            ("empty", "img/tiles/empty.png"),
-            ("straight", "img/tiles/straight.png"),
-            ("curve_left", "img/tiles/curve_left.png"),
-            ("curve_right", "img/tiles/curve_right.png"),
-            ("3way_left", "img/tiles/three_way_left.png"),
-            ("3way_right", "img/tiles/three_way_left.png"),
-            ("4way", "img/tiles/four_way_center.png"),
-            ("asphalt", "img/tiles/asphalt.png"),
-            ("grass", "img/tiles/grass.png"),
-            ("floor", "img/tiles/floor.png")
+            ("Пустой блок","empty","block", "img/tiles/empty.png"),
+            ("Дорога","straight","road", "img/tiles/straight.png"),
+            ("Левый поворот","curve_left","road", "img/tiles/curve_left.png"),
+            ("Правый поворот","curve_right","road", "img/tiles/curve_right.png"),
+            ("T-образный левый перекрёсток","3way_left","road", "img/tiles/three_way_left.png"),
+            ("T-образный правый перекрёсток","3way_right","road", "img/tiles/three_way_left.png"),
+            ("Перекрёсток","4way", "road","img/tiles/four_way_center.png"),
+            ("Асфальт","asphalt","block", "img/tiles/asphalt.png"),
+            ("Трава","grass", "block","img/tiles/grass.png"),
+            ("Плитка","floor", "block","img/tiles/floor.png")
         ]
 
-        for name, icon in blocks_list:
+        signs_list = [
+            ("Стоп", "stop", "img/signs/stop.png"),
+            ("Уступи дорогу", "yield", "img/signs/yield.png"),
+            ("Поворот нараво запрещён", "no-right-turn", "img/signs/no-right-turn.png"),
+            ("Поворот налево запрещён", "no-left-turn", "img/signs/no-left-turn.png"),
+            ("Кирпич", "do-not-enter", "img/signs/do-not-enter.png"),
+            ("Односторонее движении направо", "oneway-right", "img/signs/oneway-right.png"),
+            ("Односторонее движении налево", "oneway-left", "img/signs/oneway-left.png"),
+            ("Перекрёсток", "4-way-intersect", "img/signs/4-way-intersect.png"),
+            ("T-образный правый перекрёсток", "right-T-intersect", "img/signs/right-T-intersect.png"),
+            ("T-образный левый перекрёсток", "left-T-intersect", "img/signs/left-T-intersect.png"),
+            ("T-образный перекрёсток", "T-intersection", "img/signs/T-intersection.png"),
+            ("Пешеход", "pedestrian", "img/signs/pedestrian.png"),
+            ("Светофор", "t-light-ahead", "img/signs/t-light-ahead.png"),
+            ("Уточки", "duck-crossing", "img/signs/duck-crossing.png"),
+            ("Парковка", "parking", "img/signs/parking.png")
+        ]
+
+        galka = QtGui.QIcon("img/icons/galka.png")
+        separator_1 = QtWidgets.QListWidgetItem(galka, "Блоки карты")
+        separator_1.setBackground(QtGui.QColor(169, 169, 169))
+        separator_1.setData(0x0100, "separator")
+        separator_1.setData(0x0101, "block")
+        block_list_widget.addItem(separator_1)
+
+        for name, data, categ, icon in blocks_list:
             widget = QtWidgets.QListWidgetItem(QtGui.QIcon(icon), name)
+            widget.setData(0x0100, data)
+            widget.setData(0x0101, categ)
             block_list_widget.addItem(widget)
+
+
+
+
+
+        for name, data,icon in signs_list:
+            widget = QtWidgets.QListWidgetItem(QtGui.QIcon(icon), name)
+            widget.setData(0x0100, data)
+            block_list_widget.addItem(widget)
+
 
         # Настройка меню Редактор карты
         default_fill = self.ui.default_fill
         delete_fill = self.ui.delete_fill
-        for name, icon in blocks_list:
-            default_fill.addItem(QtGui.QIcon(icon), name)
-            delete_fill.addItem(QtGui.QIcon(icon), name)
-        default_fill.setCurrentText("grass")
-        delete_fill.setCurrentText("empty")
+        for name, data, categ, icon in blocks_list:
+            default_fill.addItem(QtGui.QIcon(icon), name, data)
+            delete_fill.addItem(QtGui.QIcon(icon), name, data)
+
+        default_fill.setCurrentText("Трава")
+        delete_fill.setCurrentText("Пустой блок")
 
         set_fill = self.ui.set_fill
         set_fill.clicked.connect(self.set_default_fill)
@@ -294,22 +332,27 @@ class duck_window(QtWidgets.QMainWindow):
 
     # обработка клика по элементу из списка списку
     def item_list_clicked(self):
-        name = self.ui.block_list.currentItem().text()
         # TODO Отрисовка блока на поле доп. информации по 1 клику( файл с информацией tiles.yaml)
+        name = self.ui.block_list.currentItem().data(0x0100)
 
+        if name == "separator":
+            for elem in self.ui.block_list.item(0x0100):
+                print(elem)
 
-        print(name)
+        nam1 = self.ui.block_list.currentItem().data(0x0101)
+        print(name, nam1)
 
     # 2й клик также перехватывается одинарным
     def item_list_double_clicked(self):
-        name = self.ui.block_list.currentItem().text()
         # TODO Добавление блока на карту по 2 клику
+        name = self.ui.block_list.currentItem().data(0x0100)
+
         print(name)
 
     # Установка значений по умолчанию
     def set_default_fill(self):
-        default_fill = self.ui.default_fill.currentText()
-        delete_fill = self.ui.delete_fill.currentText()
+        default_fill = self.ui.default_fill.currentData()
+        delete_fill = self.ui.delete_fill.currentData()
         # TODO установка занчений по умолчанию
         print(default_fill, delete_fill)
 

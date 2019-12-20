@@ -318,7 +318,7 @@ class Ui_MainWindow(object):
         self.help.setTitle(_translate("MainWindow", "Помощь"))
         self.menuDbl.setTitle(_translate("MainWindow", "Вид"))
         self.tool_bar.setWindowTitle(_translate("MainWindow", "toolBar"))
-        self.block_widget.setWindowTitle(_translate("MainWindow", "Блоки"))
+        self.block_widget.setWindowTitle(_translate("MainWindow", "Карты, знаки и объекты"))
         self.info_widget.setWindowTitle(_translate("MainWindow", "Информация"))
         self.map_info_widget.setWindowTitle(_translate("MainWindow", "Редактор карты"))
         self.default_fill_label.setText(_translate("MainWindow", "Заливка по умолчанию"))
