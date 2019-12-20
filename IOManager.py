@@ -1,4 +1,3 @@
-# TODO тут будет вся работа с файлами
 import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QFileDialog
