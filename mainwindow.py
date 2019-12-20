@@ -16,6 +16,7 @@ class duck_window(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.brush_button = QtWidgets.QToolButton()
         self.closeEvent = functools.partial(self.quit_program_event)
         self.map = map.DuckietownMap()
         self.ui = Ui_MainWindow()
@@ -81,40 +82,130 @@ class duck_window(QtWidgets.QMainWindow):
         a4 = QtWidgets.QAction(QtGui.QIcon("img/icons/save_as.png"), 'Сохранить карту как', self)
         a5 = QtWidgets.QAction(QtGui.QIcon("img/icons/png.png"), 'Экспортировать в png', self)
 
+        b1 = QtWidgets.QAction(QtGui.QIcon("img/icons/copy.png"), 'Копировать', self)
+        b2 = QtWidgets.QAction(QtGui.QIcon("img/icons/cut.png"), 'Вырезать', self)
+        b3 = QtWidgets.QAction(QtGui.QIcon("img/icons/insert.png"), 'Вставить', self)
+        b4 = QtWidgets.QAction(QtGui.QIcon("img/icons/delete.png"), 'Удалить', self)
+        b5 = QtWidgets.QAction(QtGui.QIcon("img/icons/undo.png"), 'Откатить изменение', self)
+        b1.setShortcut("Ctrl+C")
+        b2.setShortcut("Ctrl+X")
+        b3.setShortcut("Ctrl+V")
+        b4.setShortcut("Delete")
+        b5.setShortcut("Ctrl+Z")
+
+        self.brush_button.setIcon(QtGui.QIcon("img/icons/brush.png"))
+        self.brush_button.setCheckable(True)
+        self.brush_button.setToolTip("Режим кисти")
+        self.brush_button.setShortcut("Ctrl+B")
+
         a1.triggered.connect(self.create_map_triggered)
         a2.triggered.connect(self.open_map_triggered)
         a3.triggered.connect(self.save_map_triggered)
         a4.triggered.connect(self.save_map_as_triggered)
         a5.triggered.connect(self.export_png_triggered)
 
+        b1.triggered.connect(self.copy_button_clicked)
+        b2.triggered.connect(self.cut_button_clicked)
+        b3.triggered.connect(self.insert_button_clicked)
+        b4.triggered.connect(self.delete_button_clicked)
+        b5.triggered.connect(self.undo_button_clicked)
+
+        self.brush_button.clicked.connect(self.bruch_mode)
+
         tool_bar.addAction(a1)
         tool_bar.addAction(a2)
         tool_bar.addAction(a3)
         tool_bar.addAction(a4)
         tool_bar.addAction(a5)
+        tool_bar.addSeparator()
+        tool_bar.addAction(b1)
+        tool_bar.addAction(b2)
+        tool_bar.addAction(b3)
+        tool_bar.addAction(b4)
+        tool_bar.addAction(b5)
+        tool_bar.addSeparator()
+        tool_bar.addWidget(self.brush_button)
 
-        # обработка элементов списка
+        # Настройка меню Блоки
         block_list_widget = self.ui.block_list
         block_list_widget.itemClicked.connect(self.item_list_clicked)
         block_list_widget.itemDoubleClicked.connect(self.item_list_double_clicked)
 
         # Заполнение списка
         blocks_list = [
-            ("empty", "img/tiles/empty.png"),
-            ("straight", "img/tiles/straight.png"),
-            ("curve_left", "img/tiles/curve_left.png"),
-            ("curve_right", "img/tiles/curve_right.png"),
-            ("3way_left", "img/tiles/three_way_left.png"),
-            ("3way_right", "img/tiles/three_way_left.png"),
-            ("4way", "img/tiles/four_way_center.png"),
-            ("asphalt", "img/tiles/asphalt.png"),
-            ("grass", "img/tiles/grass.png"),
-            ("floor", "img/tiles/floor.png")
+            ("Пустой блок","empty","block", "img/tiles/empty.png"),
+            ("Дорога","straight","road", "img/tiles/straight.png"),
+            ("Левый поворот","curve_left","road", "img/tiles/curve_left.png"),
+            ("Правый поворот","curve_right","road", "img/tiles/curve_right.png"),
+            ("T-образный левый перекрёсток","3way_left","road", "img/tiles/three_way_left.png"),
+            ("T-образный правый перекрёсток","3way_right","road", "img/tiles/three_way_left.png"),
+            ("Перекрёсток","4way", "road","img/tiles/four_way_center.png"),
+            ("Асфальт","asphalt","block", "img/tiles/asphalt.png"),
+            ("Трава","grass", "block","img/tiles/grass.png"),
+            ("Плитка","floor", "block","img/tiles/floor.png")
         ]
 
-        for name, icon in blocks_list:
+        signs_list = [
+            ("Стоп", "stop", "img/signs/stop.png"),
+            ("Уступи дорогу", "yield", "img/signs/yield.png"),
+            ("Поворот нараво запрещён", "no-right-turn", "img/signs/no-right-turn.png"),
+            ("Поворот налево запрещён", "no-left-turn", "img/signs/no-left-turn.png"),
+            ("Кирпич", "do-not-enter", "img/signs/do-not-enter.png"),
+            ("Односторонее движении направо", "oneway-right", "img/signs/oneway-right.png"),
+            ("Односторонее движении налево", "oneway-left", "img/signs/oneway-left.png"),
+            ("Перекрёсток", "4-way-intersect", "img/signs/4-way-intersect.png"),
+            ("T-образный правый перекрёсток", "right-T-intersect", "img/signs/right-T-intersect.png"),
+            ("T-образный левый перекрёсток", "left-T-intersect", "img/signs/left-T-intersect.png"),
+            ("T-образный перекрёсток", "T-intersection", "img/signs/T-intersection.png"),
+            ("Пешеход", "pedestrian", "img/signs/pedestrian.png"),
+            ("Светофор", "t-light-ahead", "img/signs/t-light-ahead.png"),
+            ("Уточки", "duck-crossing", "img/signs/duck-crossing.png"),
+            ("Парковка", "parking", "img/signs/parking.png")
+        ]
+
+        galka = QtGui.QIcon("img/icons/galka.png")
+        separator_1 = QtWidgets.QListWidgetItem(galka, "Блоки карты")
+        separator_1.setBackground(QtGui.QColor(169, 169, 169))
+        separator_1.setData(0x0100, "separator")
+        separator_1.setData(0x0101, "block")
+        block_list_widget.addItem(separator_1)
+
+        for name, data, categ, icon in blocks_list:
             widget = QtWidgets.QListWidgetItem(QtGui.QIcon(icon), name)
+            widget.setData(0x0100, data)
+            widget.setData(0x0101, categ)
             block_list_widget.addItem(widget)
+
+
+
+
+
+        for name, data,icon in signs_list:
+            widget = QtWidgets.QListWidgetItem(QtGui.QIcon(icon), name)
+            widget.setData(0x0100, data)
+            block_list_widget.addItem(widget)
+
+
+        # Настройка меню Редактор карты
+        default_fill = self.ui.default_fill
+        delete_fill = self.ui.delete_fill
+        for name, data, categ, icon in blocks_list:
+            default_fill.addItem(QtGui.QIcon(icon), name, data)
+            delete_fill.addItem(QtGui.QIcon(icon), name, data)
+
+        default_fill.setCurrentText("Трава")
+        delete_fill.setCurrentText("Пустой блок")
+
+        set_fill = self.ui.set_fill
+        set_fill.clicked.connect(self.set_default_fill)
+
+
+        # new = mapviewer.small_wigget()
+        #
+        # #self.ui.horizontal_layout.addSpacing(QtWidgets.QSpacerItem.)
+        # self.ui.horizontal_layout.addWidget(new)
+
+
 
     def center(self):
         qr = self.frameGeometry()
@@ -241,12 +332,59 @@ class duck_window(QtWidgets.QMainWindow):
 
     # обработка клика по элементу из списка списку
     def item_list_clicked(self):
-        name = self.ui.block_list.currentItem().text()
         # TODO Отрисовка блока на поле доп. информации по 1 клику( файл с информацией tiles.yaml)
-        print(name)
+        name = self.ui.block_list.currentItem().data(0x0100)
+
+        if name == "separator":
+            for elem in self.ui.block_list.item(0x0100):
+                print(elem)
+
+        nam1 = self.ui.block_list.currentItem().data(0x0101)
+        print(name, nam1)
 
     # 2й клик также перехватывается одинарным
     def item_list_double_clicked(self):
-        name = self.ui.block_list.currentItem().text()
         # TODO Добавление блока на карту по 2 клику
+        name = self.ui.block_list.currentItem().data(0x0100)
+
         print(name)
+
+    # Установка значений по умолчанию
+    def set_default_fill(self):
+        default_fill = self.ui.default_fill.currentData()
+        delete_fill = self.ui.delete_fill.currentData()
+        # TODO установка занчений по умолчанию
+        print(default_fill, delete_fill)
+
+    # Вызов функции копирования
+    def copy_button_clicked(self):
+        # TODO кнопка копирования
+        print("copy")
+
+    # Вызов функции вырезания
+    def cut_button_clicked(self):
+        # TODO Кновку вырезания
+        print("cut")
+
+    # Вызов функции вставки
+    def insert_button_clicked(self):
+        # TODO Кнопка вставки
+        print("insert")
+
+    # Вызов функции удаления
+    def delete_button_clicked(self):
+        # TODO Кнопка удаления
+        print("delete")
+
+    # Вызов функции отката
+    def undo_button_clicked(self):
+        #  TODO Кнопка возврата
+        print("undo")
+
+    # Включение режима кисти
+    def bruch_mode(self):
+        if self.brush_button.isChecked():
+            print(True)
+            #  TODO Кисть активна
+        else:
+            print(False)
