@@ -1,3 +1,4 @@
+import codecs
 import json
 import re
 
@@ -132,7 +133,7 @@ def get_map_elements(map):
     result += padding2 + 'Количество блоков травы: ' + str(count_of_grass) + ' шт\n'
     result += padding2 + 'Количество блоков асфальта: ' + str(count_of_asphalt) + ' шт\n'
     result += padding2 + 'Количество блоков пола: ' + str(count_of_floor) + ' шт\n'
-    result += padding + 'Знаки\n'
+    result +='Знаки\n'
     if sign_4_way:
         result += padding2 + 'Перекресток: ' + str(sign_4_way) + ' шт\n'
     if sign_T:
@@ -156,8 +157,8 @@ def get_map_elements(map):
     return result
 
 def materials_of_map(map):
-    with open("./doc/info.json", "r") as read_file:
-        specifications = json.load(read_file)
+    read_file = codecs.open("./doc/info.json", "r", "utf-8")
+    specifications = json.load(read_file)
 
     padding = '   '
     padding2 = padding + padding
@@ -186,15 +187,15 @@ def materials_of_map(map):
 
 
 def specifications_of_map(map):
-    with open("./doc/info.json", "r") as read_file:
-        specifications = json.load(read_file)
+    read_file = codecs.open("./doc/info.json", "r", "utf-8")
+    specifications = json.load(read_file)
 
     road_length = 0
-    result = "Характеристики карты\n  Дороги\n"
+    result = "Характеристики карты\nДороги\n"
     for tile in np.array(map.tiles).flat:
         road_length += specifications[tile.kind]['length']
 
-    result += '   Протяженность дорог: ' + str(road_length) + ' см\n'
+    result += '      Протяженность дорог: ' + str(road_length) + ' см\n'
     result += get_map_elements(map)
     print(result)
     return result
