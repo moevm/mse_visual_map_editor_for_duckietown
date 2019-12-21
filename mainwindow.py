@@ -4,7 +4,7 @@ import map
 from main_design import *
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QMessageBox, QDesktopWidget
-from IOManager import open_map, save_map_as, save_map, export_png, new_map
+from IOManager import *
 import functools
 
 
@@ -239,12 +239,12 @@ class duck_window(QtWidgets.QMainWindow):
 
     # Подсчёт характеристик карт
     def calc_param_triggered(self):
-        # TODO Подсчёт характеристик карт
+        get_map_specifications(self)
         pass
 
     # Расчёт требуемых материалов
     def calc_materials_triggered(self):
-        # TODO Расчёт требуемых материалов
+        get_map_materials(self)
         pass
 
     # Вывод справки по работе с программой
