@@ -1,11 +1,10 @@
-from PyQt5 import QtWidgets
 import mapviewer
 import map
 from main_design import *
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QMessageBox, QDesktopWidget
 from IOManager import *
-import functools
+import functools, json
 
 
 # pyuic5 main_design.ui -o main_design.py
@@ -13,6 +12,7 @@ import functools
 class duck_window(QtWidgets.QMainWindow):
     map = None
     mapviewer = None
+    info_json = None
 
     def __init__(self):
         super().__init__()
@@ -28,6 +28,9 @@ class duck_window(QtWidgets.QMainWindow):
         self.ui.horizontalLayout.addWidget(viewer)
         viewer.repaint()
         self.initUi()
+
+        with open("doc/info.json", "r") as read_file:
+            self.info_json = json.load(read_file)
 
     def initUi(self):
         self.center()
@@ -112,18 +115,10 @@ class duck_window(QtWidgets.QMainWindow):
 
         self.brush_button.clicked.connect(self.bruch_mode)
 
-        tool_bar.addAction(a1)
-        tool_bar.addAction(a2)
-        tool_bar.addAction(a3)
-        tool_bar.addAction(a4)
-        tool_bar.addAction(a5)
-        tool_bar.addSeparator()
-        tool_bar.addAction(b1)
-        tool_bar.addAction(b2)
-        tool_bar.addAction(b3)
-        tool_bar.addAction(b4)
-        tool_bar.addAction(b5)
-        tool_bar.addSeparator()
+        for elem in [[a1,a2,a3,a4,a5],[b1,b2,b3,b4,b5]]:
+            for act in elem:
+                tool_bar.addAction(act)
+            tool_bar.addSeparator()
         tool_bar.addWidget(self.brush_button)
 
         # Настройка меню Блоки
@@ -133,65 +128,73 @@ class duck_window(QtWidgets.QMainWindow):
 
         # Заполнение списка
         blocks_list = [
-            ("Пустой блок","empty","block", "img/tiles/empty.png"),
-            ("Дорога","straight","road", "img/tiles/straight.png"),
-            ("Левый поворот","curve_left","road", "img/tiles/curve_left.png"),
-            ("Правый поворот","curve_right","road", "img/tiles/curve_right.png"),
-            ("T-образный левый перекрёсток","3way_left","road", "img/tiles/three_way_left.png"),
-            ("T-образный правый перекрёсток","3way_right","road", "img/tiles/three_way_left.png"),
-            ("Перекрёсток","4way", "road","img/tiles/four_way_center.png"),
-            ("Асфальт","asphalt","block", "img/tiles/asphalt.png"),
-            ("Трава","grass", "block","img/tiles/grass.png"),
-            ("Плитка","floor", "block","img/tiles/floor.png")
+            ("Куски дороги", "separator", "road", "img/icons/galka.png"),
+            ("Дорога", "straight", "road", "img/tiles/straight.png"),
+            ("Левый поворот", "curve_left", "road", "img/tiles/curve_left.png"),
+            ("Правый поворот", "curve_right", "road", "img/tiles/curve_right.png"),
+            ("T-образный левый перекрёсток", "3way_left", "road", "img/tiles/three_way_left.png"),
+            ("T-образный правый перекрёсток", "3way_right", "road", "img/tiles/three_way_left.png"),
+            ("Перекрёсток", "4way", "road", "img/tiles/four_way_center.png"),
+
+            ("Блоки заполнения", "separator", "block", "img/icons/galka.png"),
+            ("Пустой блок", "empty", "block", "img/tiles/empty.png"),
+            ("Асфальт", "asphalt", "block", "img/tiles/asphalt.png"),
+            ("Трава", "grass", "block", "img/tiles/grass.png"),
+            ("Плитка", "floor", "block", "img/tiles/floor.png")
         ]
 
         signs_list = [
-            ("Стоп", "stop", "img/signs/stop.png"),
-            ("Уступи дорогу", "yield", "img/signs/yield.png"),
-            ("Поворот нараво запрещён", "no-right-turn", "img/signs/no-right-turn.png"),
-            ("Поворот налево запрещён", "no-left-turn", "img/signs/no-left-turn.png"),
-            ("Кирпич", "do-not-enter", "img/signs/do-not-enter.png"),
-            ("Односторонее движении направо", "oneway-right", "img/signs/oneway-right.png"),
-            ("Односторонее движении налево", "oneway-left", "img/signs/oneway-left.png"),
-            ("Перекрёсток", "4-way-intersect", "img/signs/4-way-intersect.png"),
-            ("T-образный правый перекрёсток", "right-T-intersect", "img/signs/right-T-intersect.png"),
-            ("T-образный левый перекрёсток", "left-T-intersect", "img/signs/left-T-intersect.png"),
-            ("T-образный перекрёсток", "T-intersection", "img/signs/T-intersection.png"),
-            ("Пешеход", "pedestrian", "img/signs/pedestrian.png"),
-            ("Светофор", "t-light-ahead", "img/signs/t-light-ahead.png"),
-            ("Уточки", "duck-crossing", "img/signs/duck-crossing.png"),
-            ("Парковка", "parking", "img/signs/parking.png")
+            ("Запрещающие знаки", "separator", "ban", "img/icons/galka.png"),
+            ("Стоп", "sign_stop","ban", "img/signs/sign_stop.png"),
+            ("Уступи дорогу", "sign_yield", "ban","img/signs/sign_yield.png"),
+            ("Поворот направо запрещён", "sign_no_right_turn", "ban","img/signs/sign_no_right_turn.png"),
+            ("Поворот налево запрещён", "sign_no_left_turn","ban", "img/signs/sign_no_left_turn.png"),
+            ("Кирпич", "sign_do_not_enter","ban", "img/signs/sign_do_not_enter.png"),
+
+            ("Информационные знаки", "separator", "info", "img/icons/galka.png"),
+            ("Односторонее движении направо", "sign_oneway_right","info", "img/signs/sign_oneway_right.png"),
+            ("Односторонее движении налево", "sign_oneway_left","info", "img/signs/sign_oneway_left.png"),
+            ("Перекрёсток", "sign_4_way_intersect","info", "img/signs/sign_4_way_intersect.png"),
+            ("T-образный правый перекрёсток", "sign_right_T_intersect","info", "img/signs/sign_right_T_intersect.png"),
+            ("T-образный левый перекрёсток", "sign_left_T_intersect","info", "img/signs/sign_left_T_intersect.png"),
+            ("T-образный перекрёсток", "sign_T_intersection","info", "img/signs/sign_T_intersection.png"),
+
+            ("Специальные знаки", "separator", "spec", "img/icons/galka.png"),
+            ("Пешеход", "sign_pedestrian", "spec", "img/signs/sign_pedestrian.png"),
+            ("Светофор", "sign_t_light_ahead", "spec", "img/signs/sign_t_light_ahead.png"),
+            ("Уточки", "sign_duck_crossing", "spec","img/signs/sign_duck_crossing.png"),
+            ("Парковка", "sign_parking", "spec","img/signs/sign_parking.png")
         ]
 
-        galka = QtGui.QIcon("img/icons/galka.png")
-        separator_1 = QtWidgets.QListWidgetItem(galka, "Блоки карты")
-        separator_1.setBackground(QtGui.QColor(169, 169, 169))
-        separator_1.setData(0x0100, "separator")
-        separator_1.setData(0x0101, "block")
-        block_list_widget.addItem(separator_1)
+        object_list = [
+            ("Иные объекты", "separator", "objects", "img/icons/galka.png"),
+            ("Барьер", "barrier", "objects", "img/objects/"),
+            ("Конус", "cone", "objects", "img/objects/"),
+            ("Уточка", "duckie", "objects", "img/objects/"),
+            ("Уточка-бот", "duckiebot", "objects", "img/objects/"),
+            ("Дерево", "tree", "objects", "img/objects/"),
+            ("Дом", "house", "objects", "img/objects/"),
+            ("Грузовик(в стиле доставки)", "truck", "objects", "img/objects/"),
+            ("Автобус", "bus", "objects", "img/objects/"),
+            ("Здание(многоэтажное)", "building", "objects", "img/objects/"),
+        ]
 
-        for name, data, categ, icon in blocks_list:
-            widget = QtWidgets.QListWidgetItem(QtGui.QIcon(icon), name)
-            widget.setData(0x0100, data)
-            widget.setData(0x0101, categ)
-            block_list_widget.addItem(widget)
-
-
-
-
-
-        for name, data,icon in signs_list:
-            widget = QtWidgets.QListWidgetItem(QtGui.QIcon(icon), name)
-            widget.setData(0x0100, data)
-            block_list_widget.addItem(widget)
+        for elem in [blocks_list, signs_list, object_list]:
+            for name, data, categ, icon in elem:
+                widget = QtWidgets.QListWidgetItem(QtGui.QIcon(icon), name)
+                widget.setData(0x0100, data)
+                widget.setData(0x0101, categ)
+                if data == "separator": widget.setBackground(QtGui.QColor(169, 169, 169))
+                block_list_widget.addItem(widget)
 
 
         # Настройка меню Редактор карты
         default_fill = self.ui.default_fill
         delete_fill = self.ui.delete_fill
         for name, data, categ, icon in blocks_list:
-            default_fill.addItem(QtGui.QIcon(icon), name, data)
-            delete_fill.addItem(QtGui.QIcon(icon), name, data)
+            if data != "separator":
+                default_fill.addItem(QtGui.QIcon(icon), name, data)
+                delete_fill.addItem(QtGui.QIcon(icon), name, data)
 
         default_fill.setCurrentText("Трава")
         delete_fill.setCurrentText("Пустой блок")
@@ -199,12 +202,10 @@ class duck_window(QtWidgets.QMainWindow):
         set_fill = self.ui.set_fill
         set_fill.clicked.connect(self.set_default_fill)
 
-
         # new = mapviewer.small_wigget()
         #
         # #self.ui.horizontal_layout.addSpacing(QtWidgets.QSpacerItem.)
         # self.ui.horizontal_layout.addWidget(new)
-
 
 
     def center(self):
@@ -332,22 +333,41 @@ class duck_window(QtWidgets.QMainWindow):
 
     # обработка клика по элементу из списка списку
     def item_list_clicked(self):
-        # TODO Отрисовка блока на поле доп. информации по 1 клику( файл с информацией tiles.yaml)
-        name = self.ui.block_list.currentItem().data(0x0100)
+        list = self.ui.block_list
+        name = list.currentItem().data(0x0100)
+        type = list.currentItem().data(0x0101)
 
         if name == "separator":
-            for elem in self.ui.block_list.item(0x0100):
-                print(elem)
+            list.currentItem().setSelected(False)
 
-        nam1 = self.ui.block_list.currentItem().data(0x0101)
-        print(name, nam1)
+            for i in range(list.count()):
+                elem = list.item(i)
+                if type == elem.data(0x0101):
+                    if name == elem.data(0x0100):
+                        icon = QtGui.QIcon("img/icons/galka.png") if list.item(i + 1).isHidden() else \
+                            QtGui.QIcon("img/icons/galka_r.png")
+                        elem.setIcon(icon)
+                    else:
+                        elem.setHidden(not elem.isHidden())
+        else:
+            elem = self.info_json[name]
+            info_browser = self.ui.info_browser
+            info_browser.clear()
+            str = "Название:\n"+ list.currentItem().text() \
+                  + "\n\nОписание:\n" + elem["info"];
+            info_browser.setText(str)
 
     # 2й клик также перехватывается одинарным
     def item_list_double_clicked(self):
-        # TODO Добавление блока на карту по 2 клику
-        name = self.ui.block_list.currentItem().data(0x0100)
+        list = self.ui.block_list
+        name = list.currentItem().data(0x0100)
+        type = list.currentItem().data(0x0101)
 
-        print(name)
+        if name == "separator":
+            list.currentItem().setSelected(False)
+        else:
+            # TODO Добавление блока на карту по 2 клику
+            print(name)
 
     # Установка значений по умолчанию
     def set_default_fill(self):
