@@ -43,12 +43,8 @@ def new_map(parent: QtWidgets.QWidget):
 
 
 def get_map_specifications(parent: QtWidgets.QWidget):
-    file_name = QFileDialog.getSaveFileName(parent, 'Save file', '.', filter=('TXT file (*.txt)'))[0]
-    if file_name:
-        specifications_of_map(parent.map, file_name)
+    return specifications_of_map(parent.map)
 
 
 def get_map_materials(parent: QtWidgets.QWidget):
-    file_name = QFileDialog.getSaveFileName(parent, 'Save file', '.', filter=('TXT file (*.txt)'))[0]
-    if file_name:
-        materials_of_map(parent.map, file_name)
+    return materials_of_map(parent.map)

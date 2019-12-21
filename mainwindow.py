@@ -240,12 +240,12 @@ class duck_window(QtWidgets.QMainWindow):
 
     # Подсчёт характеристик карт
     def calc_param_triggered(self):
-        get_map_specifications(self)
+        s = get_map_specifications(self)
         pass
 
     # Расчёт требуемых материалов
     def calc_materials_triggered(self):
-        get_map_materials(self)
+        s = get_map_materials(self)
         pass
 
     # Вывод справки по работе с программой

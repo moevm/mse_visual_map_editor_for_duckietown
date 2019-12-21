@@ -12,7 +12,8 @@ from mapviewer import MapViewer
 rotation_val = {0: 'E', 90: 'S', 180: 'W', 270: 'N'}
 
 
-def get_map_objects(map, f):
+def get_map_objects(map):
+    result = ''
     barrier = 0
     building = 0
     bus = 0
@@ -46,30 +47,31 @@ def get_map_objects(map, f):
         elif object.kind == 'truck':
             truck += 1
 
-    f.write('\tОбъекты\n')
+    result += '\tОбъекты\n'
     if barrier:
-        f.write('Барьер: ' + str(barrier) + ' шт\n')
+        result += 'Барьер: ' + str(barrier) + ' шт\n'
     if building:
-        f.write('Здание: ' + str(building) + ' шт\n')
+        result += 'Здание: ' + str(building) + ' шт\n'
     if bus:
-        f.write('Автобус: ' + str(bus) + ' шт\n')
+        result += 'Автобус: ' + str(bus) + ' шт\n'
     if truck:
-        f.write('Грузовик: ' + str(truck) + ' шт\n')
+        result += 'Грузовик: ' + str(truck) + ' шт\n'
     if cone:
-        f.write('Конус: ' + str(cone) + ' шт\n')
+        result += 'Конус: ' + str(cone) + ' шт\n'
     if house:
-        f.write('Дом: ' + str(house) + ' шт\n')
+        result += 'Дом: ' + str(house) + ' шт\n'
     if tree:
-        f.write('Дерево: ' + str(tree) + ' шт\n')
+        result += 'Дерево: ' + str(tree) + ' шт\n'
     if duckie:
-        f.write('Уточка: ' + str(duckie) + ' шт\n')
+        result += 'Уточка: ' + str(duckie) + ' шт\n'
     if duckiebot:
-        f.write('Дакибот: ' + str(duckiebot) + ' шт\n')
+        result += 'Дакибот: ' + str(duckiebot) + ' шт\n'
     if trafficlight:
-        f.write('Светофор: ' + str(trafficlight) + ' шт\n')
+        result += 'Светофор: ' + str(trafficlight) + ' шт\n'
+    return result
 
-
-def get_map_elements(map, f):
+def get_map_elements(map):
+    result = ''
     sign_4_way = sign_T = parking = 0
     sign_do_not_enter = sign_no_turn = sign_oneway = 0
     sign_pedestrian = sign_stop = sign_yield = 0
@@ -119,42 +121,41 @@ def get_map_elements(map, f):
         elif object.kind == 'parking':
             parking += 1
 
-    f.write('Количество тройных перекрестков: ' + str(count_of_3way) + ' шт\n')
-    f.write('Количество полных перекрестков: ' + str(count_of_4way) + ' шт\n')
-    f.write('Количество блоков прямой дороги: ' + str(count_of_str) + ' шт\n')
-    f.write('Количество поворотов: ' + str(count_of_curve) + ' шт\n')
-    f.write('Количество блоков травы: ' + str(count_of_grass) + ' шт\n')
-    f.write('Количество блоков асфальта: ' + str(count_of_asphalt) + ' шт\n')
-    f.write('Количество блоков пола: ' + str(count_of_floor) + ' шт\n')
-    f.write('\tКоличество знаков\n')
+    result += 'Количество тройных перекрестков: ' + str(count_of_3way) + ' шт\n'
+    result += 'Количество полных перекрестков: ' + str(count_of_4way) + ' шт\n'
+    result += 'Количество блоков прямой дороги: ' + str(count_of_str) + ' шт\n'
+    result += 'Количество поворотов: ' + str(count_of_curve) + ' шт\n'
+    result += 'Количество блоков травы: ' + str(count_of_grass) + ' шт\n'
+    result += 'Количество блоков асфальта: ' + str(count_of_asphalt) + ' шт\n'
+    result += 'Количество блоков пола: ' + str(count_of_floor) + ' шт\n'
+    result += '\tЗнаки\n'
     if sign_4_way:
-        f.write('Перекресток: ' + str(sign_4_way) + ' шт\n')
+        result += 'Перекресток: ' + str(sign_4_way) + ' шт\n'
     if sign_T:
-        f.write('Тройной перекресток: ' + str(sign_T) + ' шт\n')
+        result += 'Тройной перекресток: ' + str(sign_T) + ' шт\n'
     if sign_do_not_enter:
-        f.write('Проезд запрещен: ' + str(sign_do_not_enter) + ' шт\n')
+        result += 'Проезд запрещен: ' + str(sign_do_not_enter) + ' шт\n'
     if sign_no_turn:
-        f.write('Поворот запрещен: ' + str(sign_no_turn) + ' шт\n')
+        result += 'Поворот запрещен: ' + str(sign_no_turn) + ' шт\n'
     if sign_oneway:
-        f.write('Одностороннее движение: ' + str(sign_oneway) + ' шт\n')
+        result += 'Одностороннее движение: ' + str(sign_oneway) + ' шт\n'
     if sign_pedestrian:
-        f.write('Пешеходный переход: ' + str(sign_pedestrian) + ' шт\n')
+        result += 'Пешеходный переход: ' + str(sign_pedestrian) + ' шт\n'
     if sign_stop:
-        f.write('Стоп: ' + str(sign_stop) + ' шт\n')
+        result += 'Стоп: ' + str(sign_stop) + ' шт\n'
     if parking:
-        f.write('Парковка: ' + str(parking) + ' шт\n')
+        result += 'Парковка: ' + str(parking) + ' шт\n'
     if sign_yield:
-        f.write('Уступите дорогу: ' + str(sign_yield) + ' шт\n')
+        result += 'Уступите дорогу: ' + str(sign_yield) + ' шт\n'
     if sign_t_light_ahead:
-        f.write('Впереди светофор: ' + str(sign_t_light_ahead) + ' шт\n')
+        result += 'Впереди светофор: ' + str(sign_t_light_ahead) + ' шт\n'
+    return result
 
-
-def materials_of_map(map, file_name):
+def materials_of_map(map):
     with open("./doc/info.json", "r") as read_file:
         specifications = json.load(read_file)
-    if '.txt' not in file_name:
-        file_name = file_name + '.txt'
-    f = open(file_name, 'w')
+
+    result = '\tНеобходимые материалы для карты\n\tИзолента\n'
 
     white = 0
     yellow = 0
@@ -165,36 +166,32 @@ def materials_of_map(map, file_name):
         yellow += specifications[tile.kind]['yellow']
         red += specifications[tile.kind]['red']
 
-
-    f.write('\tНеобходимые материалы для карты\n\tКоличество изоленты\n')
     if white:
-        f.write('Белая: 4.8 х ' + str(white) + ' см\n')
+        result += 'Белая: 4.8 х ' + str(white) + ' см\n'
     if yellow:
-        f.write('Желтая: 2.4 х ' + str(yellow) + ' см\n')
+        result += 'Желтая: 2.4 х ' + str(yellow) + ' см\n'
     if red:
-        f.write('Красная: 4.8 х ' + str(red) + ' см\n')
-    f.write('\tБлоки\n')
-    get_map_elements(map, f)
-    get_map_objects(map, f)
-    f.close()
+        result += 'Красная: 4.8 х ' + str(red) + ' см\n'
+    result += '\tБлоки\n'
+    result += get_map_elements(map)
+    result += get_map_objects(map)
+    print(result)
+    return result
 
 
-def specifications_of_map(map, file_name):
+def specifications_of_map(map):
     with open("./doc/info.json", "r") as read_file:
         specifications = json.load(read_file)
-    if '.txt' not in file_name:
-        file_name = file_name + '.txt'
-    f = open(file_name, 'w')
 
     road_length = 0
-
+    result = "\tХарактеристики карты\n\tДороги\n"
     for tile in np.array(map.tiles).flat:
         road_length += specifications[tile.kind]['length']
 
-    f.write('\tХарактеристики карты\n\tДороги\n')
-    f.write('Протяженность дорог: ' + str(road_length) + ' см\n')
-    get_map_elements(map, f)
-    f.close()
+    result += 'Протяженность дорог: ' + str(road_length) + ' см\n'
+    result += get_map_elements(map)
+    print(result)
+    return result
 
 
 def map_to_png(map, map_name):
@@ -227,7 +224,6 @@ def map_to_png(map, map_name):
     pt.end()
 
 
-
 def map_to_yaml(map, map_name):
     if '.yaml' not in map_name:
         map_name = map_name + '.yaml'
@@ -238,7 +234,7 @@ def map_to_yaml(map, map_name):
         for tile in tile_string:
             f.write(tile.kind)
             if tile.rotation == 0:
-                if tile.kind != 'asphalt' and tile.kind != 'grass' and tile.kind != 'floor' and tile.kind != '4way':
+                if tile.kind != 'empty' and tile.kind != 'asphalt' and tile.kind != 'grass' and tile.kind != 'floor' and tile.kind != '4way':
                     f.write('/' + rotation_val[tile.rotation])
             else:
                 f.write('/' + rotation_val[tile.rotation])
