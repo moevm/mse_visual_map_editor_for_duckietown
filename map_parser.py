@@ -22,6 +22,7 @@ def get_map_objects(map, f):
     house = 0
     tree = 0
     trafficlight = 0
+    truck = 0
 
     for object in map.items:
         if object.kind == 'barrier':
@@ -42,6 +43,8 @@ def get_map_objects(map, f):
             duckiebot += 1
         elif object.kind == 'house':
             house += 1
+        elif object.kind == 'truck':
+            truck += 1
 
     f.write('\tОбъекты\n')
     if barrier:
@@ -50,6 +53,8 @@ def get_map_objects(map, f):
         f.write('Здание: ' + str(building) + ' шт\n')
     if bus:
         f.write('Автобус: ' + str(bus) + ' шт\n')
+    if truck:
+        f.write('Грузовик: ' + str(truck) + ' шт\n')
     if cone:
         f.write('Конус: ' + str(cone) + ' шт\n')
     if house:
