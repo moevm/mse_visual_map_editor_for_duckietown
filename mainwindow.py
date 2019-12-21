@@ -174,16 +174,16 @@ class duck_window(QtWidgets.QMainWindow):
 
         object_list = [
             ("Городские объекты", "separator", "objects", "img/icons/galka.png"),
-            ("Светофор","trafficlight","objects","img/objects/"),
-            ("Барьер", "barrier", "objects", "img/objects/"),
-            ("Конус", "cone", "objects", "img/objects/"),
-            ("Уточка", "duckie", "objects", "img/objects/"),
-            ("Уточка-бот", "duckiebot", "objects", "img/objects/"),
-            ("Дерево", "tree", "objects", "img/objects/"),
-            ("Дом", "house", "objects", "img/objects/"),
-            ("Грузовик(в стиле доставки)", "truck", "objects", "img/objects/"),
-            ("Автобус", "bus", "objects", "img/objects/"),
-            ("Здание(многоэтажное)", "building", "objects", "img/objects/"),
+            ("Светофор","trafficlight","objects","img/objects/trafficlight.png"),
+            ("Барьер", "barrier", "objects", "img/objects/barrier.png"),
+            ("Конус", "cone", "objects", "img/objects/cone.png"),
+            ("Уточка", "duckie", "objects", "img/objects/duckie.png"),
+            ("Уточка-бот", "duckiebot", "objects", "img/objects/duckiebot.png"),
+            ("Дерево", "tree", "objects", "img/objects/tree.png"),
+            ("Дом", "house", "objects", "img/objects/house.png"),
+            ("Грузовик(в стиле доставки)", "truck", "objects", "img/objects/truck.png"),
+            ("Автобус", "bus", "objects", "img/objects/bus.png"),
+            ("Здание(многоэтажное)", "building", "objects", "img/objects/building.png"),
         ]
 
         for elem in [blocks_list, signs_list, object_list]:
@@ -359,7 +359,7 @@ class duck_window(QtWidgets.QMainWindow):
             text = "Название:\n " + list.currentItem().text() \
                    + "\n\nОписание:\n " + elem["info"]
             if elem["type"] == "block":
-                text += "\nДлина дороги: " + str(elem["length"]) + " см\n"
+                text += "\n\nДлина дороги: " + str(elem["length"]) + " см\n"
                 text += "\nИзолента:\n"
                 text += " Красная: " + str(elem["red"]) + " см\n"
                 text += " Желтая: " + str(elem["yellow"]) + " см\n"
@@ -423,19 +423,3 @@ class duck_window(QtWidgets.QMainWindow):
         name.set_window_name(title)
         name.set_text(text)
         name.show()
-
-# # класс для доплнительного информационного окна
-# class info_window(QtWidgets.QWidget):
-#     def __init__(self, parent=None):
-#         super(info_window, self).__init__(parent)
-#         self.ui = infowindow.Ui_info_widget()
-#         self.ui.setupUi(self)
-#
-#     def set_window_name(self, title):
-#         self.setWindowTitle(title)
-#
-#     def set_text(self, text):
-#         self.ui.text_browser.setText(text)
-#
-#     def exit(self):
-#         self.close()

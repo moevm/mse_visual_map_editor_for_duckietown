@@ -14,6 +14,8 @@ rotation_val = {0: 'E', 90: 'S', 180: 'W', 270: 'N'}
 
 def get_map_objects(map):
     result = ''
+    padding = '   '
+    padding2 = padding + padding
     barrier = 0
     building = 0
     bus = 0
@@ -47,31 +49,33 @@ def get_map_objects(map):
         elif object.kind == 'truck':
             truck += 1
 
-    result += '\tОбъекты\n'
+    result += 'Объекты\n'
     if barrier:
-        result += 'Барьер: ' + str(barrier) + ' шт\n'
+        result += padding + 'Барьер: ' + str(barrier) + ' шт\n'
     if building:
-        result += 'Здание: ' + str(building) + ' шт\n'
+        result += padding + 'Здание: ' + str(building) + ' шт\n'
     if bus:
-        result += 'Автобус: ' + str(bus) + ' шт\n'
+        result += padding + 'Автобус: ' + str(bus) + ' шт\n'
     if truck:
-        result += 'Грузовик: ' + str(truck) + ' шт\n'
+        result += padding + 'Грузовик: ' + str(truck) + ' шт\n'
     if cone:
-        result += 'Конус: ' + str(cone) + ' шт\n'
+        result += padding + 'Конус: ' + str(cone) + ' шт\n'
     if house:
-        result += 'Дом: ' + str(house) + ' шт\n'
+        result += padding + 'Дом: ' + str(house) + ' шт\n'
     if tree:
-        result += 'Дерево: ' + str(tree) + ' шт\n'
+        result += padding + 'Дерево: ' + str(tree) + ' шт\n'
     if duckie:
-        result += 'Уточка: ' + str(duckie) + ' шт\n'
+        result += padding + 'Уточка: ' + str(duckie) + ' шт\n'
     if duckiebot:
-        result += 'Дакибот: ' + str(duckiebot) + ' шт\n'
+        result += padding + 'Дакибот: ' + str(duckiebot) + ' шт\n'
     if trafficlight:
-        result += 'Светофор: ' + str(trafficlight) + ' шт\n'
+        result += padding + 'Светофор: ' + str(trafficlight) + ' шт\n'
     return result
 
 def get_map_elements(map):
     result = ''
+    padding = '   '
+    padding2 = padding + padding
     sign_4_way = sign_T = parking = 0
     sign_do_not_enter = sign_no_turn = sign_oneway = 0
     sign_pedestrian = sign_stop = sign_yield = 0
@@ -121,41 +125,43 @@ def get_map_elements(map):
         elif object.kind == 'parking':
             parking += 1
 
-    result += 'Количество тройных перекрестков: ' + str(count_of_3way) + ' шт\n'
-    result += 'Количество полных перекрестков: ' + str(count_of_4way) + ' шт\n'
-    result += 'Количество блоков прямой дороги: ' + str(count_of_str) + ' шт\n'
-    result += 'Количество поворотов: ' + str(count_of_curve) + ' шт\n'
-    result += 'Количество блоков травы: ' + str(count_of_grass) + ' шт\n'
-    result += 'Количество блоков асфальта: ' + str(count_of_asphalt) + ' шт\n'
-    result += 'Количество блоков пола: ' + str(count_of_floor) + ' шт\n'
-    result += '\tЗнаки\n'
+    result += padding2 + 'Количество тройных перекрестков: ' + str(count_of_3way) + ' шт\n'
+    result += padding2 + 'Количество полных перекрестков: ' + str(count_of_4way) + ' шт\n'
+    result += padding2 + 'Количество блоков прямой дороги: ' + str(count_of_str) + ' шт\n'
+    result += padding2 + 'Количество поворотов: ' + str(count_of_curve) + ' шт\n'
+    result += padding2 + 'Количество блоков травы: ' + str(count_of_grass) + ' шт\n'
+    result += padding2 + 'Количество блоков асфальта: ' + str(count_of_asphalt) + ' шт\n'
+    result += padding2 + 'Количество блоков пола: ' + str(count_of_floor) + ' шт\n'
+    result += padding + 'Знаки\n'
     if sign_4_way:
-        result += 'Перекресток: ' + str(sign_4_way) + ' шт\n'
+        result += padding2 + 'Перекресток: ' + str(sign_4_way) + ' шт\n'
     if sign_T:
-        result += 'Тройной перекресток: ' + str(sign_T) + ' шт\n'
+        result += padding2 + 'Тройной перекресток: ' + str(sign_T) + ' шт\n'
     if sign_do_not_enter:
-        result += 'Проезд запрещен: ' + str(sign_do_not_enter) + ' шт\n'
+        result += padding2 + 'Проезд запрещен: ' + str(sign_do_not_enter) + ' шт\n'
     if sign_no_turn:
-        result += 'Поворот запрещен: ' + str(sign_no_turn) + ' шт\n'
+        result += padding2 + 'Поворот запрещен: ' + str(sign_no_turn) + ' шт\n'
     if sign_oneway:
-        result += 'Одностороннее движение: ' + str(sign_oneway) + ' шт\n'
+        result += padding2 + 'Одностороннее движение: ' + str(sign_oneway) + ' шт\n'
     if sign_pedestrian:
-        result += 'Пешеходный переход: ' + str(sign_pedestrian) + ' шт\n'
+        result += padding2 + 'Пешеходный переход: ' + str(sign_pedestrian) + ' шт\n'
     if sign_stop:
-        result += 'Стоп: ' + str(sign_stop) + ' шт\n'
+        result += padding2 + 'Стоп: ' + str(sign_stop) + ' шт\n'
     if parking:
-        result += 'Парковка: ' + str(parking) + ' шт\n'
+        result += padding2 + 'Парковка: ' + str(parking) + ' шт\n'
     if sign_yield:
-        result += 'Уступите дорогу: ' + str(sign_yield) + ' шт\n'
+        result += padding2 + 'Уступите дорогу: ' + str(sign_yield) + ' шт\n'
     if sign_t_light_ahead:
-        result += 'Впереди светофор: ' + str(sign_t_light_ahead) + ' шт\n'
+        result += padding2 + 'Впереди светофор: ' + str(sign_t_light_ahead) + ' шт\n'
     return result
 
 def materials_of_map(map):
     with open("./doc/info.json", "r") as read_file:
         specifications = json.load(read_file)
 
-    result = '\tНеобходимые материалы для карты\n\tИзолента\n'
+    padding = '   '
+    padding2 = padding + padding
+    result = 'Необходимые материалы для карты\n   Изолента\n'
 
     white = 0
     yellow = 0
@@ -167,12 +173,12 @@ def materials_of_map(map):
         red += specifications[tile.kind]['red']
 
     if white:
-        result += 'Белая: 4.8 х ' + str(white) + ' см\n'
+        result += padding + 'Белая: 4.8 х ' + str(white) + ' см\n'
     if yellow:
-        result += 'Желтая: 2.4 х ' + str(yellow) + ' см\n'
+        result += padding + 'Желтая: 2.4 х ' + str(yellow) + ' см\n'
     if red:
-        result += 'Красная: 4.8 х ' + str(red) + ' см\n'
-    result += '\tБлоки\n'
+        result += padding + 'Красная: 4.8 х ' + str(red) + ' см\n'
+    result += 'Блоки\n'
     result += get_map_elements(map)
     result += get_map_objects(map)
     print(result)
@@ -184,11 +190,11 @@ def specifications_of_map(map):
         specifications = json.load(read_file)
 
     road_length = 0
-    result = "\tХарактеристики карты\n\tДороги\n"
+    result = "Характеристики карты\n  Дороги\n"
     for tile in np.array(map.tiles).flat:
         road_length += specifications[tile.kind]['length']
 
-    result += 'Протяженность дорог: ' + str(road_length) + ' см\n'
+    result += '   Протяженность дорог: ' + str(road_length) + ' см\n'
     result += get_map_elements(map)
     print(result)
     return result
