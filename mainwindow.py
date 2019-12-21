@@ -240,14 +240,13 @@ class duck_window(QtWidgets.QMainWindow):
 
     # Подсчёт характеристик карт
     def calc_param_triggered(self):
-        get_map_specifications(self)
-        text ="Если есть в кармане пачкка сигарет"
+
+        text = get_map_specifications(self)
         self.show_info(self.param_window, "Характеристики карты", text)
 
     # Расчёт требуемых материалов
     def calc_materials_triggered(self):
-        get_map_materials(self)
-        text ="Солнце взгляни на меня"
+        text = get_map_materials(self)
         self.show_info(self.mater_window, "Необходимые материалы", text)
 
     # Вывод справки по работе с программой
