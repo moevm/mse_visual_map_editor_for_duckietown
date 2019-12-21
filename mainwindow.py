@@ -1,3 +1,5 @@
+import codecs
+
 import mapviewer
 import map
 from main_design import *
@@ -37,8 +39,9 @@ class duck_window(QtWidgets.QMainWindow):
         viewer.repaint()
         self.initUi()
 
-        with open("doc/info.json", "r") as read_file:
-            self.info_json = json.load(read_file)
+
+        read_file = codecs.open("doc/info.json", "r", "utf-8")
+        self.info_json = json.load(read_file)
 
     def initUi(self):
         self.center()
