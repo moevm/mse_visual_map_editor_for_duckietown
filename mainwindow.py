@@ -5,6 +5,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QMessageBox, QDesktopWidget
 from IOManager import *
 import functools, json
+from infowindow import info_window
 
 
 # pyuic5 main_design.ui -o main_design.py
@@ -16,8 +17,15 @@ class duck_window(QtWidgets.QMainWindow):
 
     def __init__(self):
         super().__init__()
+        # доп. окна для вывода информации
+        self.author_window = info_window()
+        self.param_window = info_window()
+        self.mater_window = info_window()
+
+        # кнопка для кисти и переопределение события закрытия
         self.brush_button = QtWidgets.QToolButton()
         self.closeEvent = functools.partial(self.quit_program_event)
+
         self.map = map.DuckietownMap()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
@@ -44,7 +52,6 @@ class duck_window(QtWidgets.QMainWindow):
         export_png = self.ui.export_png
         calc_param = self.ui.calc_param
         calc_materials = self.ui.calc_materials
-        help_info = self.ui.help_info
         about_author = self.ui.about_author
         exit = self.ui.exit
         change_blocks = self.ui.change_blocks
@@ -64,7 +71,6 @@ class duck_window(QtWidgets.QMainWindow):
         export_png.triggered.connect(self.export_png_triggered)
         calc_param.triggered.connect(self.calc_param_triggered)
         calc_materials.triggered.connect(self.calc_materials_triggered)
-        help_info.triggered.connect(self.help_info_triggered)
         about_author.triggered.connect(self.about_author_triggered)
         exit.triggered.connect(self.exit_triggered)
 
@@ -115,7 +121,7 @@ class duck_window(QtWidgets.QMainWindow):
 
         self.brush_button.clicked.connect(self.bruch_mode)
 
-        for elem in [[a1,a2,a3,a4,a5],[b1,b2,b3,b4,b5]]:
+        for elem in [[a1, a2, a3, a4, a5], [b1, b2, b3, b4, b5]]:
             for act in elem:
                 tool_bar.addAction(act)
             tool_bar.addSeparator()
@@ -145,38 +151,39 @@ class duck_window(QtWidgets.QMainWindow):
 
         signs_list = [
             ("Запрещающие знаки", "separator", "ban", "img/icons/galka.png"),
-            ("Стоп", "sign_stop","ban", "img/signs/sign_stop.png"),
-            ("Уступи дорогу", "sign_yield", "ban","img/signs/sign_yield.png"),
-            ("Поворот направо запрещён", "sign_no_right_turn", "ban","img/signs/sign_no_right_turn.png"),
-            ("Поворот налево запрещён", "sign_no_left_turn","ban", "img/signs/sign_no_left_turn.png"),
-            ("Кирпич", "sign_do_not_enter","ban", "img/signs/sign_do_not_enter.png"),
+            ("Стоп", "sign_stop", "ban", "img/signs/sign_stop.png"),
+            ("Уступи дорогу", "sign_yield", "ban", "img/signs/sign_yield.png"),
+            ("Поворот направо запрещён", "sign_no_right_turn", "ban", "img/signs/sign_no_right_turn.png"),
+            ("Поворот налево запрещён", "sign_no_left_turn", "ban", "img/signs/sign_no_left_turn.png"),
+            ("Кирпич", "sign_do_not_enter", "ban", "img/signs/sign_do_not_enter.png"),
 
             ("Информационные знаки", "separator", "info", "img/icons/galka.png"),
-            ("Односторонее движении направо", "sign_oneway_right","info", "img/signs/sign_oneway_right.png"),
-            ("Односторонее движении налево", "sign_oneway_left","info", "img/signs/sign_oneway_left.png"),
-            ("Перекрёсток", "sign_4_way_intersect","info", "img/signs/sign_4_way_intersect.png"),
-            ("T-образный правый перекрёсток", "sign_right_T_intersect","info", "img/signs/sign_right_T_intersect.png"),
-            ("T-образный левый перекрёсток", "sign_left_T_intersect","info", "img/signs/sign_left_T_intersect.png"),
-            ("T-образный перекрёсток", "sign_T_intersection","info", "img/signs/sign_T_intersection.png"),
+            ("Односторонее движении направо", "sign_oneway_right", "info", "img/signs/sign_oneway_right.png"),
+            ("Односторонее движении налево", "sign_oneway_left", "info", "img/signs/sign_oneway_left.png"),
+            ("Перекрёсток", "sign_4_way_intersect", "info", "img/signs/sign_4_way_intersect.png"),
+            ("T-образный правый перекрёсток", "sign_right_T_intersect", "info", "img/signs/sign_right_T_intersect.png"),
+            ("T-образный левый перекрёсток", "sign_left_T_intersect", "info", "img/signs/sign_left_T_intersect.png"),
+            ("T-образный перекрёсток", "sign_T_intersection", "info", "img/signs/sign_T_intersection.png"),
 
             ("Специальные знаки", "separator", "spec", "img/icons/galka.png"),
             ("Пешеход", "sign_pedestrian", "spec", "img/signs/sign_pedestrian.png"),
             ("Светофор", "sign_t_light_ahead", "spec", "img/signs/sign_t_light_ahead.png"),
-            ("Уточки", "sign_duck_crossing", "spec","img/signs/sign_duck_crossing.png"),
-            ("Парковка", "sign_parking", "spec","img/signs/sign_parking.png")
+            ("Уточки", "sign_duck_crossing", "spec", "img/signs/sign_duck_crossing.png"),
+            ("Парковка", "sign_parking", "spec", "img/signs/sign_parking.png")
         ]
 
         object_list = [
-            ("Иные объекты", "separator", "objects", "img/icons/galka.png"),
-            ("Барьер", "barrier", "objects", "img/objects/"),
-            ("Конус", "cone", "objects", "img/objects/"),
-            ("Уточка", "duckie", "objects", "img/objects/"),
-            ("Уточка-бот", "duckiebot", "objects", "img/objects/"),
-            ("Дерево", "tree", "objects", "img/objects/"),
-            ("Дом", "house", "objects", "img/objects/"),
-            ("Грузовик(в стиле доставки)", "truck", "objects", "img/objects/"),
-            ("Автобус", "bus", "objects", "img/objects/"),
-            ("Здание(многоэтажное)", "building", "objects", "img/objects/"),
+            ("Городские объекты", "separator", "objects", "img/icons/galka.png"),
+            ("Светофор","trafficlight","objects","img/objects/trafficlight.png"),
+            ("Барьер", "barrier", "objects", "img/objects/barrier.png"),
+            ("Конус", "cone", "objects", "img/objects/cone.png"),
+            ("Уточка", "duckie", "objects", "img/objects/duckie.png"),
+            ("Уточка-бот", "duckiebot", "objects", "img/objects/duckiebot.png"),
+            ("Дерево", "tree", "objects", "img/objects/tree.png"),
+            ("Дом", "house", "objects", "img/objects/house.png"),
+            ("Грузовик(в стиле доставки)", "truck", "objects", "img/objects/truck.png"),
+            ("Автобус", "bus", "objects", "img/objects/bus.png"),
+            ("Здание(многоэтажное)", "building", "objects", "img/objects/building.png"),
         ]
 
         for elem in [blocks_list, signs_list, object_list]:
@@ -186,7 +193,6 @@ class duck_window(QtWidgets.QMainWindow):
                 widget.setData(0x0101, categ)
                 if data == "separator": widget.setBackground(QtGui.QColor(169, 169, 169))
                 block_list_widget.addItem(widget)
-
 
         # Настройка меню Редактор карты
         default_fill = self.ui.default_fill
@@ -201,12 +207,6 @@ class duck_window(QtWidgets.QMainWindow):
 
         set_fill = self.ui.set_fill
         set_fill.clicked.connect(self.set_default_fill)
-
-        # new = mapviewer.small_wigget()
-        #
-        # #self.ui.horizontal_layout.addSpacing(QtWidgets.QSpacerItem.)
-        # self.ui.horizontal_layout.addWidget(new)
-
 
     def center(self):
         qr = self.frameGeometry()
@@ -240,23 +240,19 @@ class duck_window(QtWidgets.QMainWindow):
 
     # Подсчёт характеристик карт
     def calc_param_triggered(self):
-        get_map_specifications(self)
-        pass
+
+        text = get_map_specifications(self)
+        self.show_info(self.param_window, "Характеристики карты", text)
 
     # Расчёт требуемых материалов
     def calc_materials_triggered(self):
-        get_map_materials(self)
-        pass
-
-    # Вывод справки по работе с программой
-    def help_info_triggered(self):
-        # TODO Вывод справки по работе с программой
-        pass
+        text = get_map_materials(self)
+        self.show_info(self.mater_window, "Необходимые материалы", text)
 
     # Вывод справки по работе с программой
     def about_author_triggered(self):
-        # TODO Информация о великих создателях
-        pass
+        text = "Авторы:\n alskaa;\n dihindee; \n ovc-serega.\n\n Ищите нас на github!"
+        self.show_info(self.author_window, "Об авторах", text)
 
     # Выход из программы
     def exit_triggered(self):
@@ -265,6 +261,7 @@ class duck_window(QtWidgets.QMainWindow):
             return
         if ret == QMessageBox.Save:
             save_map(self)
+        self.info.close()
         QtCore.QCoreApplication.instance().quit()
 
     # скрытие меню о блоках
@@ -329,6 +326,12 @@ class duck_window(QtWidgets.QMainWindow):
             return
         if ret == QMessageBox.Save:
             save_map(self)
+
+        # закрытие доп. диалоговых окон
+        self.author_window.exit()
+        self.param_window.exit()
+        self.mater_window.exit()
+
         event.accept()
 
     # обработка клика по элементу из списка списку
@@ -353,9 +356,15 @@ class duck_window(QtWidgets.QMainWindow):
             elem = self.info_json[name]
             info_browser = self.ui.info_browser
             info_browser.clear()
-            str = "Название:\n"+ list.currentItem().text() \
-                  + "\n\nОписание:\n" + elem["info"];
-            info_browser.setText(str)
+            text = "Название:\n " + list.currentItem().text() \
+                   + "\n\nОписание:\n " + elem["info"]
+            if elem["type"] == "block":
+                text += "\n\nДлина дороги: " + str(elem["length"]) + " см\n"
+                text += "\nИзолента:\n"
+                text += " Красная: " + str(elem["red"]) + " см\n"
+                text += " Желтая: " + str(elem["yellow"]) + " см\n"
+                text += " Белая: " + str(elem["white"]) + " см"
+            info_browser.setText(text)
 
     # 2й клик также перехватывается одинарным
     def item_list_double_clicked(self):
@@ -408,3 +417,9 @@ class duck_window(QtWidgets.QMainWindow):
             #  TODO Кисть активна
         else:
             print(False)
+
+    # функция создания доп. информационного окна
+    def show_info(self, name, title, text):
+        name.set_window_name(title)
+        name.set_text(text)
+        name.show()
