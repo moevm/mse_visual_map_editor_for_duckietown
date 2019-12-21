@@ -186,7 +186,6 @@
     <property name="title">
      <string>Помощь</string>
     </property>
-    <addaction name="help_info"/>
     <addaction name="about_author"/>
    </widget>
    <widget class="QMenu" name="menuDbl">
@@ -503,9 +502,6 @@
    <widget class="QWidget" name="dockWidgetContents_2">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <layout class="QHBoxLayout" name="horizontal_layout"/>
-     </item>
-     <item>
       <widget class="QTextBrowser" name="info_browser">
        <property name="autoFillBackground">
         <bool>false</bool>
@@ -685,25 +681,6 @@
     <string>Рассчитать материалы</string>
    </property>
   </action>
-  <action name="help_info">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Справка о программе</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+I</string>
-   </property>
-  </action>
-  <action name="about_author">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Об авторах</string>
-   </property>
-  </action>
   <action name="save_map_as">
    <property name="text">
     <string>Сохранить карту как</string>
@@ -762,6 +739,11 @@
    </property>
    <property name="text">
     <string>Редактор карт</string>
+   </property>
+  </action>
+  <action name="about_author">
+   <property name="text">
+    <string>Об авторах</string>
    </property>
   </action>
  </widget>
