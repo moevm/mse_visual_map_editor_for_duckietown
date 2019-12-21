@@ -40,3 +40,15 @@ def new_map(parent: QtWidgets.QWidget):
         parent.map.items = []
         parent.map.gridSize = 58.5
         map_to_yaml(parent.map, new_map)
+
+
+def get_map_specifications(parent: QtWidgets.QWidget):
+    file_name = QFileDialog.getSaveFileName(parent, 'Save file', '.', filter=('TXT file (*.txt)'))[0]
+    if file_name:
+        specifications_of_map(parent.map, file_name)
+
+
+def get_map_materials(parent: QtWidgets.QWidget):
+    file_name = QFileDialog.getSaveFileName(parent, 'Save file', '.', filter=('TXT file (*.txt)'))[0]
+    if file_name:
+        materials_of_map(parent.map, file_name)
