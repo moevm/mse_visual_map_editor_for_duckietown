@@ -78,8 +78,13 @@ def get_map_elements(map):
     result = ''
     padding = '   '
     padding2 = padding + padding
+
+    sign_no_right_turn = sign_no_left_turn = 0
+    sign_oneway_right = sign_oneway_left = 0
+    sign_right_T_intersect = sign_left_T_intersect = 0
+    sign_duck = 0
     sign_4_way = sign_T = parking = 0
-    sign_do_not_enter = sign_no_turn = sign_oneway = 0
+    sign_do_not_enter = 0
     sign_pedestrian = sign_stop = sign_yield = 0
     sign_t_light_ahead = 0
 
@@ -105,27 +110,35 @@ def get_map_elements(map):
 
     if map.items:
         for object in map.items:
-            if 'sign_4_way_intersect' in object.kind:
+            if object.kind == 'sign_4_way_intersect':
                 sign_4_way += 1
-            elif 'T_intersect' in object.kind:
+            elif object.kind == 'sign_right_T_intersect':
+                sign_right_T_intersect += 1
+            elif object.kind == 'sign_left_T_intersect':
+                sign_left_T_intersect += 1
+            elif object.kind == 'sign_T_intersection':
                 sign_T += 1
-            elif 'sign_do_not_enter' in object.kind:
+            elif object.kind == 'sign_do_not_enter':
                 sign_do_not_enter += 1
-            elif 'sign_duck_crossing' in object.kind:
+            elif object.kind == 'sign_duck_crossing':
+                sign_duck += 1
+            elif object.kind == 'sign_no_right_turn':
+                sign_no_right_turn += 1
+            elif object.kind == 'sign_no_left_turn':
+                sign_no_left_turn += 1
+            elif object.kind == 'sign_oneway_right':
+                sign_oneway_right += 1
+            elif object.kind == 'sign_oneway_left':
+                sign_oneway_left += 1
+            elif object.kind == 'sign_pedestrian':
                 sign_pedestrian += 1
-            elif 'turn' in object.kind:
-                sign_no_turn += 1
-            elif 'sign_oneway' in object.kind:
-                sign_oneway += 1
-            elif 'sign_pedestrian' in object.kind:
-                sign_pedestrian += 1
-            elif 'sign_stop' in object.kind:
+            elif object.kind == 'sign_stop':
                 sign_stop += 1
-            elif 'sign_yield' in object.kind:
+            elif object.kind == 'sign_yield':
                 sign_yield += 1
-            elif 'sign_t_light_ahead' in object.kind:
+            elif object.kind == 'sign_t_light_ahead':
                 sign_t_light_ahead += 1
-            elif 'parking' in object.kind:
+            elif object.kind == 'sign_parking':
                 parking += 1
 
     result += padding2 + 'Количество тройных перекрестков: ' + str(count_of_3way) + ' шт\n'
@@ -137,17 +150,27 @@ def get_map_elements(map):
     result += padding2 + 'Количество блоков пола: ' + str(count_of_floor) + ' шт\n'
     result +='Знаки\n'
     if sign_4_way:
-        result += padding2 + 'Перекресток: ' + str(sign_4_way) + ' шт\n'
+        result += padding2 + 'Впереди перекресток: ' + str(sign_4_way) + ' шт\n'
     if sign_T:
-        result += padding2 + 'Тройной перекресток: ' + str(sign_T) + ' шт\n'
+        result += padding2 + 'Впереди тройной перекресток: ' + str(sign_T) + ' шт\n'
+    if sign_right_T_intersect:
+        result += padding2 + 'Впереди тройной перекресток с поворотом направо: ' + str(sign_right_T_intersect) + ' шт\n'
+    if sign_left_T_intersect:
+        result += padding2 + 'Впереди тройной перекресток с поворотом налево: ' + str(sign_left_T_intersect) + ' шт\n'
     if sign_do_not_enter:
         result += padding2 + 'Проезд запрещен: ' + str(sign_do_not_enter) + ' шт\n'
-    if sign_no_turn:
-        result += padding2 + 'Поворот запрещен: ' + str(sign_no_turn) + ' шт\n'
-    if sign_oneway:
-        result += padding2 + 'Одностороннее движение: ' + str(sign_oneway) + ' шт\n'
+    if sign_no_right_turn:
+        result += padding2 + 'Поворот направо запрещен: ' + str(sign_no_right_turn) + ' шт\n'
+    if sign_no_left_turn:
+        result += padding2 + 'Поворот налево запрещен: ' + str(sign_no_left_turn) + ' шт\n'
+    if sign_oneway_right:
+        result += padding2 + 'Одностороннее движение направо: ' + str(sign_oneway_right) + ' шт\n'
+    if sign_oneway_left:
+        result += padding2 + 'Одностороннее движение налево: ' + str(sign_oneway_left) + ' шт\n'
     if sign_pedestrian:
         result += padding2 + 'Пешеходный переход: ' + str(sign_pedestrian) + ' шт\n'
+    if sign_duck:
+        result += padding2 + 'Осторожно, уточки: ' + str(sign_duck)
     if sign_stop:
         result += padding2 + 'Стоп: ' + str(sign_stop) + ' шт\n'
     if parking:
