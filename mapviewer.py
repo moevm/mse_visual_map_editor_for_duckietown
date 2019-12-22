@@ -7,7 +7,7 @@ from maptile import MapTile
 class MapViewer(QGraphicsView, QtWidgets.QWidget):
     map = None
     tileSprites = {'empty': QtGui.QImage()}
-    signs = {'stop': QtGui.QImage()}
+    objects = {'stop': QtGui.QImage()}
     offsetX = 0
     offsetY = 0
     sc = 1
@@ -51,8 +51,13 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
                       'sign_left_T_intersect', 'sign_T_intersection', 'sign_pedestrian', 'sign_t_light_ahead',
                       'sign_duck_crossing', 'sign_parking']
         for t in sign_names:
-            self.signs[t] = QtGui.QImage()
-            self.signs[t].load('./img/signs/' + t + '.png')
+            self.objects[t] = QtGui.QImage()
+            self.objects[t].load('./img/signs/' + t + '.png')
+        items = ["trafficlight", "barrier", "cone", "duckie", "duckiebot", 'tree', "house", "truck", "bus",
+                 "building", ]
+        for o in items:
+            self.objects[o] = QtGui.QImage()
+            self.objects[o].load('./img/objects/' + o + '.png')
 
     def setMap(self, tiles: DuckietownMap):
         self.map = tiles
@@ -75,7 +80,6 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
                 (self.mouseCurY - self.offsetY) / self.sc * self.map.gridSize):
                 self.lmbClicked.emit(int((self.mouseStartX - self.offsetX) / self.sc * self.map.gridSize),
                                      int((self.mouseStartY - self.offsetY) / self.sc * self.map.gridSize))
-            oldSelection = self.tileSelection.copy()
             self.tileSelection[0] = int(((min(self.mouseStartX, self.mouseCurX) - self.offsetX) / self.sc
                                          ) / self.map.gridSize)
             # if self.tileSelection[0] < 0:
@@ -101,7 +105,7 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
             # elif self.tileSelection[3] > len(self.map.tiles):
             #     self.tileSelection[3] = len(self.map.tiles)
             # print(self.tileSelection)
-
+            self.selectionChanged.emit()
         else:
             self.rmbPressed = False
         self.scene().update()
@@ -156,13 +160,15 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
                     painter.setPen(QtGui.QColor('white'))
                     painter.drawRect(QtCore.QRectF(0, 0, self.map.gridSize, self.map.gridSize))
                 painter.setTransform(globalTransform, False)
-                painter.scale(self.sc, self.sc)
-                if self.map.items:
-                    for s in self.map.items:
-                        if self.signs.__contains__(s.kind):
-                            painter.drawImage(
-                                QtCore.QRectF(self.map.gridSize * s.position['x'], self.map.gridSize * s.position['y'],
-                                              16, 16), self.signs[s.kind])
+        # painter.scale(self.sc, self.sc)
+        if self.map.items:
+            for s in self.map.items:
+                if self.objects.__contains__(s.kind):
+                    painter.drawImage(
+                        QtCore.QRectF(self.map.gridSize*self.sc * s.position['x'],
+                                      self.map.gridSize*self.sc * s.position['y'],
+                                      self.map.gridSize*self.sc /2, self.map.gridSize*self.sc /2),
+                        self.objects[s.kind])
         painter.resetTransform()
         painter.setPen(QtGui.QColor('black'))
         if self.lmbPressed:
