@@ -115,18 +115,10 @@ class duck_window(QtWidgets.QMainWindow):
         b4.setShortcut("Delete")
         b5.setShortcut("Ctrl+Z")
 
-        c1 = QtWidgets.QAction(self)
-        c1.setShortcut("R")
-        c1.triggered.connect(self.rotateSelectedTiles)
-        self.addAction(c1)
-        c2 = QtWidgets.QAction(self)
-        c2.setShortcut("Ctrl+R")
-        c2.triggered.connect(self.rotateSelected)
-        self.addAction(c2)
-        c3 = QtWidgets.QAction(self)
-        c3.setShortcut('Ctrl+F')
-        c3.triggered.connect(self.trimClicked)
-        self.addAction(c3)
+        c1 = QtWidgets.QAction(QtGui.QIcon("img/icons/rotate.png"), 'Повернуть', self)
+        c2 = QtWidgets.QAction(QtGui.QIcon("img/icons/trim.png"), 'Обрезать крайние блоки', self)
+        c1.setShortcut("Ctrl+R")
+        c2.setShortcut("Ctrl+F")
 
         self.brush_button.setIcon(QtGui.QIcon("img/icons/brush.png"))
         self.brush_button.setCheckable(True)
@@ -145,6 +137,9 @@ class duck_window(QtWidgets.QMainWindow):
         b4.triggered.connect(self.delete_button_clicked)
         b5.triggered.connect(self.undo_button_clicked)
 
+        c1.triggered.connect(self.rotateSelectedTiles)
+        c2.triggered.connect(self.trimClicked)
+
         self.brush_button.clicked.connect(self.brush_mode)
 
         for elem in [[a1, a2, a3, a4, a5], [b1, b2, b3, b4, b5]]:
@@ -152,6 +147,8 @@ class duck_window(QtWidgets.QMainWindow):
                 tool_bar.addAction(act)
             tool_bar.addSeparator()
         tool_bar.addWidget(self.brush_button)
+        tool_bar.addAction(c1)
+        tool_bar.addAction(c2)
 
         # Настройка меню Блоки
         block_list_widget = self.ui.block_list
@@ -461,9 +458,6 @@ class duck_window(QtWidgets.QMainWindow):
         else:
             self.drawState = ''
 
-    def rotateSelected(self):
-        # TODO
-        print("rotate selected rect")
 
     def rotateSelectedTiles(self):
         self.editor.save(self.map)
