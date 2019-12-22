@@ -312,7 +312,7 @@ def get_tiles(name):
 
         tile_string = []
         for tile in tiles:
-            print ("_"+tile+"_")
+            # print ("_"+tile+"_")
             if tile == "":
                 continue
             tile_object = {}

@@ -1,6 +1,6 @@
 class DuckietownMap:
     name = None
-    tiles = []
+    tiles = [[]]
     items = []
     gridSize = 64
 
