@@ -4,6 +4,13 @@ from PyQt5.QtWidgets import QFileDialog
 from map_parser import *
 
 
+def init_map(parent: QtWidgets.QWidget):
+    input_map = './maps/empty.yaml'
+    if new_map:
+        parent.map.tiles = tiles_to_objects(get_tiles(input_map))
+        parent.map.items = map_objects_to_objects(get_objects(input_map))
+        parent.map.gridSize = 58.5
+
 def open_map(parent: QtWidgets.QWidget):
     input_map = QFileDialog.getOpenFileName(parent, 'Open file', '.', filter=('YAML file (*.yaml)'))[0]
     if input_map:
@@ -21,8 +28,11 @@ def save_map_as(parent: QtWidgets.QWidget):
 
 
 def save_map(parent: QtWidgets.QWidget):
-    if len(parent.map.tiles) > 0:
-        map_to_yaml(parent.map, parent.map.name)
+    if parent.map.name:
+        if len(parent.map.tiles) > 0:
+            map_to_yaml(parent.map, parent.map.name)
+    else:
+        save_map_as(parent)
 
 
 def export_png(parent: QtWidgets.QWidget):
@@ -34,10 +44,11 @@ def export_png(parent: QtWidgets.QWidget):
 
 def new_map(parent: QtWidgets.QWidget):
     new_map = QFileDialog.getSaveFileName(parent, 'Save file', '.', filter=('YAML file (*.yaml)'))[0]
+    input_map = './maps/empty.yaml'
     if new_map:
         parent.map.name = new_map
-        parent.map.tiles = []
-        parent.map.items = []
+        parent.map.tiles = tiles_to_objects(get_tiles(input_map))
+        parent.map.items = map_objects_to_objects(get_objects(input_map))
         parent.map.gridSize = 58.5
         map_to_yaml(parent.map, new_map)
 
