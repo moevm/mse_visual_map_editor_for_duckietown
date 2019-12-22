@@ -21,8 +21,9 @@ def save_map_as(parent: QtWidgets.QWidget):
 
 
 def save_map(parent: QtWidgets.QWidget):
-    if len(parent.map.tiles) > 0:
-        map_to_yaml(parent.map, parent.map.name)
+    if parent.map.name:
+        if len(parent.map.tiles) > 0:
+            map_to_yaml(parent.map, parent.map.name)
 
 
 def export_png(parent: QtWidgets.QWidget):
