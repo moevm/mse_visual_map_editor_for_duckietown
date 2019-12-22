@@ -27,28 +27,28 @@ def get_map_objects(map):
     tree = 0
     trafficlight = 0
     truck = 0
-
-    for object in map.items:
-        if object.kind == 'barrier':
-            barrier += 1
-        elif object.kind == 'trafficlight':
-            trafficlight += 1
-        elif object.kind == 'tree':
-            tree += 1
-        elif object.kind == 'building':
-            building += 1
-        elif object.kind == 'bus':
-            bus += 1
-        elif object.kind == 'cone':
-            cone += 1
-        elif object.kind == 'duckie':
-            duckie += 1
-        elif object.kind == 'duckiebot':
-            duckiebot += 1
-        elif object.kind == 'house':
-            house += 1
-        elif object.kind == 'truck':
-            truck += 1
+    if map.items:
+        for object in map.items:
+            if object.kind == 'barrier':
+                barrier += 1
+            elif object.kind == 'trafficlight':
+                trafficlight += 1
+            elif object.kind == 'tree':
+                tree += 1
+            elif object.kind == 'building':
+                building += 1
+            elif object.kind == 'bus':
+                bus += 1
+            elif object.kind == 'cone':
+                cone += 1
+            elif object.kind == 'duckie':
+                duckie += 1
+            elif object.kind == 'duckiebot':
+                duckiebot += 1
+            elif object.kind == 'house':
+                house += 1
+            elif object.kind == 'truck':
+                truck += 1
 
     result += 'Объекты\n'
     if barrier:
@@ -103,29 +103,30 @@ def get_map_elements(map):
         elif 'asphalt' in tile.kind:
             count_of_asphalt +=1
 
-    for object in map.items:
-        if object.kind == 'sign_4_way_':
-            sign_4_way += 1
-        elif object.kind == 'T_intersect':
-            sign_T += 1
-        elif object.kind == 'sign_do_not_enter':
-            sign_do_not_enter += 1
-        elif object.kind == 'sign_duck_crossing':
-            sign_pedestrian += 1
-        elif object.kind == 'turn':
-            sign_no_turn += 1
-        elif object.kind == 'sign_oneway':
-            sign_oneway += 1
-        elif object.kind == 'sign_pedestrian':
-            sign_pedestrian += 1
-        elif object.kind == 'sign_stop':
-            sign_stop += 1
-        elif object.kind == 'sign_yield':
-            sign_yield += 1
-        elif object.kind == 'sign_t_light_ahead':
-            sign_t_light_ahead += 1
-        elif object.kind == 'parking':
-            parking += 1
+    if map.items:
+        for object in map.items:
+            if 'sign_4_way_intersect' in object.kind:
+                sign_4_way += 1
+            elif 'T_intersect' in object.kind:
+                sign_T += 1
+            elif 'sign_do_not_enter' in object.kind:
+                sign_do_not_enter += 1
+            elif 'sign_duck_crossing' in object.kind:
+                sign_pedestrian += 1
+            elif 'turn' in object.kind:
+                sign_no_turn += 1
+            elif 'sign_oneway' in object.kind:
+                sign_oneway += 1
+            elif 'sign_pedestrian' in object.kind:
+                sign_pedestrian += 1
+            elif 'sign_stop' in object.kind:
+                sign_stop += 1
+            elif 'sign_yield' in object.kind:
+                sign_yield += 1
+            elif 'sign_t_light_ahead' in object.kind:
+                sign_t_light_ahead += 1
+            elif 'parking' in object.kind:
+                parking += 1
 
     result += padding2 + 'Количество тройных перекрестков: ' + str(count_of_3way) + ' шт\n'
     result += padding2 + 'Количество полных перекрестков: ' + str(count_of_4way) + ' шт\n'
@@ -229,6 +230,16 @@ def map_to_png(map, map_name):
                               MapViewer.tileSprites[map.tiles[y][x].kind])
             pt.setTransform(transform, False)
 
+    if map.items:
+        for s in map.items:
+            if MapViewer.objects.__contains__(s.kind):
+                pt.drawImage(
+                    QtCore.QRectF(map.gridSize * MapViewer.sc * s.position['x'],
+                                  map.gridSize * MapViewer.sc * s.position['y'],
+                                  map.gridSize * MapViewer.sc / 2, map.gridSize * MapViewer.sc / 2),
+                    MapViewer.objects[s.kind])
+    pt.resetTransform()
+
     mergedImage.save(map_name, "png")
     pt.end()
 
@@ -312,7 +323,6 @@ def get_tiles(name):
 
         tile_string = []
         for tile in tiles:
-            # print ("_"+tile+"_")
             if tile == "":
                 continue
             tile_object = {}
