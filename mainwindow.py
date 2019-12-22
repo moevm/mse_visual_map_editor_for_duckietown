@@ -50,6 +50,8 @@ class duck_window(QtWidgets.QMainWindow):
         read_file = codecs.open("doc/info.json", "r", "utf-8")
         self.info_json = json.load(read_file)
 
+        init_map(self)
+
     def initUi(self):
         self.center()
         self.show()
@@ -462,10 +464,11 @@ class duck_window(QtWidgets.QMainWindow):
     def rotateSelectedTiles(self):
         self.editor.save(self.map)
         selection = self.mapviewer.tileSelection
-        for i in range(selection[0], selection[2]):
-            for j in range(selection[1], selection[3]):
-                self.map.tiles[j][i].rotation = (self.map.tiles[j][i].rotation + 90) % 360
-        self.mapviewer.scene().update()
+        if selection:
+            for i in range(selection[0], selection[2]):
+                for j in range(selection[1], selection[3]):
+                    self.map.tiles[j][i].rotation = (self.map.tiles[j][i].rotation + 90) % 360
+            self.mapviewer.scene().update()
 
     def trimClicked(self):
         self.editor.save(self.map)
