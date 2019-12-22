@@ -2,11 +2,14 @@ import codecs
 
 import mapviewer
 import map
+
+from maptile import MapTile
+from mapEditor import MapEditor
 from main_design import *
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QMessageBox, QDesktopWidget
 from IOManager import *
-import functools, json
+import functools, json , copy
 from infowindow import info_window
 
 
@@ -16,6 +19,9 @@ class duck_window(QtWidgets.QMainWindow):
     map = None
     mapviewer = None
     info_json = None
+    editor = None
+    drawState = ''
+    copyBuffer = [[]]
 
     def __init__(self):
         super().__init__()
@@ -32,6 +38,7 @@ class duck_window(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         viewer = mapviewer.MapViewer()
+        self.editor = MapEditor(self.map, self.mapviewer)
         viewer.setMap(self.map)
         self.mapviewer = viewer
         viewer.setMinimumSize(540, 540)
@@ -65,6 +72,9 @@ class duck_window(QtWidgets.QMainWindow):
         block_widget = self.ui.block_widget
         info_widget = self.ui.info_widget
         map_info_widget = self.ui.map_info_widget
+
+        # сигнал от viewer'а
+        self.mapviewer.selectionChanged.connect(self.selectionUpdate)
 
         # подключение действий к кнопкам
         create_map.triggered.connect(self.create_map_triggered)
@@ -105,6 +115,19 @@ class duck_window(QtWidgets.QMainWindow):
         b4.setShortcut("Delete")
         b5.setShortcut("Ctrl+Z")
 
+        c1 = QtWidgets.QAction(self)
+        c1.setShortcut("R")
+        c1.triggered.connect(self.rotateSelectedTiles)
+        self.addAction(c1)
+        c2 = QtWidgets.QAction(self)
+        c2.setShortcut("Ctrl+R")
+        c2.triggered.connect(self.rotateSelected)
+        self.addAction(c2)
+        c3 = QtWidgets.QAction(self)
+        c3.setShortcut('Ctrl+F')
+        c3.triggered.connect(self.trimClicked)
+        self.addAction(c3)
+
         self.brush_button.setIcon(QtGui.QIcon("img/icons/brush.png"))
         self.brush_button.setCheckable(True)
         self.brush_button.setToolTip("Режим кисти")
@@ -122,7 +145,7 @@ class duck_window(QtWidgets.QMainWindow):
         b4.triggered.connect(self.delete_button_clicked)
         b5.triggered.connect(self.undo_button_clicked)
 
-        self.brush_button.clicked.connect(self.bruch_mode)
+        self.brush_button.clicked.connect(self.brush_mode)
 
         for elem in [[a1, a2, a3, a4, a5], [b1, b2, b3, b4, b5]]:
             for act in elem:
@@ -221,12 +244,14 @@ class duck_window(QtWidgets.QMainWindow):
     def create_map_triggered(self):
         new_map(self)
         print(self.map.tiles, self.map.items)
+        self.mapviewer.offsetX = self.mapviewer.offsetY = 0
         self.mapviewer.scene().update()
         print("создание новой карты")
 
     # Действия по открытию карты
     def open_map_triggered(self):
         open_map(self)
+        self.mapviewer.offsetX = self.mapviewer.offsetY = 0
         self.mapviewer.scene().update()
 
     # Сохранение карты
@@ -390,23 +415,36 @@ class duck_window(QtWidgets.QMainWindow):
 
     # Вызов функции копирования
     def copy_button_clicked(self):
-        # TODO кнопка копирования
+        if self.brush_button.isChecked():
+            self.brush_button.click()
+        self.drawState = 'copy'
+        self.copyBuffer = copy.copy(self.mapviewer.tileSelection)
         print("copy")
 
     # Вызов функции вырезания
     def cut_button_clicked(self):
-        # TODO Кновку вырезания
+        if self.brush_button.isChecked():
+            self.brush_button.click()
+        self.drawState = 'cut'
+        self.copyBuffer = copy.copy(self.mapviewer.tileSelection)
         print("cut")
 
     # Вызов функции вставки
     def insert_button_clicked(self):
-        # TODO Кнопка вставки
-        print("insert")
+        if len(self.copyBuffer) == 0:
+            return
+        if self.drawState == 'copy':
+            self.editor.copySelection(self.copyBuffer, self.mapviewer.tileSelection[0], self.mapviewer.tileSelection[1],
+                                      MapTile(self.ui.delete_fill.currentData()))
+        elif self.drawState == 'cut':
+            self.editor.moveSelection(self.copyBuffer, self.mapviewer.tileSelection[0], self.mapviewer.tileSelection[1],
+                                      MapTile(self.ui.delete_fill.currentData()))
+        self.mapviewer.scene().update()
 
     # Вызов функции удаления
     def delete_button_clicked(self):
-        # TODO Кнопка удаления
-        print("delete")
+        self.editor.deleteSelection(self.mapviewer.tileSelection, MapTile(self.ui.delete_fill.currentData()))
+        self.mapviewer.scene().update()
 
     # Вызов функции отката
     def undo_button_clicked(self):
@@ -414,12 +452,43 @@ class duck_window(QtWidgets.QMainWindow):
         print("undo")
 
     # Включение режима кисти
-    def bruch_mode(self):
+    def brush_mode(self):
+        # print('bruh click')
         if self.brush_button.isChecked():
-            print(True)
-            #  TODO Кисть активна
+            self.drawState = 'brush'
+            #  TODO Кисть активна[4, 4, 8, 7]
         else:
-            print(False)
+            self.drawState = ''
+    def rotateSelected(self):
+        # TODO
+        print("rotate selected rect")
+
+    def rotateSelectedTiles(self):
+        selection = self.mapviewer.tileSelection
+        for i in range(selection[0], selection[2]):
+            for j in range(selection[1], selection[3]):
+                self.map.tiles[j][i].rotation = (self.map.tiles[j][i].rotation + 90) % 360
+        self.mapviewer.scene().update()
+
+    def trimClicked(self):
+        print('trim clicked')
+        self.editor.trimBorders(True,True,True,True,MapTile(self.ui.delete_fill.currentData()))
+
+    def selectionUpdate(self):
+        selection = self.mapviewer.tileSelection
+        filler = MapTile(self.ui.default_fill.currentData())
+        if self.drawState == 'brush':
+            self.editor.extendToFit(selection, selection[0], selection[1], MapTile(self.ui.delete_fill.currentData()))
+            if selection[0] < 0:
+                delta = -selection[0]
+                selection[0] = 0
+                selection[2] += delta
+            if selection[1] < 0:
+                delta = -selection[1]
+                selection[3] += delta
+            for i in range(max(selection[0], 0), min(selection[2], len(self.map.tiles[0]))):
+                for j in range(max(selection[1], 0), min(selection[3], len(self.map.tiles))):
+                    self.map.tiles[j][i] = filler
 
     # функция создания доп. информационного окна
     def show_info(self, name, title, text):

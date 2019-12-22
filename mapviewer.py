@@ -7,6 +7,7 @@ from maptile import MapTile
 class MapViewer(QGraphicsView, QtWidgets.QWidget):
     map = None
     tileSprites = {'empty': QtGui.QImage()}
+    signs = {'stop': QtGui.QImage()}
     offsetX = 0
     offsetY = 0
     sc = 1
@@ -45,6 +46,14 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
         self.tileSprites['floor'] = QtGui.QImage()
         self.tileSprites['floor'].load('./img/tiles/floor.png')
 
+        sign_names = ['sign_stop', 'sign_yield', 'sign_no_right_turn', 'sign_no_left_turn', 'sign_do_not_enter',
+                      'sign_oneway_right', 'sign_oneway_left', 'sign_4_way_intersect', 'sign_right_T_intersect',
+                      'sign_left_T_intersect', 'sign_T_intersection', 'sign_pedestrian', 'sign_t_light_ahead',
+                      'sign_duck_crossing', 'sign_parking']
+        for t in sign_names:
+            self.signs[t] = QtGui.QImage()
+            self.signs[t].load('./img/signs/' + t + '.png')
+
     def setMap(self, tiles: DuckietownMap):
         self.map = tiles
         self.tileSelection = [0] * 4
@@ -52,7 +61,7 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
 
     def wheelEvent(self, event: QtGui.QWheelEvent) -> None:
         sf = 2 ** (event.angleDelta().y() / 240)
-        if (self.sc < 0.5 and sf < 1) or (self.sc > 100 and sf > 1):
+        if (self.sc < 0.05 and sf < 1) or (self.sc > 100 and sf > 1):
             return
         self.sc *= sf
         self.scene().update()
@@ -69,31 +78,30 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
             oldSelection = self.tileSelection.copy()
             self.tileSelection[0] = int(((min(self.mouseStartX, self.mouseCurX) - self.offsetX) / self.sc
                                          ) / self.map.gridSize)
-            if self.tileSelection[0] < 0:
-                self.tileSelection[0] = -1
-            if self.tileSelection[0] > (len(self.map.tiles[0]) if len(self.map.tiles) > 0 else 0):
-                self.tileSelection[0] = (len(self.map.tiles[0]) if len(self.map.tiles) > 0 else 0)
+            # if self.tileSelection[0] < 0:
+            #     self.tileSelection[0] = -1
+            # elif self.tileSelection[0] > (len(self.map.tiles[0]) if len(self.map.tiles) > 0 else 0):
+            #     self.tileSelection[0] = (len(self.map.tiles[0]) if len(self.map.tiles) > 0 else 0)
             self.tileSelection[1] = int(((min(self.mouseStartY, self.mouseCurY) - self.offsetY) / self.sc
                                          ) / self.map.gridSize)
-            if self.tileSelection[1] < 0:
-                self.tileSelection[1] = -1
-            if self.tileSelection[1] > len(self.map.tiles):
-                self.tileSelection[1] = len(self.map.tiles)
+            # if self.tileSelection[1] < 0:
+            #     self.tileSelection[1] = -1
+            # elif self.tileSelection[1] > len(self.map.tiles):
+            #     self.tileSelection[1] = len(self.map.tiles)
             self.tileSelection[2] = int(
-                ((max(self.mouseStartX, self.mouseCurX) - self.offsetX) / self.sc) / self.map.gridSize)
-            if self.tileSelection[2] < 0:
-                self.tileSelection[2] = -1
-            if self.tileSelection[2] > (len(self.map.tiles[0]) if len(self.map.tiles) > 0 else 0):
-                self.tileSelection[2] = (len(self.map.tiles[0]) if len(self.map.tiles) > 0 else 0)
+                ((max(self.mouseStartX, self.mouseCurX) - self.offsetX) / self.sc) / self.map.gridSize) + 1
+            # if self.tileSelection[2] < 0:
+            #     self.tileSelection[2] = -1
+            # elif self.tileSelection[2] > (len(self.map.tiles[0]) if len(self.map.tiles) > 0 else 0):
+            #     self.tileSelection[2] = (len(self.map.tiles[0]) if len(self.map.tiles) > 0 else 0)
             self.tileSelection[3] = int(
-                ((max(self.mouseStartY, self.mouseCurY) - self.offsetY) / self.sc) / self.map.gridSize)
-            if self.tileSelection[3] < 0:
-                self.tileSelection[3] = -1
-            if self.tileSelection[3] > len(self.map.tiles):
-                self.tileSelection[3] = len(self.map.tiles)
-            print(self.tileSelection)
-            if self.tileSelection != oldSelection:
-                self.selectionChanged.emit()
+                ((max(self.mouseStartY, self.mouseCurY) - self.offsetY) / self.sc) / self.map.gridSize) + 1
+            # if self.tileSelection[3] < 0:
+            #     self.tileSelection[3] = -1
+            # elif self.tileSelection[3] > len(self.map.tiles):
+            #     self.tileSelection[3] = len(self.map.tiles)
+            # print(self.tileSelection)
+
         else:
             self.rmbPressed = False
         self.scene().update()
@@ -148,6 +156,13 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
                     painter.setPen(QtGui.QColor('white'))
                     painter.drawRect(QtCore.QRectF(0, 0, self.map.gridSize, self.map.gridSize))
                 painter.setTransform(globalTransform, False)
+                painter.scale(self.sc, self.sc)
+                if self.map.items:
+                    for s in self.map.items:
+                        if self.signs.__contains__(s.kind):
+                            painter.drawImage(
+                                QtCore.QRectF(self.map.gridSize * s.position['x'], self.map.gridSize * s.position['y'],
+                                              16, 16), self.signs[s.kind])
         painter.resetTransform()
         painter.setPen(QtGui.QColor('black'))
         if self.lmbPressed:

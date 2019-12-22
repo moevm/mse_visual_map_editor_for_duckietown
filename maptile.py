@@ -5,6 +5,6 @@ class MapTile:
 
     # height = 0
     # static = True
-    def __init__(self, kind, rotation):
+    def __init__(self, kind, rotation=0):
         self.kind = kind
         self.rotation = rotation
