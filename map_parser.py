@@ -73,6 +73,7 @@ def get_map_objects(map):
         result += padding + 'Светофор: ' + str(trafficlight) + ' шт\n'
     return result
 
+
 def get_map_elements(map):
     result = ''
     padding = '   '
@@ -155,6 +156,7 @@ def get_map_elements(map):
     if sign_t_light_ahead:
         result += padding2 + 'Впереди светофор: ' + str(sign_t_light_ahead) + ' шт\n'
     return result
+
 
 def materials_of_map(map):
     read_file = codecs.open("./doc/info.json", "r", "utf-8")
@@ -310,6 +312,9 @@ def get_tiles(name):
 
         tile_string = []
         for tile in tiles:
+            print ("_"+tile+"_")
+            if tile == "":
+                continue
             tile_object = {}
             if '/' in tile != -1:
                 kind, rotate = tile.split('/')
