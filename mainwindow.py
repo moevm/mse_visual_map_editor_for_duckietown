@@ -100,31 +100,31 @@ class duck_window(QtWidgets.QMainWindow):
         # настройка QToolBar
         tool_bar = self.ui.tool_bar
 
-        a1 = QtWidgets.QAction(QtGui.QIcon("img/icons/new.png"), 'Новая карта', self)
-        a2 = QtWidgets.QAction(QtGui.QIcon("img/icons/open.png"), 'Открыть карту', self)
-        a3 = QtWidgets.QAction(QtGui.QIcon("img/icons/save.png"), 'Сохранить карту', self)
-        a4 = QtWidgets.QAction(QtGui.QIcon("img/icons/save_as.png"), 'Сохранить карту как', self)
-        a5 = QtWidgets.QAction(QtGui.QIcon("img/icons/png.png"), 'Экспортировать в png', self)
+        a1 = QtWidgets.QAction(QtGui.QIcon("img/icons/new.png"), 'New map', self)
+        a2 = QtWidgets.QAction(QtGui.QIcon("img/icons/open.png"), 'Open map', self)
+        a3 = QtWidgets.QAction(QtGui.QIcon("img/icons/save.png"), 'Save map', self)
+        a4 = QtWidgets.QAction(QtGui.QIcon("img/icons/save_as.png"), 'Save map as', self)
+        a5 = QtWidgets.QAction(QtGui.QIcon("img/icons/png.png"), 'Export to PNG', self)
 
-        b1 = QtWidgets.QAction(QtGui.QIcon("img/icons/copy.png"), 'Копировать', self)
-        b2 = QtWidgets.QAction(QtGui.QIcon("img/icons/cut.png"), 'Вырезать', self)
-        b3 = QtWidgets.QAction(QtGui.QIcon("img/icons/insert.png"), 'Вставить', self)
-        b4 = QtWidgets.QAction(QtGui.QIcon("img/icons/delete.png"), 'Удалить', self)
-        b5 = QtWidgets.QAction(QtGui.QIcon("img/icons/undo.png"), 'Откатить изменение', self)
+        b1 = QtWidgets.QAction(QtGui.QIcon("img/icons/copy.png"), 'Copy', self)
+        b2 = QtWidgets.QAction(QtGui.QIcon("img/icons/cut.png"), 'Cut', self)
+        b3 = QtWidgets.QAction(QtGui.QIcon("img/icons/insert.png"), 'Paste', self)
+        b4 = QtWidgets.QAction(QtGui.QIcon("img/icons/delete.png"), 'Delete', self)
+        b5 = QtWidgets.QAction(QtGui.QIcon("img/icons/undo.png"), 'Undo', self)
         b1.setShortcut("Ctrl+C")
         b2.setShortcut("Ctrl+X")
         b3.setShortcut("Ctrl+V")
         b4.setShortcut("Delete")
         b5.setShortcut("Ctrl+Z")
 
-        c1 = QtWidgets.QAction(QtGui.QIcon("img/icons/rotate.png"), 'Повернуть', self)
-        c2 = QtWidgets.QAction(QtGui.QIcon("img/icons/trim.png"), 'Обрезать крайние блоки', self)
+        c1 = QtWidgets.QAction(QtGui.QIcon("img/icons/rotate.png"), 'Rotate', self)
+        c2 = QtWidgets.QAction(QtGui.QIcon("img/icons/trim.png"), 'Delete extreme empty blocks', self)
         c1.setShortcut("Ctrl+R")
         c2.setShortcut("Ctrl+F")
 
         self.brush_button.setIcon(QtGui.QIcon("img/icons/brush.png"))
         self.brush_button.setCheckable(True)
-        self.brush_button.setToolTip("Режим кисти")
+        self.brush_button.setToolTip("Brush tool")
         self.brush_button.setShortcut("Ctrl+B")
 
         a1.triggered.connect(self.create_map_triggered)
@@ -159,56 +159,56 @@ class duck_window(QtWidgets.QMainWindow):
 
         # Заполнение списка
         blocks_list = [
-            ("Куски дороги", "separator", "road", "img/icons/galka.png"),
-            ("Дорога", "straight", "road", "img/tiles/straight.png"),
-            ("Левый поворот", "curve_left", "road", "img/tiles/curve_left.png"),
-            ("Правый поворот", "curve_right", "road", "img/tiles/curve_right.png"),
-            ("T-образный левый перекрёсток", "3way_left", "road", "img/tiles/three_way_left.png"),
-            ("T-образный правый перекрёсток", "3way_right", "road", "img/tiles/three_way_left.png"),
-            ("Перекрёсток", "4way", "road", "img/tiles/four_way_center.png"),
+            ("Road tiles", "separator", "road", "img/icons/galka.png"),
+            ("Road", "straight", "road", "img/tiles/straight.png"),
+            ("Left turn", "curve_left", "road", "img/tiles/curve_left.png"),
+            ("Right turn", "curve_right", "road", "img/tiles/curve_right.png"),
+            ("T-shaped left crossroads", "3way_left", "road", "img/tiles/three_way_left.png"),
+            ("T-shaped right crossroads", "3way_right", "road", "img/tiles/three_way_left.png"),
+            ("Crossroad", "4way", "road", "img/tiles/four_way_center.png"),
 
-            ("Блоки заполнения", "separator", "block", "img/icons/galka.png"),
-            ("Пустой блок", "empty", "block", "img/tiles/empty.png"),
-            ("Асфальт", "asphalt", "block", "img/tiles/asphalt.png"),
-            ("Трава", "grass", "block", "img/tiles/grass.png"),
-            ("Плитка", "floor", "block", "img/tiles/floor.png")
+            ("Fill tiles", "separator", "block", "img/icons/galka.png"),
+            ("Empty block", "empty", "block", "img/tiles/empty.png"),
+            ("Asphalt", "asphalt", "block", "img/tiles/asphalt.png"),
+            ("Grass", "grass", "block", "img/tiles/grass.png"),
+            ("Floor", "floor", "block", "img/tiles/floor.png")
         ]
 
         signs_list = [
-            ("Запрещающие знаки", "separator", "ban", "img/icons/galka.png"),
-            ("Стоп", "sign_stop", "ban", "img/signs/sign_stop.png"),
-            ("Уступи дорогу", "sign_yield", "ban", "img/signs/sign_yield.png"),
-            ("Поворот направо запрещён", "sign_no_right_turn", "ban", "img/signs/sign_no_right_turn.png"),
-            ("Поворот налево запрещён", "sign_no_left_turn", "ban", "img/signs/sign_no_left_turn.png"),
-            ("Кирпич", "sign_do_not_enter", "ban", "img/signs/sign_do_not_enter.png"),
+            ("Regulatory signs", "separator", "ban", "img/icons/galka.png"),
+            ("Stop", "sign_stop", "ban", "img/signs/sign_stop.png"),
+            ("Give away", "sign_yield", "ban", "img/signs/sign_yield.png"),
+            ("No right turn", "sign_no_right_turn", "ban", "img/signs/sign_no_right_turn.png"),
+            ("No left turn", "sign_no_left_turn", "ban", "img/signs/sign_no_left_turn.png"),
+            ("No entry", "sign_do_not_enter", "ban", "img/signs/sign_do_not_enter.png"),
 
-            ("Информационные знаки", "separator", "info", "img/icons/galka.png"),
-            ("Односторонее движении направо", "sign_oneway_right", "info", "img/signs/sign_oneway_right.png"),
-            ("Односторонее движении налево", "sign_oneway_left", "info", "img/signs/sign_oneway_left.png"),
-            ("Перекрёсток", "sign_4_way_intersect", "info", "img/signs/sign_4_way_intersect.png"),
-            ("T-образный правый перекрёсток", "sign_right_T_intersect", "info", "img/signs/sign_right_T_intersect.png"),
-            ("T-образный левый перекрёсток", "sign_left_T_intersect", "info", "img/signs/sign_left_T_intersect.png"),
-            ("T-образный перекрёсток", "sign_T_intersection", "info", "img/signs/sign_T_intersection.png"),
+            ("Infornation signs", "separator", "info", "img/icons/galka.png"),
+            ("One-way street right", "sign_oneway_right", "info", "img/signs/sign_oneway_right.png"),
+            ("One-way street left", "sign_oneway_left", "info", "img/signs/sign_oneway_left.png"),
+            ("Crossroad", "sign_4_way_intersect", "info", "img/signs/sign_4_way_intersect.png"),
+            ("T-shaped right crossroads", "sign_right_T_intersect", "info", "img/signs/sign_right_T_intersect.png"),
+            ("T-shaped left crossroads", "sign_left_T_intersect", "info", "img/signs/sign_left_T_intersect.png"),
+            ("T-shaped crossroads", "sign_T_intersection", "info", "img/signs/sign_T_intersection.png"),
 
-            ("Специальные знаки", "separator", "spec", "img/icons/galka.png"),
-            ("Пешеход", "sign_pedestrian", "spec", "img/signs/sign_pedestrian.png"),
-            ("Светофор", "sign_t_light_ahead", "spec", "img/signs/sign_t_light_ahead.png"),
-            ("Уточки", "sign_duck_crossing", "spec", "img/signs/sign_duck_crossing.png"),
-            ("Парковка", "sign_parking", "spec", "img/signs/sign_parking.png")
+            ("Special signs", "separator", "spec", "img/icons/galka.png"),
+            ("Pedestrian crossing", "sign_pedestrian", "spec", "img/signs/sign_pedestrian.png"),
+            ("Traffic light", "sign_t_light_ahead", "spec", "img/signs/sign_t_light_ahead.png"),
+            ("Duck crossing", "sign_duck_crossing", "spec", "img/signs/sign_duck_crossing.png"),
+            ("Parking", "sign_parking", "spec", "img/signs/sign_parking.png")
         ]
 
         object_list = [
-            ("Городские объекты", "separator", "objects", "img/icons/galka.png"),
-            ("Светофор","trafficlight","objects","img/objects/trafficlight.png"),
-            ("Барьер", "barrier", "objects", "img/objects/barrier.png"),
-            ("Конус", "cone", "objects", "img/objects/cone.png"),
-            ("Уточка", "duckie", "objects", "img/objects/duckie.png"),
-            ("Уточка-бот", "duckiebot", "objects", "img/objects/duckiebot.png"),
-            ("Дерево", "tree", "objects", "img/objects/tree.png"),
-            ("Дом", "house", "objects", "img/objects/house.png"),
-            ("Грузовик(в стиле доставки)", "truck", "objects", "img/objects/truck.png"),
-            ("Автобус", "bus", "objects", "img/objects/bus.png"),
-            ("Здание(многоэтажное)", "building", "objects", "img/objects/building.png"),
+            ("City object", "separator", "objects", "img/icons/galka.png"),
+            ("Traffic light","trafficlight","objects","img/objects/trafficlight.png"),
+            ("Barrier", "barrier", "objects", "img/objects/barrier.png"),
+            ("Cone", "cone", "objects", "img/objects/cone.png"),
+            ("Duckie", "duckie", "objects", "img/objects/duckie.png"),
+            ("Duckiebot", "duckiebot", "objects", "img/objects/duckiebot.png"),
+            ("Tree", "tree", "objects", "img/objects/tree.png"),
+            ("House", "house", "objects", "img/objects/house.png"),
+            ("Truck", "truck", "objects", "img/objects/truck.png"),
+            ("Bus", "bus", "objects", "img/objects/bus.png"),
+            ("Building", "building", "objects", "img/objects/building.png"),
         ]
 
         for elem in [blocks_list, signs_list, object_list]:
@@ -227,8 +227,8 @@ class duck_window(QtWidgets.QMainWindow):
                 default_fill.addItem(QtGui.QIcon(icon), name, data)
                 delete_fill.addItem(QtGui.QIcon(icon), name, data)
 
-        default_fill.setCurrentText("Трава")
-        delete_fill.setCurrentText("Пустой блок")
+        default_fill.setCurrentText("Grass")
+        delete_fill.setCurrentText("Empty block")
 
         set_fill = self.ui.set_fill
         set_fill.clicked.connect(self.set_default_fill)
@@ -245,7 +245,7 @@ class duck_window(QtWidgets.QMainWindow):
         print(self.map.tiles, self.map.items)
         self.mapviewer.offsetX = self.mapviewer.offsetY = 0
         self.mapviewer.scene().update()
-        print("создание новой карты")
+        print("Creating new map")
 
     # Действия по открытию карты
     def open_map_triggered(self):
@@ -270,17 +270,17 @@ class duck_window(QtWidgets.QMainWindow):
     def calc_param_triggered(self):
 
         text = get_map_specifications(self)
-        self.show_info(self.param_window, "Характеристики карты", text)
+        self.show_info(self.param_window, "Map's characteristics", text)
 
     # Расчёт требуемых материалов
     def calc_materials_triggered(self):
         text = get_map_materials(self)
-        self.show_info(self.mater_window, "Необходимые материалы", text)
+        self.show_info(self.mater_window, "Map's material", text)
 
     # Вывод справки по работе с программой
     def about_author_triggered(self):
-        text = "Авторы:\n alskaa;\n dihindee; \n ovc-serega.\n\n Ищите нас на github!"
-        self.show_info(self.author_window, "Об авторах", text)
+        text = "Authors:\n alskaa;\n dihindee;\n ovc-serega;\n HardonCollider.\n\n Contact us on github!"
+        self.show_info(self.author_window, "About", text)
 
     # Выход из программы
     def exit_triggered(self):
@@ -338,9 +338,9 @@ class duck_window(QtWidgets.QMainWindow):
     def quit_MessageBox(self):
         reply = QMessageBox(self)
         reply.setIcon(QMessageBox.Question)
-        reply.setWindowTitle("Выход")
-        reply.setText("Выход из программы")
-        reply.setInformativeText("Выйти и сохранить?")
+        reply.setWindowTitle("Exit")
+        reply.setText("Exit")
+        reply.setInformativeText("Save and exit?")
         reply.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
         reply.setDefaultButton(QMessageBox.Save)
         ret = reply.exec()
@@ -384,14 +384,14 @@ class duck_window(QtWidgets.QMainWindow):
             elem = self.info_json[name]
             info_browser = self.ui.info_browser
             info_browser.clear()
-            text = "Название:\n " + list.currentItem().text() \
-                   + "\n\nОписание:\n " + elem["info"]
+            text = "Name:\n " + list.currentItem().text() \
+                   + "\nDescription:\n " + elem["info"]
             if elem["type"] == "block":
-                text += "\n\nДлина дороги: " + str(elem["length"]) + " см\n"
-                text += "\nИзолента:\n"
-                text += " Красная: " + str(elem["red"]) + " см\n"
-                text += " Желтая: " + str(elem["yellow"]) + " см\n"
-                text += " Белая: " + str(elem["white"]) + " см"
+                text += "\n\nRoad len: " + str(elem["length"]) + " sm\n"
+                text += " Tape:\n"
+                text += " Red: " + str(elem["red"]) + " sm\n"
+                text += " Yellow: " + str(elem["yellow"]) + " sm\n"
+                text += " White: " + str(elem["white"]) + " sm"
             info_browser.setText(text)
 
     # 2й клик также перехватывается одинарным

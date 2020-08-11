@@ -50,27 +50,27 @@ def get_map_objects(map):
             elif object.kind == 'truck':
                 truck += 1
 
-    result += 'Объекты\n'
+    result += 'Objects\n'
     if barrier:
-        result += padding + 'Барьер: ' + str(barrier) + ' шт\n'
+        result += padding + 'Barrier: ' + str(barrier) + ' pcs\n'
     if building:
-        result += padding + 'Здание: ' + str(building) + ' шт\n'
+        result += padding + 'Building: ' + str(building) + ' pcs\n'
     if bus:
-        result += padding + 'Автобус: ' + str(bus) + ' шт\n'
+        result += padding + 'Bus: ' + str(bus) + ' pcs\n'
     if truck:
-        result += padding + 'Грузовик: ' + str(truck) + ' шт\n'
+        result += padding + 'Truck: ' + str(truck) + ' pcs\n'
     if cone:
-        result += padding + 'Конус: ' + str(cone) + ' шт\n'
+        result += padding + 'Code: ' + str(cone) + ' pcs\n'
     if house:
-        result += padding + 'Дом: ' + str(house) + ' шт\n'
+        result += padding + 'House: ' + str(house) + ' pcs\n'
     if tree:
-        result += padding + 'Дерево: ' + str(tree) + ' шт\n'
+        result += padding + 'Tree: ' + str(tree) + ' pcs\n'
     if duckie:
-        result += padding + 'Уточка: ' + str(duckie) + ' шт\n'
+        result += padding + 'Duckie: ' + str(duckie) + ' pcs\n'
     if duckiebot:
-        result += padding + 'Дакибот: ' + str(duckiebot) + ' шт\n'
+        result += padding + 'Duckiebot: ' + str(duckiebot) + ' pcs\n'
     if trafficlight:
-        result += padding + 'Светофор: ' + str(trafficlight) + ' шт\n'
+        result += padding + 'Trafficlight: ' + str(trafficlight) + ' pcs\n'
     return result
 
 
@@ -141,44 +141,44 @@ def get_map_elements(map):
             elif object.kind == 'sign_parking':
                 parking += 1
 
-    result += padding2 + 'Количество тройных перекрестков: ' + str(count_of_3way) + ' шт\n'
-    result += padding2 + 'Количество полных перекрестков: ' + str(count_of_4way) + ' шт\n'
-    result += padding2 + 'Количество блоков прямой дороги: ' + str(count_of_str) + ' шт\n'
-    result += padding2 + 'Количество поворотов: ' + str(count_of_curve) + ' шт\n'
-    result += padding2 + 'Количество блоков травы: ' + str(count_of_grass) + ' шт\n'
-    result += padding2 + 'Количество блоков асфальта: ' + str(count_of_asphalt) + ' шт\n'
-    result += padding2 + 'Количество блоков пола: ' + str(count_of_floor) + ' шт\n'
-    result +='Знаки\n'
+    result += padding2 + 'Number of T-shaped crossroads: ' + str(count_of_3way) + ' pcs\n'
+    result += padding2 + 'Number of crossroads: ' + str(count_of_4way) + ' pcs\n'
+    result += padding2 + 'Number of road: ' + str(count_of_str) + ' pcs\n'
+    result += padding2 + 'Number of turn: ' + str(count_of_curve) + ' pcs\n'
+    result += padding2 + 'Number of grass: ' + str(count_of_grass) + ' pcs\n'
+    result += padding2 + 'Number of asphalt: ' + str(count_of_asphalt) + ' pcs\n'
+    result += padding2 + 'Number of floor: ' + str(count_of_floor) + ' pcs\n'
+    result +='Signs\n'
     if sign_4_way:
-        result += padding2 + 'Впереди перекресток: ' + str(sign_4_way) + ' шт\n'
+        result += padding2 + 'Crossroad: ' + str(sign_4_way) + ' pcs\n'
     if sign_T:
-        result += padding2 + 'Впереди тройной перекресток: ' + str(sign_T) + ' шт\n'
+        result += padding2 + 'T-shaped crossroads: ' + str(sign_T) + ' pcs\n'
     if sign_right_T_intersect:
-        result += padding2 + 'Впереди тройной перекресток с поворотом направо: ' + str(sign_right_T_intersect) + ' шт\n'
+        result += padding2 + 'T-shaped right crossroads: ' + str(sign_right_T_intersect) + ' pcs\n'
     if sign_left_T_intersect:
-        result += padding2 + 'Впереди тройной перекресток с поворотом налево: ' + str(sign_left_T_intersect) + ' шт\n'
+        result += padding2 + 'T-shaped left crossroads: ' + str(sign_left_T_intersect) + ' pcs\n'
     if sign_do_not_enter:
-        result += padding2 + 'Проезд запрещен: ' + str(sign_do_not_enter) + ' шт\n'
+        result += padding2 + 'Give away: ' + str(sign_do_not_enter) + ' pcs\n'
     if sign_no_right_turn:
-        result += padding2 + 'Поворот направо запрещен: ' + str(sign_no_right_turn) + ' шт\n'
+        result += padding2 + 'No right turn: ' + str(sign_no_right_turn) + ' pcs\n'
     if sign_no_left_turn:
-        result += padding2 + 'Поворот налево запрещен: ' + str(sign_no_left_turn) + ' шт\n'
+        result += padding2 + 'No left turn: ' + str(sign_no_left_turn) + ' pcs\n'
     if sign_oneway_right:
-        result += padding2 + 'Одностороннее движение направо: ' + str(sign_oneway_right) + ' шт\n'
+        result += padding2 + 'One-way street right: ' + str(sign_oneway_right) + ' pcs\n'
     if sign_oneway_left:
-        result += padding2 + 'Одностороннее движение налево: ' + str(sign_oneway_left) + ' шт\n'
+        result += padding2 + 'One-way street left: ' + str(sign_oneway_left) + ' pcs\n'
     if sign_pedestrian:
-        result += padding2 + 'Пешеходный переход: ' + str(sign_pedestrian) + ' шт\n'
+        result += padding2 + 'Pedestrian crossing: ' + str(sign_pedestrian) + ' pcs\n'
     if sign_duck:
-        result += padding2 + 'Осторожно, уточки: ' + str(sign_duck)
+        result += padding2 + 'Duck crossing: ' + str(sign_duck)
     if sign_stop:
-        result += padding2 + 'Стоп: ' + str(sign_stop) + ' шт\n'
+        result += padding2 + 'Stop: ' + str(sign_stop) + ' pcs\n'
     if parking:
-        result += padding2 + 'Парковка: ' + str(parking) + ' шт\n'
+        result += padding2 + 'Parking: ' + str(parking) + ' pcs\n'
     if sign_yield:
-        result += padding2 + 'Уступите дорогу: ' + str(sign_yield) + ' шт\n'
+        result += padding2 + 'Give away: ' + str(sign_yield) + ' pcs\n'
     if sign_t_light_ahead:
-        result += padding2 + 'Впереди светофор: ' + str(sign_t_light_ahead) + ' шт\n'
+        result += padding2 + 'Traffic light: ' + str(sign_t_light_ahead) + ' pcs\n'
     return result
 
 
@@ -188,7 +188,7 @@ def materials_of_map(map):
 
     padding = '   '
     padding2 = padding + padding
-    result = 'Необходимые материалы для карты\n   Изолента\n'
+    result = 'Materials for the map\n   Tape\n'
 
     white = 0
     yellow = 0
@@ -200,12 +200,12 @@ def materials_of_map(map):
         red += specifications[tile.kind]['red']
 
     if white:
-        result += padding + 'Белая: 4.8 х ' + str(white) + ' см\n'
+        result += padding + 'White: 4.8 x ' + str(white) + ' sm\n'
     if yellow:
-        result += padding + 'Желтая: 2.4 х ' + str(yellow) + ' см\n'
+        result += padding + 'Yellow: 2.4 x ' + str(yellow) + ' sm\n'
     if red:
-        result += padding + 'Красная: 4.8 х ' + str(red) + ' см\n'
-    result += 'Блоки\n'
+        result += padding + 'Red: 4.8 x ' + str(red) + ' sm\n'
+    result += 'Blocks\n'
     result += get_map_elements(map)
     result += get_map_objects(map)
     print(result)
@@ -217,11 +217,11 @@ def specifications_of_map(map):
     specifications = json.load(read_file)
 
     road_length = 0
-    result = "Характеристики карты\nДороги\n"
+    result = "Map's characteristics\nRoads\n"
     for tile in np.array(map.tiles).flat:
         road_length += specifications[tile.kind]['length']
 
-    result += '      Протяженность дорог: ' + str(road_length) + ' см\n'
+    result += '      Road len: ' + str(road_length) + ' sm\n'
     result += get_map_elements(map)
     print(result)
     return result
