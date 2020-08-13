@@ -12,6 +12,7 @@ from mapviewer import MapViewer
 
 
 rotation_val = {0: 'E', 90: 'S', 180: 'W', 270: 'N'}
+_translate = QtCore.QCoreApplication.translate
 
 
 def get_map_objects(map):
@@ -51,27 +52,27 @@ def get_map_objects(map):
             elif object.kind == 'truck':
                 truck += 1
 
-    result += 'Objects\n'
+    result += '{}\n'.format(_translate("MainWindow", "Objects"))
     if barrier:
-        result += padding + 'Barrier: ' + str(barrier) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Barrier"), barrier, _translate("MainWindow", "pcs"))
     if building:
-        result += padding + 'Building: ' + str(building) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Building"), building, _translate("MainWindow", "pcs"))
     if bus:
-        result += padding + 'Bus: ' + str(bus) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Bus"), bus, _translate("MainWindow", "pcs"))
     if truck:
-        result += padding + 'Truck: ' + str(truck) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Truck"), truck, _translate("MainWindow", "pcs"))
     if cone:
-        result += padding + 'Code: ' + str(cone) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Cone"), cone, _translate("MainWindow", "pcs"))
     if house:
-        result += padding + 'House: ' + str(house) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "House"), house, _translate("MainWindow", "pcs"))
     if tree:
-        result += padding + 'Tree: ' + str(tree) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Tree"), tree, _translate("MainWindow", "pcs"))
     if duckie:
-        result += padding + 'Duckie: ' + str(duckie) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Duckie"), duckie, _translate("MainWindow", "pcs"))
     if duckiebot:
-        result += padding + 'Duckiebot: ' + str(duckiebot) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Duckiebot"), duckiebot, _translate("MainWindow", "pcs"))
     if trafficlight:
-        result += padding + 'Trafficlight: ' + str(trafficlight) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Trafficlight"), trafficlight, _translate("MainWindow", "pcs"))
     return result
 
 
@@ -141,52 +142,52 @@ def get_map_elements(map):
                 sign_t_light_ahead += 1
             elif object.kind == 'sign_parking':
                 parking += 1
-
-    result += padding2 + 'Number of T-shaped crossroads: ' + str(count_of_3way) + ' pcs\n'
-    result += padding2 + 'Number of crossroads: ' + str(count_of_4way) + ' pcs\n'
-    result += padding2 + 'Number of road: ' + str(count_of_str) + ' pcs\n'
-    result += padding2 + 'Number of turn: ' + str(count_of_curve) + ' pcs\n'
-    result += padding2 + 'Number of grass: ' + str(count_of_grass) + ' pcs\n'
-    result += padding2 + 'Number of asphalt: ' + str(count_of_asphalt) + ' pcs\n'
-    result += padding2 + 'Number of floor: ' + str(count_of_floor) + ' pcs\n'
-    result +='Signs\n'
+    result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Number of T-shaped crossroads"), count_of_3way, _translate("MainWindow", "pcs"))
+    result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Number of crossroads"), count_of_4way, _translate("MainWindow", "pcs"))
+    result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Number of road"), count_of_str, _translate("MainWindow", "pcs"))
+    result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Number of turn"), count_of_curve, _translate("MainWindow", "pcs"))
+    result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Number of grass"), count_of_grass, _translate("MainWindow", "pcs"))
+    result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Number of asphalt"), count_of_asphalt, _translate("MainWindow", "pcs"))
+    result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Number of floor"), count_of_floor, _translate("MainWindow", "pcs"))
+    
+    result +='{}\n'.format(_translate("MainWindow", "Signs"))
     if sign_4_way:
-        result += padding2 + 'Crossroad: ' + str(sign_4_way) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Crossroad"), sign_4_way, _translate("MainWindow", "pcs"))
     if sign_T:
-        result += padding2 + 'T-shaped crossroads: ' + str(sign_T) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "T-shaped crossroads"), sign_T, _translate("MainWindow", "pcs"))
     if sign_right_T_intersect:
-        result += padding2 + 'T-shaped right crossroads: ' + str(sign_right_T_intersect) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "T-shaped right crossroads"), sign_right_T_intersect, _translate("MainWindow", "pcs"))
     if sign_left_T_intersect:
-        result += padding2 + 'T-shaped left crossroads: ' + str(sign_left_T_intersect) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "T-shaped left crossroads"), sign_left_T_intersect, _translate("MainWindow", "pcs"))
     if sign_do_not_enter:
-        result += padding2 + 'Give away: ' + str(sign_do_not_enter) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Give away"), sign_do_not_enter, _translate("MainWindow", "pcs"))
     if sign_no_right_turn:
-        result += padding2 + 'No right turn: ' + str(sign_no_right_turn) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "No right turn"), sign_no_right_turn, _translate("MainWindow", "pcs"))
     if sign_no_left_turn:
-        result += padding2 + 'No left turn: ' + str(sign_no_left_turn) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "No left turn"), sign_no_left_turn, _translate("MainWindow", "pcs"))
     if sign_oneway_right:
-        result += padding2 + 'One-way street right: ' + str(sign_oneway_right) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "One-way street right"), sign_oneway_right, _translate("MainWindow", "pcs"))
     if sign_oneway_left:
-        result += padding2 + 'One-way street left: ' + str(sign_oneway_left) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "One-way street left"), sign_oneway_left, _translate("MainWindow", "pcs"))
     if sign_pedestrian:
-        result += padding2 + 'Pedestrian crossing: ' + str(sign_pedestrian) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Pedestrian crossing"), sign_pedestrian, _translate("MainWindow", "pcs"))
     if sign_duck:
-        result += padding2 + 'Duck crossing: ' + str(sign_duck)
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Duck crossing"), sign_duck, _translate("MainWindow", "pcs"))
     if sign_stop:
-        result += padding2 + 'Stop: ' + str(sign_stop) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Stop"), sign_stop, _translate("MainWindow", "pcs"))
     if parking:
-        result += padding2 + 'Parking: ' + str(parking) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Parking"), parking, _translate("MainWindow", "pcs"))
     if sign_yield:
-        result += padding2 + 'Give away: ' + str(sign_yield) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Give away"), sign_yield, _translate("MainWindow", "pcs"))
     if sign_t_light_ahead:
-        result += padding2 + 'Traffic light: ' + str(sign_t_light_ahead) + ' pcs\n'
+        result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Traffic light"), sign_t_light_ahead, _translate("MainWindow", "pcs"))
     return result
 
 
 def materials_of_map(map, specifications):
     padding = '   '
     padding2 = padding + padding
-    result = 'Materials for the map\n   Tape\n'
+    result = '{}\n   {}\n'.format(_translate("MainWindow", "Map materials"), _translate("MainWindow", "Tape"))
 
     white = 0
     yellow = 0
@@ -198,12 +199,12 @@ def materials_of_map(map, specifications):
         red += specifications[tile.kind]['red']
 
     if white:
-        result += padding + 'White: 4.8 x ' + str(white) + ' sm\n'
+        result += '{}{}: 4.8 x {} {}\n'.format(padding, _translate("MainWindow", "White"), white, _translate("MainWindow", "sm"))
     if yellow:
-        result += padding + 'Yellow: 2.4 x ' + str(yellow) + ' sm\n'
+        result += '{}{}: 2.4 x {} {}\n'.format(padding, _translate("MainWindow", "Yellow"), yellow, _translate("MainWindow", "sm"))
     if red:
-        result += padding + 'Red: 4.8 x ' + str(red) + ' sm\n'
-    result += 'Blocks\n'
+        result += '{}{}: 4.8 x {} {}\n'.format(padding, _translate("MainWindow", "Red"), red, _translate("MainWindow", "sm"))
+    result += '{}\n'.format(_translate("MainWindow", "Blocks"))
     result += get_map_elements(map)
     result += get_map_objects(map)
     print(result)
@@ -212,11 +213,11 @@ def materials_of_map(map, specifications):
 
 def specifications_of_map(map, specifications):
     road_length = 0
-    result = "Map's characteristics\nRoads\n"
+    result = "{}\n{}\n".format(_translate("MainWindow", "Map characteristics"), _translate("MainWindow", "Roads"))
     for tile in np.array(map.tiles).flat:
         road_length += specifications[tile.kind]['length']
 
-    result += '      Road len: ' + str(road_length) + ' sm\n'
+    result += '      {}: {} {}\n'.format(_translate("MainWindow", "Road len"), road_length, _translate("MainWindow", "sm"))
     result += get_map_elements(map)
     print(result)
     return result
@@ -326,7 +327,7 @@ def get_tiles(name):
     try:
         f = open(name, 'r')
     except IOError:
-        print("Could not open file!")
+        print(_translate("MainWindow", "Could not open file!"))
         return None
 
     while True:
@@ -366,7 +367,7 @@ def get_objects(name):
     try:
         f = open(name, 'r')
     except IOError:
-        print("Could not open file!")
+        print(_translate("MainWindow", "Could not open file!"))
         return None
 
     map_line = f.readline()
@@ -405,7 +406,7 @@ def get_tile_size(name):
     try:
         f = open(name, 'r')
     except IOError:
-        print("Could not open file!")
+        print(_translate("MainWindow", "Could not open file!"))
         return None
 
     while True:

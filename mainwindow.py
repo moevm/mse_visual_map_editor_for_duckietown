@@ -18,6 +18,7 @@ from infowindow import info_window
 # pyuic5 main_design.ui -o main_design.py
 
 log = logging.getLogger('root')
+_translate = QtCore.QCoreApplication.translate
 
 class duck_window(QtWidgets.QMainWindow):
     map = None
@@ -120,25 +121,25 @@ class duck_window(QtWidgets.QMainWindow):
         # настройка QToolBar
         tool_bar = self.ui.tool_bar
 
-        a1 = QtWidgets.QAction(QtGui.QIcon("img/icons/new.png"), 'New map', self)
-        a2 = QtWidgets.QAction(QtGui.QIcon("img/icons/open.png"), 'Open map', self)
-        a3 = QtWidgets.QAction(QtGui.QIcon("img/icons/save.png"), 'Save map', self)
-        a4 = QtWidgets.QAction(QtGui.QIcon("img/icons/save_as.png"), 'Save map as', self)
-        a5 = QtWidgets.QAction(QtGui.QIcon("img/icons/png.png"), 'Export to PNG', self)
+        a1 = QtWidgets.QAction(QtGui.QIcon("img/icons/new.png"), _translate("MainWindow", "New map"), self)
+        a2 = QtWidgets.QAction(QtGui.QIcon("img/icons/open.png"), _translate("MainWindow", "Open map"), self)
+        a3 = QtWidgets.QAction(QtGui.QIcon("img/icons/save.png"), _translate("MainWindow", "Save map"), self)
+        a4 = QtWidgets.QAction(QtGui.QIcon("img/icons/save_as.png"), _translate("MainWindow", "Save map as"), self)
+        a5 = QtWidgets.QAction(QtGui.QIcon("img/icons/png.png"), _translate("MainWindow", "Export to PNG"), self)
 
-        b1 = QtWidgets.QAction(QtGui.QIcon("img/icons/copy.png"), 'Copy', self)
-        b2 = QtWidgets.QAction(QtGui.QIcon("img/icons/cut.png"), 'Cut', self)
-        b3 = QtWidgets.QAction(QtGui.QIcon("img/icons/insert.png"), 'Paste', self)
-        b4 = QtWidgets.QAction(QtGui.QIcon("img/icons/delete.png"), 'Delete', self)
-        b5 = QtWidgets.QAction(QtGui.QIcon("img/icons/undo.png"), 'Undo', self)
+        b1 = QtWidgets.QAction(QtGui.QIcon("img/icons/copy.png"), _translate("MainWindow", "Copy"), self)
+        b2 = QtWidgets.QAction(QtGui.QIcon("img/icons/cut.png"), _translate("MainWindow", "Cut"), self)
+        b3 = QtWidgets.QAction(QtGui.QIcon("img/icons/insert.png"), _translate("MainWindow", "Paste"), self)
+        b4 = QtWidgets.QAction(QtGui.QIcon("img/icons/delete.png"), _translate("MainWindow", "Delete"), self)
+        b5 = QtWidgets.QAction(QtGui.QIcon("img/icons/undo.png"), _translate("MainWindow", "Undo"), self)
         b1.setShortcut("Ctrl+C")
         b2.setShortcut("Ctrl+X")
         b3.setShortcut("Ctrl+V")
         b4.setShortcut("Delete")
         b5.setShortcut("Ctrl+Z")
 
-        c1 = QtWidgets.QAction(QtGui.QIcon("img/icons/rotate.png"), 'Rotate', self)
-        c2 = QtWidgets.QAction(QtGui.QIcon("img/icons/trim.png"), 'Delete extreme empty blocks', self)
+        c1 = QtWidgets.QAction(QtGui.QIcon("img/icons/rotate.png"), _translate("MainWindow", "Rotate"), self)
+        c2 = QtWidgets.QAction(QtGui.QIcon("img/icons/trim.png"), _translate("MainWindow", "Delete extreme empty blocks"), self)
         c1.setShortcut("Ctrl+R")
         c2.setShortcut("Ctrl+F")
 
@@ -246,12 +247,12 @@ class duck_window(QtWidgets.QMainWindow):
     def calc_param_triggered(self):
 
         text = get_map_specifications(self)
-        self.show_info(self.param_window, "Map's characteristics", text)
+        self.show_info(self.param_window, _translate("MainWindow", "Map characteristics"), text)
 
     # Расчёт требуемых материалов
     def calc_materials_triggered(self):
         text = get_map_materials(self)
-        self.show_info(self.mater_window, "Map's material", text)
+        self.show_info(self.mater_window, _translate("MainWindow", "Map material"), text)
 
     # Вывод справки по работе с программой
     def about_author_triggered(self):
@@ -314,9 +315,9 @@ class duck_window(QtWidgets.QMainWindow):
     def quit_MessageBox(self):
         reply = QMessageBox(self)
         reply.setIcon(QMessageBox.Question)
-        reply.setWindowTitle("Exit")
-        reply.setText("Exit")
-        reply.setInformativeText("Save and exit?")
+        reply.setWindowTitle(_translate("MainWindow", "Exit"))
+        reply.setText(_translate("MainWindow", "Exit"))
+        reply.setInformativeText(_translate("MainWindow", "Save and exit?"))
         reply.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
         reply.setDefaultButton(QMessageBox.Save)
         ret = reply.exec()
@@ -360,14 +361,13 @@ class duck_window(QtWidgets.QMainWindow):
             elem = self.info_json['info'][name]
             info_browser = self.ui.info_browser
             info_browser.clear()
-            text = "Name:\n " + list.currentItem().text() \
-                   + "\nDescription:\n " + self.get_translation(elem)['info']
+            text = "{}:\n {}\n{}:\n{}".format(_translate("MainWindow", "Name"), list.currentItem().text(), _translate("MainWindow", "Description"), self.get_translation(elem)['info'])
             if elem["type"] == "block":
-                text += "\n\nRoad len: " + str(elem["length"]) + " sm\n"
+                text += "\n\n{}: {} {}".format(_translate("MainWindow", "Road len"), elem["length"], _translate("MainWindow", "sm"))
                 text += " Tape:\n"
-                text += " Red: " + str(elem["red"]) + " sm\n"
-                text += " Yellow: " + str(elem["yellow"]) + " sm\n"
-                text += " White: " + str(elem["white"]) + " sm"
+                text += " {}: {} {}\n".format(_translate("MainWindow", "Red"), elem["red"], _translate("MainWindow", "sm"))
+                text += " {}: {} {}\n".format(_translate("MainWindow", "Yellow"), elem["yellow"], _translate("MainWindow", "sm"))
+                text += " {}: {} {}\n".format(_translate("MainWindow", "White"), elem["white"], _translate("MainWindow", "sm"))
             info_browser.setText(text)
 
     # 2й клик также перехватывается одинарным
