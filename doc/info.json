@@ -124,7 +124,7 @@
                 },
                 "en": {
                     "name": "Duck crossing",
-                    "info": "text"
+                    "info": "Special sign. Indicates the place where ducks cross the road."
                 }
             },
             "icon": "img/signs/sign_duck_crossing.png"
@@ -138,7 +138,7 @@
                 },
                 "en": {
                     "name": "Barrier",
-                    "info": "text"
+                    "info": "City object. Barrier."
                 }
             },
             "icon": "img/objects/barrier.png"
@@ -170,7 +170,7 @@
                 },
                 "en": {
                     "name": "House",
-                    "info": "text"
+                    "info": "City object. The house that Jack built for the duck."
                 }
             },
             "icon": "img/objects/house.png"
@@ -184,7 +184,7 @@
                 },
                 "en": {
                     "name": "Stop",
-                    "info": "text"
+                    "info": "Regulatory sign. It obliges to stop in front of it."
                 }
             },
             "icon": "img/signs/sign_stop.png"
@@ -216,7 +216,7 @@
                 },
                 "en": {
                     "name": "Duckiebot",
-                    "info": "text"
+                    "info": "City object. A cute terminator duck."
                 }
             },
             "icon": "img/objects/duckiebot.png"
@@ -229,7 +229,7 @@
                 },
                 "en": {
                     "name": "Right turn",
-                    "info": "text"
+                    "info": "Right turn with two lanes. Limited to solid white markings. The stripes are delimited by a dashed yellow line."
                 }
             },
             "red": 0,
@@ -247,7 +247,7 @@
                 },
                 "en": {
                     "name": "Floor",
-                    "info": "text"
+                    "info": "Floor block, use to create parking and stopping places."
                 }
             },
             "red": 0,
@@ -266,7 +266,7 @@
                 },
                 "en": {
                     "name": "Tree",
-                    "info": "text"
+                    "info": "City object. Tree."
                 }
             },
             "icon": "img/objects/tree.png"
@@ -280,7 +280,7 @@
                 },
                 "en": {
                     "name": "Give away",
-                    "info": "text"
+                    "info": "Regulatory sign. Demands to give way at an intersection."
                 }
             },
             "icon": "img/signs/sign_yield.png"
@@ -293,7 +293,7 @@
                 },
                 "en": {
                     "name": "Grass",
-                    "info": "text"
+                    "info": "Grass block, used to fill the map."
                 }
             },
             "red": 0,
@@ -311,7 +311,7 @@
                 },
                 "en": {
                     "name": "T-shaped left crossroads",
-                    "info": "text"
+                    "info": "Left T-junction with red stop lines to stop cars."
                 }
             },
             "red": 90,
@@ -330,7 +330,7 @@
                 },
                 "en": {
                     "name": "T-shaped right crossroads",
-                    "info": "text"
+                    "info": "Information sign. Means there is a right T-junction ahead."
                 }
             },
             "icon": "img/signs/sign_right_T_intersect.png"
@@ -344,7 +344,7 @@
                 },
                 "en": {
                     "name": "Duckie",
-                    "info": "text"
+                    "info": "City object. A cute duck."
                 }
             },
             "icon": "img/objects/duckie.png"
@@ -357,7 +357,7 @@
                 },
                 "en": {
                     "name": "T-shaped right crossroads",
-                    "info": "text"
+                    "info": "Right T-junction with red stop lines to stop cars."
                 }
             },
             "red": 90,
@@ -372,11 +372,11 @@
             "lang": {
                 "ru": {
                     "name": "T-образный перекрёсток",
-                    "info": "Информационный знак. Говорит , что впереди T-образный перекрёсток."
+                    "info": "Информационный знак. Говорит, что впереди T-образный перекрёсток."
                 },
                 "en": {
                     "name": "T-shaped crossroads",
-                    "info": "text"
+                    "info": "Information sign. Means there is a T-junction ahead."
                 }
             },
             "icon": "img/signs/sign_T_intersection.png"
@@ -390,7 +390,7 @@
                 },
                 "en": {
                     "name": "Crossroad",
-                    "info": "text"
+                    "info": "Information sign. Means that there is a 4-way intersection ahead."
                 }
             },
             "icon": "img/signs/sign_4_way_intersect.png"
@@ -404,7 +404,7 @@
                 },
                 "en": {
                     "name": "Cone",
-                    "info": "text"
+                    "info": "City object. Traffic cone."
                 }
             },
             "icon": "img/objects/cone.png"
@@ -418,7 +418,7 @@
                 },
                 "en": {
                     "name": "T-shaped left crossroads",
-                    "info": "text"
+                    "info": "Information sign. Means there is a left T-intersection ahead."
                 }
             },
             "icon": "img/signs/sign_left_T_intersect.png"
@@ -431,7 +431,7 @@
                 },
                 "en": {
                     "name": "Crossroad",
-                    "info": "text"
+                    "info": "4-way intersection with red stop lines for car stops."
                 }
             },
             "red": 120,
@@ -450,7 +450,7 @@
                 },
                 "en": {
                     "name": "No left turn",
-                    "info": "text"
+                    "info": "Regulatory sign. Prohibits left turn and U-turn."
                 }
             },
             "icon": "img/signs/sign_no_left_turn.png"
@@ -464,7 +464,7 @@
                 },
                 "en": {
                     "name": "No entry",
-                    "info": "text"
+                    "info": "Regulatory sign. Prohibits passage under the sign."
                 }
             },
             "icon": "img/signs/sign_do_not_enter.png"
@@ -478,7 +478,7 @@
                 },
                 "en": {
                     "name": "Bus",
-                    "info": "text"
+                    "info": "City object. Duck bus."
                 }
             },
             "icon": "img/objects/bus.png"
@@ -492,7 +492,7 @@
                 },
                 "en": {
                     "name": "Traffic light",
-                    "info": "text"
+                    "info": "Special sign. Indicates the presence of traffic light."
                 }
             },
             "icon": "img/signs/sign_t_light_ahead.png"
@@ -506,7 +506,7 @@
                 },
                 "en": {
                     "name": "Building",
-                    "info": "text"
+                    "info": "City object. Multi-storey building."
                 }
             },
             "icon": "img/objects/building.png"
@@ -520,7 +520,7 @@
                 },
                 "en": {
                     "name": "No right turn",
-                    "info": "text"
+                    "info": "Regulatory sign. Prohibits right turn."
                 }
             },
             "icon": "img/signs/sign_no_right_turn.png"
@@ -534,7 +534,7 @@
                 },
                 "en": {
                     "name": "Traffic light",
-                    "info": "text"
+                    "info": "City object. Traffic light regulating traffic in automatic mode."
                 }
             },
             "icon": "img/objects/trafficlight.png"
@@ -547,7 +547,7 @@
                 },
                 "en": {
                     "name": "Asphalt",
-                    "info": "text"
+                    "info": "Standard block of asphalt."
                 }
             },
             "red": 0,
@@ -566,7 +566,7 @@
                 },
                 "en": {
                     "name": "Parking",
-                    "info": "text"
+                    "info": "Special sign. Indicates a parking spot."
                 }
             },
             "icon": "img/signs/sign_parking.png"
@@ -580,7 +580,7 @@
                 },
                 "en": {
                     "name": "One-way street right",
-                    "info": "text"
+                    "info": "Information sign. Means that one-way traffic starts from left to right."
                 }
             },
             "icon": "img/signs/sign_oneway_right.png"
@@ -594,7 +594,7 @@
                 },
                 "en": {
                     "name": "Pedestrian crossing",
-                    "info": "text"
+                    "info": "Special sign. Indicates a pedestrian crossing."
                 }
             },
             "icon": "img/signs/sign_pedestrian.png"
@@ -608,7 +608,7 @@
                 },
                 "en": {
                     "name": "Truck",
-                    "info": "text"
+                    "info": "City object. Delivery truck."
                 }
             },
             "icon": "img/objects/truck.png"
@@ -622,7 +622,7 @@
                 },
                 "en": {
                     "name": "One-way street left",
-                    "info": "text"
+                    "info": "Information sign. Says that one-way traffic starts from right to left."
                 }
             },
             "icon": "img/signs/sign_oneway_left.png"
