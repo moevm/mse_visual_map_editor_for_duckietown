@@ -465,9 +465,9 @@ class duck_window(QtWidgets.QMainWindow):
         self.editor.save(self.map)
         selection = self.mapviewer.tileSelection
         if selection:
-            for i in range(selection[0], selection[2]):
-                for j in range(selection[1], selection[3]):
-                    self.map.tiles[j][i].rotation = (self.map.tiles[j][i].rotation + 90) % 360
+            for i in range(max(selection[1], 0), min(selection[3], len(self.map.tiles))):
+                for j in range(max(selection[0], 0), min(selection[2], len(self.map.tiles[0]))):
+                    self.map.tiles[i][j].rotation = (self.map.tiles[i][j].rotation + 90) % 360
             self.mapviewer.scene().update()
 
     def trimClicked(self):
