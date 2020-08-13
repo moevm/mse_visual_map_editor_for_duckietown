@@ -177,7 +177,7 @@
    </widget>
    <widget class="QMenu" name="maps">
     <property name="title">
-     <string>Map's Info</string>
+     <string>Map Info</string>
     </property>
     <addaction name="calc_param"/>
     <addaction name="calc_materials"/>
@@ -670,7 +670,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Calculate map's characteristics</string>
+    <string>Calculate map characteristics</string>
    </property>
   </action>
   <action name="calc_materials">
@@ -678,7 +678,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Calculate map's materials</string>
+    <string>Calculate map materials</string>
    </property>
   </action>
   <action name="save_map_as">
