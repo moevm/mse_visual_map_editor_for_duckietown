@@ -15,7 +15,7 @@ def main():
     translator.load('{}/lang_{}.qm'.format(LANG_DIR, locale))
     app.installTranslator(translator)
     
-    window = duck_window()
+    window = duck_window(locale)
     window.show()
     app.exec_()
 
