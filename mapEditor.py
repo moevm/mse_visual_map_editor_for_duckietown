@@ -66,8 +66,8 @@ class MapEditor:
 
     # TO TEST
     def deleteSelection(self, selection, backgroundTile):
-        for y in range(max(0, selection[1]), max(0, selection[3])):
-            for x in range(max(0, selection[0]), max(0, selection[2])):
+        for y in range(max(0, selection[1]), min(selection[3], len(self.map.tiles))):
+            for x in range(max(0, selection[0]), min(selection[2], len(self.map.tiles[0]))):
                 self.map.tiles[y][x] = copy.copy(backgroundTile)
         return
 
