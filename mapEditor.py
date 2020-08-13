@@ -100,7 +100,7 @@ class MapEditor:
     def trimBorders(self, trimUp: bool, trimRight: bool, trimDown: bool, trimLeft: bool, backgroundTile):
         isLineEmpty = True
         if trimDown:
-            while isLineEmpty:
+            while isLineEmpty and self.map.tiles:
                 for i in range(len(self.map.tiles[len(self.map.tiles) - 1])):
                     if self.map.tiles[len(self.map.tiles) - 1][i].kind != backgroundTile.kind:
                         isLineEmpty = False
@@ -109,7 +109,7 @@ class MapEditor:
                     self.map.tiles.pop()
         isLineEmpty = True
         if trimUp:
-            while isLineEmpty:
+            while isLineEmpty and self.map.tiles:
                 for i in range(len(self.map.tiles[0])):
                     if self.map.tiles[0][i].kind != backgroundTile.kind:
                         isLineEmpty = False
@@ -118,7 +118,7 @@ class MapEditor:
                     self.map.tiles.pop(0)
         isLineEmpty = True
         if trimRight:
-            while isLineEmpty:
+            while isLineEmpty and self.map.tiles:
                 for i in range(len(self.map.tiles)):
                     if self.map.tiles[i][len(self.map.tiles[i]) - 1].kind != backgroundTile.kind:
                         isLineEmpty = False
@@ -128,7 +128,7 @@ class MapEditor:
                         self.map.tiles[i].pop()
         isLineEmpty = True
         if trimLeft:
-            while isLineEmpty:
+            while isLineEmpty and self.map.tiles:
                 for i in range(len(self.map.tiles)):
                     if self.map.tiles[i][0].kind != backgroundTile.kind:
                         isLineEmpty = False
@@ -136,6 +136,8 @@ class MapEditor:
                 if isLineEmpty:
                     for i in range(len(self.map.tiles)):
                         self.map.tiles[i].pop(0)
+        if not self.map.tiles:
+            self.map.tiles = [[]]
         return
 
     def save(self, map):
