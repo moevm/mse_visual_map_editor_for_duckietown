@@ -4,7 +4,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtCore import QTranslator
 from mainwindow import duck_window
 
-LANG_DIR = './resources/lang/qw'
+LANG_DIR = './resources/lang/qm'
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
