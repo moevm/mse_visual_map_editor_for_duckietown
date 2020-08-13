@@ -183,10 +183,7 @@ def get_map_elements(map):
     return result
 
 
-def materials_of_map(map):
-    read_file = codecs.open("./doc/info.json", "r", "utf-8")
-    specifications = json.load(read_file)
-
+def materials_of_map(map, specifications):
     padding = '   '
     padding2 = padding + padding
     result = 'Materials for the map\n   Tape\n'
@@ -213,10 +210,7 @@ def materials_of_map(map):
     return result
 
 
-def specifications_of_map(map):
-    read_file = codecs.open("./doc/info.json", "r", "utf-8")
-    specifications = json.load(read_file)
-
+def specifications_of_map(map, specifications):
     road_length = 0
     result = "Map's characteristics\nRoads\n"
     for tile in np.array(map.tiles).flat:

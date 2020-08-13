@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import codecs
+import logging
 
 import mapviewer
 import map
@@ -16,6 +17,8 @@ from infowindow import info_window
 
 # pyuic5 main_design.ui -o main_design.py
 
+log = logging.getLogger('root')
+
 class duck_window(QtWidgets.QMainWindow):
     map = None
     mapviewer = None
@@ -24,7 +27,7 @@ class duck_window(QtWidgets.QMainWindow):
     drawState = ''
     copyBuffer = [[]]
 
-    def __init__(self):
+    def __init__(self, locale='en', elem_info="doc/info.json"):
         super().__init__()
         # доп. окна для вывода информации
         self.author_window = info_window()
@@ -34,6 +37,12 @@ class duck_window(QtWidgets.QMainWindow):
         # кнопка для кисти и переопределение события закрытия
         self.brush_button = QtWidgets.QToolButton()
         self.closeEvent = functools.partial(self.quit_program_event)
+
+        # Set locale
+        self.locale = locale
+        
+        # Load element's info
+        self.info_json = json.load(codecs.open(elem_info, "r", "utf-8"))
 
         self.map = map.DuckietownMap()
         self.ui = Ui_MainWindow()
@@ -47,11 +56,21 @@ class duck_window(QtWidgets.QMainWindow):
         viewer.repaint()
         self.initUi()
 
-
-        read_file = codecs.open("doc/info.json", "r", "utf-8")
-        self.info_json = json.load(read_file)
-
         init_map(self)
+
+    def get_translation(self, elem):
+        """Gets info about the element based on self.locale
+        If local doesn't exist, return locale='en'
+
+        :param self
+        :param elem: dict, information about elements (or category), that contains translation
+        :return: dict(). Dict with translation based on the self.locale
+        """
+        if self.locale in elem['lang']:
+            return elem['lang'][self.locale]
+        else:
+            log.warning('duck_window.get_translation. No such locale: {}'.format(self.locale))
+            return elem['lang']['en']
 
     def initUi(self):
         self.center()
@@ -158,78 +177,34 @@ class duck_window(QtWidgets.QMainWindow):
         block_list_widget.itemClicked.connect(self.item_list_clicked)
         block_list_widget.itemDoubleClicked.connect(self.item_list_double_clicked)
 
-        # Заполнение списка
-        blocks_list = [
-            ("Road tiles", "separator", "road", "img/icons/galka.png"),
-            ("Road", "straight", "road", "img/tiles/straight.png"),
-            ("Left turn", "curve_left", "road", "img/tiles/curve_left.png"),
-            ("Right turn", "curve_right", "road", "img/tiles/curve_right.png"),
-            ("T-shaped left crossroads", "3way_left", "road", "img/tiles/three_way_left.png"),
-            ("T-shaped right crossroads", "3way_right", "road", "img/tiles/three_way_left.png"),
-            ("Crossroad", "4way", "road", "img/tiles/four_way_center.png"),
-
-            ("Fill tiles", "separator", "block", "img/icons/galka.png"),
-            ("Empty block", "empty", "block", "img/tiles/empty.png"),
-            ("Asphalt", "asphalt", "block", "img/tiles/asphalt.png"),
-            ("Grass", "grass", "block", "img/tiles/grass.png"),
-            ("Floor", "floor", "block", "img/tiles/floor.png")
-        ]
-
-        signs_list = [
-            ("Regulatory signs", "separator", "ban", "img/icons/galka.png"),
-            ("Stop", "sign_stop", "ban", "img/signs/sign_stop.png"),
-            ("Give away", "sign_yield", "ban", "img/signs/sign_yield.png"),
-            ("No right turn", "sign_no_right_turn", "ban", "img/signs/sign_no_right_turn.png"),
-            ("No left turn", "sign_no_left_turn", "ban", "img/signs/sign_no_left_turn.png"),
-            ("No entry", "sign_do_not_enter", "ban", "img/signs/sign_do_not_enter.png"),
-
-            ("Infornation signs", "separator", "info", "img/icons/galka.png"),
-            ("One-way street right", "sign_oneway_right", "info", "img/signs/sign_oneway_right.png"),
-            ("One-way street left", "sign_oneway_left", "info", "img/signs/sign_oneway_left.png"),
-            ("Crossroad", "sign_4_way_intersect", "info", "img/signs/sign_4_way_intersect.png"),
-            ("T-shaped right crossroads", "sign_right_T_intersect", "info", "img/signs/sign_right_T_intersect.png"),
-            ("T-shaped left crossroads", "sign_left_T_intersect", "info", "img/signs/sign_left_T_intersect.png"),
-            ("T-shaped crossroads", "sign_T_intersection", "info", "img/signs/sign_T_intersection.png"),
-
-            ("Special signs", "separator", "spec", "img/icons/galka.png"),
-            ("Pedestrian crossing", "sign_pedestrian", "spec", "img/signs/sign_pedestrian.png"),
-            ("Traffic light", "sign_t_light_ahead", "spec", "img/signs/sign_t_light_ahead.png"),
-            ("Duck crossing", "sign_duck_crossing", "spec", "img/signs/sign_duck_crossing.png"),
-            ("Parking", "sign_parking", "spec", "img/signs/sign_parking.png")
-        ]
-
-        object_list = [
-            ("City object", "separator", "objects", "img/icons/galka.png"),
-            ("Traffic light","trafficlight","objects","img/objects/trafficlight.png"),
-            ("Barrier", "barrier", "objects", "img/objects/barrier.png"),
-            ("Cone", "cone", "objects", "img/objects/cone.png"),
-            ("Duckie", "duckie", "objects", "img/objects/duckie.png"),
-            ("Duckiebot", "duckiebot", "objects", "img/objects/duckiebot.png"),
-            ("Tree", "tree", "objects", "img/objects/tree.png"),
-            ("House", "house", "objects", "img/objects/house.png"),
-            ("Truck", "truck", "objects", "img/objects/truck.png"),
-            ("Bus", "bus", "objects", "img/objects/bus.png"),
-            ("Building", "building", "objects", "img/objects/building.png"),
-        ]
-
-        for elem in [blocks_list, signs_list, object_list]:
-            for name, data, categ, icon in elem:
-                widget = QtWidgets.QListWidgetItem(QtGui.QIcon(icon), name)
-                widget.setData(0x0100, data)
-                widget.setData(0x0101, categ)
-                if data == "separator": widget.setBackground(QtGui.QColor(169, 169, 169))
-                block_list_widget.addItem(widget)
-
         # Настройка меню Редактор карты
         default_fill = self.ui.default_fill
         delete_fill = self.ui.delete_fill
-        for name, data, categ, icon in blocks_list:
-            if data != "separator":
-                default_fill.addItem(QtGui.QIcon(icon), name, data)
-                delete_fill.addItem(QtGui.QIcon(icon), name, data)
 
-        default_fill.setCurrentText("Grass")
-        delete_fill.setCurrentText("Empty block")
+        # Заполнение списка
+        categories = self.info_json['categories']
+        information = self.info_json['info']
+        for group in categories:
+            # add separator
+            icon = "img/icons/galka.png"
+            widget = QtWidgets.QListWidgetItem(QtGui.QIcon(icon), self.get_translation(group)['name'])
+            widget.setData(0x0100, "separator")
+            widget.setData(0x0101, group['id'])
+            widget.setBackground(QtGui.QColor(169, 169, 169))
+            block_list_widget.addItem(widget)
+            # add elements
+            for elem_id in group['elements']:
+                widget = QtWidgets.QListWidgetItem(QtGui.QIcon(information[elem_id]['icon']), self.get_translation(information[elem_id])['name'])
+                widget.setData(0x0100, elem_id)
+                widget.setData(0x0101, group['id'])
+                block_list_widget.addItem(widget)
+                # add tiles to fill menu
+                if group['id'] in ("road", "block"):
+                    default_fill.addItem(QtGui.QIcon(information[elem_id]['icon']), self.get_translation(information[elem_id])['name'], elem_id)
+                    delete_fill.addItem(QtGui.QIcon(information[elem_id]['icon']), self.get_translation(information[elem_id])['name'], elem_id)
+
+        default_fill.setCurrentText(self.get_translation(information["grass"])['name'])
+        delete_fill.setCurrentText(self.get_translation(information["empty"])['name'])
 
         set_fill = self.ui.set_fill
         set_fill.clicked.connect(self.set_default_fill)
@@ -382,11 +357,11 @@ class duck_window(QtWidgets.QMainWindow):
                     else:
                         elem.setHidden(not elem.isHidden())
         else:
-            elem = self.info_json[name]
+            elem = self.info_json['info'][name]
             info_browser = self.ui.info_browser
             info_browser.clear()
             text = "Name:\n " + list.currentItem().text() \
-                   + "\nDescription:\n " + elem["info"]
+                   + "\nDescription:\n " + self.get_translation(elem)['info']
             if elem["type"] == "block":
                 text += "\n\nRoad len: " + str(elem["length"]) + " sm\n"
                 text += " Tape:\n"
