@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -17,7 +18,7 @@ class Ui_info_widget(object):
 
     def retranslateUi(self, info_widget):
         _translate = QtCore.QCoreApplication.translate
-        info_widget.setWindowTitle(_translate("info_widget", "Справка"))
+        info_widget.setWindowTitle(_translate("MainWindow", "Reference"))
 
 
 # класс для доплнительного информационного окна

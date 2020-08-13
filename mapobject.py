@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class MapObject:
 
     #position = {'x': 0, 'y': 0}

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from map import DuckietownMap
 from mapviewer import MapViewer
 from collections import deque
