@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QFileDialog
