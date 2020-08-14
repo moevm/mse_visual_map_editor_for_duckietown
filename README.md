@@ -9,12 +9,12 @@ App for editing duckietown maps.
 * PyQt5 5.15
 ``` bash
 # Installing python-dependencies
-python3.5 -m pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 ```
 ### Run
 ``` bash
 # Run app
-python3.5 main.py
+python3 main.py
 ```
 `./maps` contains examples of maps.
 
@@ -27,7 +27,7 @@ python3.5 main.py
 ### Requirements
 ```bash
 # Installing python-dependencies
-python3.5 -m pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 ```
 
 ## Building and running the application
