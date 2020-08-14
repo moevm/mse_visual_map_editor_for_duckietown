@@ -18,6 +18,9 @@ python3.5 main.py
 ```
 `./maps` contains examples of maps.
 
+## Multi language support
+[Wiki: Multi language support](https://github.com/moevm/mse_visual_map_editor_for_duckietown/wiki/Multi-language-support)
+
 ## IN PROGRESS...
 ## Building a single-package application for a specific OS
 
