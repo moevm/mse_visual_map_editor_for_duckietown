@@ -5,7 +5,7 @@ App for editing duckietown maps.
 
 ## Getting started
 ### Requirements
-* python 3.5
+* python 3.5+
 * PyQt5 5.15
 ``` bash
 # Installing python-dependencies
