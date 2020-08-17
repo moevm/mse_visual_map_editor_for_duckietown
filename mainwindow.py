@@ -13,6 +13,9 @@ from PyQt5.QtWidgets import QMessageBox, QDesktopWidget
 from IOManager import *
 import functools, json , copy
 from infowindow import info_window
+from logger import get_logger
+
+logger = get_logger()
 
 
 # pyuic5 main_design.ui -o main_design.py
@@ -222,7 +225,8 @@ class duck_window(QtWidgets.QMainWindow):
         print(self.map.tiles, self.map.items)
         self.mapviewer.offsetX = self.mapviewer.offsetY = 0
         self.mapviewer.scene().update()
-        print("Creating new map")
+        #  print("Creating new map")
+        logger.debug("Creating new map")
 
     # Действия по открытию карты
     def open_map_triggered(self):
@@ -234,6 +238,7 @@ class duck_window(QtWidgets.QMainWindow):
     # Сохранение карты
     def save_map_triggered(self):
         save_map(self)
+        logger.debug("Save")
 
     # Сохранение карт с новым именем
     def save_map_as_triggered(self):
@@ -395,7 +400,7 @@ class duck_window(QtWidgets.QMainWindow):
             self.brush_button.click()
         self.drawState = 'copy'
         self.copyBuffer = copy.copy(self.mapviewer.tileSelection)
-        # print("copy")
+        logger.debug("Copy")
 
     # Вызов функции вырезания
     def cut_button_clicked(self):
@@ -403,7 +408,7 @@ class duck_window(QtWidgets.QMainWindow):
             self.brush_button.click()
         self.drawState = 'cut'
         self.copyBuffer = copy.copy(self.mapviewer.tileSelection)
-        # print("cut")
+        logger.debug("Cut")
 
     # Вызов функции вставки
     def insert_button_clicked(self):
