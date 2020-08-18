@@ -268,7 +268,6 @@ class duck_window(QtWidgets.QMainWindow):
             return
         if ret == QMessageBox.Save:
             save_map(self)
-        self.info.close()
         QtCore.QCoreApplication.instance().quit()
 
     # скрытие меню о блоках
