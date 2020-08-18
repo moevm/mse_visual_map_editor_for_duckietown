@@ -4,7 +4,6 @@ FROM ubuntu:18.04
 RUN adduser --quiet --disabled-password qtuser
 
 COPY . . 
-RUN ls
 
 # Install Python 3, PyQt5
 RUN apt-get update \

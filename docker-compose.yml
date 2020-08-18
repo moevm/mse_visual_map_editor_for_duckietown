@@ -1,0 +1,13 @@
+version: '3.0'
+
+services:
+  map_editor:
+    container_name: "duckietown_map_editor"
+    build: .
+    user: "qtuser"
+    network_mode: "host"
+    environment:
+        -  DISPLAY=$DISPLAY
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    entrypoint: ["python3", "/main.py"]
