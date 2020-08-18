@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import codecs
 
 import mapviewer
@@ -11,9 +12,13 @@ from PyQt5.QtWidgets import QMessageBox, QDesktopWidget
 from IOManager import *
 import functools, json , copy
 from infowindow import info_window
+import logging
 
+logger = logging.getLogger('root')
 
 # pyuic5 main_design.ui -o main_design.py
+
+_translate = QtCore.QCoreApplication.translate
 
 class duck_window(QtWidgets.QMainWindow):
     map = None
@@ -23,7 +28,7 @@ class duck_window(QtWidgets.QMainWindow):
     drawState = ''
     copyBuffer = [[]]
 
-    def __init__(self):
+    def __init__(self, locale='en', elem_info="doc/info.json"):
         super().__init__()
         # доп. окна для вывода информации
         self.author_window = info_window()
@@ -33,6 +38,12 @@ class duck_window(QtWidgets.QMainWindow):
         # кнопка для кисти и переопределение события закрытия
         self.brush_button = QtWidgets.QToolButton()
         self.closeEvent = functools.partial(self.quit_program_event)
+
+        # Set locale
+        self.locale = locale
+        
+        # Load element's info
+        self.info_json = json.load(codecs.open(elem_info, "r", "utf-8"))
 
         self.map = map.DuckietownMap()
         self.ui = Ui_MainWindow()
@@ -46,11 +57,21 @@ class duck_window(QtWidgets.QMainWindow):
         viewer.repaint()
         self.initUi()
 
-
-        read_file = codecs.open("doc/info.json", "r", "utf-8")
-        self.info_json = json.load(read_file)
-
         init_map(self)
+
+    def get_translation(self, elem):
+        """Gets info about the element based on self.locale
+        If local doesn't exist, return locale='en'
+
+        :param self
+        :param elem: dict, information about elements (or category), that contains translation
+        :return: dict(). Dict with translation based on the self.locale
+        """
+        if self.locale in elem['lang']:
+            return elem['lang'][self.locale]
+        else:
+            logger.debug("duck_window.get_translation. No such locale: {}".format(self.locale))
+            return elem['lang']['en']
 
     def initUi(self):
         self.center()
@@ -100,31 +121,31 @@ class duck_window(QtWidgets.QMainWindow):
         # настройка QToolBar
         tool_bar = self.ui.tool_bar
 
-        a1 = QtWidgets.QAction(QtGui.QIcon("img/icons/new.png"), 'Новая карта', self)
-        a2 = QtWidgets.QAction(QtGui.QIcon("img/icons/open.png"), 'Открыть карту', self)
-        a3 = QtWidgets.QAction(QtGui.QIcon("img/icons/save.png"), 'Сохранить карту', self)
-        a4 = QtWidgets.QAction(QtGui.QIcon("img/icons/save_as.png"), 'Сохранить карту как', self)
-        a5 = QtWidgets.QAction(QtGui.QIcon("img/icons/png.png"), 'Экспортировать в png', self)
+        a1 = QtWidgets.QAction(QtGui.QIcon("img/icons/new.png"), _translate("MainWindow", "New map"), self)
+        a2 = QtWidgets.QAction(QtGui.QIcon("img/icons/open.png"), _translate("MainWindow", "Open map"), self)
+        a3 = QtWidgets.QAction(QtGui.QIcon("img/icons/save.png"), _translate("MainWindow", "Save map"), self)
+        a4 = QtWidgets.QAction(QtGui.QIcon("img/icons/save_as.png"), _translate("MainWindow", "Save map as"), self)
+        a5 = QtWidgets.QAction(QtGui.QIcon("img/icons/png.png"), _translate("MainWindow", "Export to PNG"), self)
 
-        b1 = QtWidgets.QAction(QtGui.QIcon("img/icons/copy.png"), 'Копировать', self)
-        b2 = QtWidgets.QAction(QtGui.QIcon("img/icons/cut.png"), 'Вырезать', self)
-        b3 = QtWidgets.QAction(QtGui.QIcon("img/icons/insert.png"), 'Вставить', self)
-        b4 = QtWidgets.QAction(QtGui.QIcon("img/icons/delete.png"), 'Удалить', self)
-        b5 = QtWidgets.QAction(QtGui.QIcon("img/icons/undo.png"), 'Откатить изменение', self)
+        b1 = QtWidgets.QAction(QtGui.QIcon("img/icons/copy.png"), _translate("MainWindow", "Copy"), self)
+        b2 = QtWidgets.QAction(QtGui.QIcon("img/icons/cut.png"), _translate("MainWindow", "Cut"), self)
+        b3 = QtWidgets.QAction(QtGui.QIcon("img/icons/insert.png"), _translate("MainWindow", "Paste"), self)
+        b4 = QtWidgets.QAction(QtGui.QIcon("img/icons/delete.png"), _translate("MainWindow", "Delete"), self)
+        b5 = QtWidgets.QAction(QtGui.QIcon("img/icons/undo.png"), _translate("MainWindow", "Undo"), self)
         b1.setShortcut("Ctrl+C")
         b2.setShortcut("Ctrl+X")
         b3.setShortcut("Ctrl+V")
         b4.setShortcut("Delete")
         b5.setShortcut("Ctrl+Z")
 
-        c1 = QtWidgets.QAction(QtGui.QIcon("img/icons/rotate.png"), 'Повернуть', self)
-        c2 = QtWidgets.QAction(QtGui.QIcon("img/icons/trim.png"), 'Обрезать крайние блоки', self)
+        c1 = QtWidgets.QAction(QtGui.QIcon("img/icons/rotate.png"), _translate("MainWindow", "Rotate"), self)
+        c2 = QtWidgets.QAction(QtGui.QIcon("img/icons/trim.png"), _translate("MainWindow", "Delete extreme empty blocks"), self)
         c1.setShortcut("Ctrl+R")
         c2.setShortcut("Ctrl+F")
 
         self.brush_button.setIcon(QtGui.QIcon("img/icons/brush.png"))
         self.brush_button.setCheckable(True)
-        self.brush_button.setToolTip("Режим кисти")
+        self.brush_button.setToolTip("Brush tool")
         self.brush_button.setShortcut("Ctrl+B")
 
         a1.triggered.connect(self.create_map_triggered)
@@ -157,78 +178,34 @@ class duck_window(QtWidgets.QMainWindow):
         block_list_widget.itemClicked.connect(self.item_list_clicked)
         block_list_widget.itemDoubleClicked.connect(self.item_list_double_clicked)
 
-        # Заполнение списка
-        blocks_list = [
-            ("Куски дороги", "separator", "road", "img/icons/galka.png"),
-            ("Дорога", "straight", "road", "img/tiles/straight.png"),
-            ("Левый поворот", "curve_left", "road", "img/tiles/curve_left.png"),
-            ("Правый поворот", "curve_right", "road", "img/tiles/curve_right.png"),
-            ("T-образный левый перекрёсток", "3way_left", "road", "img/tiles/three_way_left.png"),
-            ("T-образный правый перекрёсток", "3way_right", "road", "img/tiles/three_way_left.png"),
-            ("Перекрёсток", "4way", "road", "img/tiles/four_way_center.png"),
-
-            ("Блоки заполнения", "separator", "block", "img/icons/galka.png"),
-            ("Пустой блок", "empty", "block", "img/tiles/empty.png"),
-            ("Асфальт", "asphalt", "block", "img/tiles/asphalt.png"),
-            ("Трава", "grass", "block", "img/tiles/grass.png"),
-            ("Плитка", "floor", "block", "img/tiles/floor.png")
-        ]
-
-        signs_list = [
-            ("Запрещающие знаки", "separator", "ban", "img/icons/galka.png"),
-            ("Стоп", "sign_stop", "ban", "img/signs/sign_stop.png"),
-            ("Уступи дорогу", "sign_yield", "ban", "img/signs/sign_yield.png"),
-            ("Поворот направо запрещён", "sign_no_right_turn", "ban", "img/signs/sign_no_right_turn.png"),
-            ("Поворот налево запрещён", "sign_no_left_turn", "ban", "img/signs/sign_no_left_turn.png"),
-            ("Кирпич", "sign_do_not_enter", "ban", "img/signs/sign_do_not_enter.png"),
-
-            ("Информационные знаки", "separator", "info", "img/icons/galka.png"),
-            ("Односторонее движении направо", "sign_oneway_right", "info", "img/signs/sign_oneway_right.png"),
-            ("Односторонее движении налево", "sign_oneway_left", "info", "img/signs/sign_oneway_left.png"),
-            ("Перекрёсток", "sign_4_way_intersect", "info", "img/signs/sign_4_way_intersect.png"),
-            ("T-образный правый перекрёсток", "sign_right_T_intersect", "info", "img/signs/sign_right_T_intersect.png"),
-            ("T-образный левый перекрёсток", "sign_left_T_intersect", "info", "img/signs/sign_left_T_intersect.png"),
-            ("T-образный перекрёсток", "sign_T_intersection", "info", "img/signs/sign_T_intersection.png"),
-
-            ("Специальные знаки", "separator", "spec", "img/icons/galka.png"),
-            ("Пешеход", "sign_pedestrian", "spec", "img/signs/sign_pedestrian.png"),
-            ("Светофор", "sign_t_light_ahead", "spec", "img/signs/sign_t_light_ahead.png"),
-            ("Уточки", "sign_duck_crossing", "spec", "img/signs/sign_duck_crossing.png"),
-            ("Парковка", "sign_parking", "spec", "img/signs/sign_parking.png")
-        ]
-
-        object_list = [
-            ("Городские объекты", "separator", "objects", "img/icons/galka.png"),
-            ("Светофор","trafficlight","objects","img/objects/trafficlight.png"),
-            ("Барьер", "barrier", "objects", "img/objects/barrier.png"),
-            ("Конус", "cone", "objects", "img/objects/cone.png"),
-            ("Уточка", "duckie", "objects", "img/objects/duckie.png"),
-            ("Уточка-бот", "duckiebot", "objects", "img/objects/duckiebot.png"),
-            ("Дерево", "tree", "objects", "img/objects/tree.png"),
-            ("Дом", "house", "objects", "img/objects/house.png"),
-            ("Грузовик(в стиле доставки)", "truck", "objects", "img/objects/truck.png"),
-            ("Автобус", "bus", "objects", "img/objects/bus.png"),
-            ("Здание(многоэтажное)", "building", "objects", "img/objects/building.png"),
-        ]
-
-        for elem in [blocks_list, signs_list, object_list]:
-            for name, data, categ, icon in elem:
-                widget = QtWidgets.QListWidgetItem(QtGui.QIcon(icon), name)
-                widget.setData(0x0100, data)
-                widget.setData(0x0101, categ)
-                if data == "separator": widget.setBackground(QtGui.QColor(169, 169, 169))
-                block_list_widget.addItem(widget)
-
         # Настройка меню Редактор карты
         default_fill = self.ui.default_fill
         delete_fill = self.ui.delete_fill
-        for name, data, categ, icon in blocks_list:
-            if data != "separator":
-                default_fill.addItem(QtGui.QIcon(icon), name, data)
-                delete_fill.addItem(QtGui.QIcon(icon), name, data)
 
-        default_fill.setCurrentText("Трава")
-        delete_fill.setCurrentText("Пустой блок")
+        # Заполнение списка
+        categories = self.info_json['categories']
+        information = self.info_json['info']
+        for group in categories:
+            # add separator
+            icon = "img/icons/galka.png"
+            widget = QtWidgets.QListWidgetItem(QtGui.QIcon(icon), self.get_translation(group)['name'])
+            widget.setData(0x0100, "separator")
+            widget.setData(0x0101, group['id'])
+            widget.setBackground(QtGui.QColor(169, 169, 169))
+            block_list_widget.addItem(widget)
+            # add elements
+            for elem_id in group['elements']:
+                widget = QtWidgets.QListWidgetItem(QtGui.QIcon(information[elem_id]['icon']), self.get_translation(information[elem_id])['name'])
+                widget.setData(0x0100, elem_id)
+                widget.setData(0x0101, group['id'])
+                block_list_widget.addItem(widget)
+                # add tiles to fill menu
+                if group['id'] in ("road", "block"):
+                    default_fill.addItem(QtGui.QIcon(information[elem_id]['icon']), self.get_translation(information[elem_id])['name'], elem_id)
+                    delete_fill.addItem(QtGui.QIcon(information[elem_id]['icon']), self.get_translation(information[elem_id])['name'], elem_id)
+
+        default_fill.setCurrentText(self.get_translation(information["grass"])['name'])
+        delete_fill.setCurrentText(self.get_translation(information["empty"])['name'])
 
         set_fill = self.ui.set_fill
         set_fill.clicked.connect(self.set_default_fill)
@@ -242,10 +219,10 @@ class duck_window(QtWidgets.QMainWindow):
     # Действие по созданию новой карты
     def create_map_triggered(self):
         new_map(self)
-        print(self.map.tiles, self.map.items)
+        logger.debug("Length - {}; Items - {}".format(len(self.map.tiles), self.map.items))
         self.mapviewer.offsetX = self.mapviewer.offsetY = 0
         self.mapviewer.scene().update()
-        print("создание новой карты")
+        logger.debug("Creating a new map")
 
     # Действия по открытию карты
     def open_map_triggered(self):
@@ -257,6 +234,7 @@ class duck_window(QtWidgets.QMainWindow):
     # Сохранение карты
     def save_map_triggered(self):
         save_map(self)
+        logger.debug("Save")
 
     # Сохранение карт с новым именем
     def save_map_as_triggered(self):
@@ -270,17 +248,17 @@ class duck_window(QtWidgets.QMainWindow):
     def calc_param_triggered(self):
 
         text = get_map_specifications(self)
-        self.show_info(self.param_window, "Характеристики карты", text)
+        self.show_info(self.param_window, _translate("MainWindow", "Map characteristics"), text)
 
     # Расчёт требуемых материалов
     def calc_materials_triggered(self):
         text = get_map_materials(self)
-        self.show_info(self.mater_window, "Необходимые материалы", text)
+        self.show_info(self.mater_window, _translate("MainWindow", "Map material"), text)
 
     # Вывод справки по работе с программой
     def about_author_triggered(self):
-        text = "Авторы:\n alskaa;\n dihindee; \n ovc-serega.\n\n Ищите нас на github!"
-        self.show_info(self.author_window, "Об авторах", text)
+        text = "Authors:\n alskaa;\n dihindee;\n ovc-serega;\n HardonCollider.\n\n Contact us on github!"
+        self.show_info(self.author_window, "About", text)
 
     # Выход из программы
     def exit_triggered(self):
@@ -289,7 +267,6 @@ class duck_window(QtWidgets.QMainWindow):
             return
         if ret == QMessageBox.Save:
             save_map(self)
-        self.info.close()
         QtCore.QCoreApplication.instance().quit()
 
     # скрытие меню о блоках
@@ -338,9 +315,9 @@ class duck_window(QtWidgets.QMainWindow):
     def quit_MessageBox(self):
         reply = QMessageBox(self)
         reply.setIcon(QMessageBox.Question)
-        reply.setWindowTitle("Выход")
-        reply.setText("Выход из программы")
-        reply.setInformativeText("Выйти и сохранить?")
+        reply.setWindowTitle(_translate("MainWindow", "Exit"))
+        reply.setText(_translate("MainWindow", "Exit"))
+        reply.setInformativeText(_translate("MainWindow", "Save and exit?"))
         reply.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
         reply.setDefaultButton(QMessageBox.Save)
         ret = reply.exec()
@@ -381,17 +358,16 @@ class duck_window(QtWidgets.QMainWindow):
                     else:
                         elem.setHidden(not elem.isHidden())
         else:
-            elem = self.info_json[name]
+            elem = self.info_json['info'][name]
             info_browser = self.ui.info_browser
             info_browser.clear()
-            text = "Название:\n " + list.currentItem().text() \
-                   + "\n\nОписание:\n " + elem["info"]
+            text = "{}:\n {}\n{}:\n{}".format(_translate("MainWindow", "Name"), list.currentItem().text(), _translate("MainWindow", "Description"), self.get_translation(elem)['info'])
             if elem["type"] == "block":
-                text += "\n\nДлина дороги: " + str(elem["length"]) + " см\n"
-                text += "\nИзолента:\n"
-                text += " Красная: " + str(elem["red"]) + " см\n"
-                text += " Желтая: " + str(elem["yellow"]) + " см\n"
-                text += " Белая: " + str(elem["white"]) + " см"
+                text += "\n\n{}: {} {}".format(_translate("MainWindow", "Road len"), elem["length"], _translate("MainWindow", "sm"))
+                text += " Tape:\n"
+                text += " {}: {} {}\n".format(_translate("MainWindow", "Red"), elem["red"], _translate("MainWindow", "sm"))
+                text += " {}: {} {}\n".format(_translate("MainWindow", "Yellow"), elem["yellow"], _translate("MainWindow", "sm"))
+                text += " {}: {} {}\n".format(_translate("MainWindow", "White"), elem["white"], _translate("MainWindow", "sm"))
             info_browser.setText(text)
 
     # 2й клик также перехватывается одинарным
@@ -404,14 +380,14 @@ class duck_window(QtWidgets.QMainWindow):
             list.currentItem().setSelected(False)
         else:
             # TODO Добавление блока на карту по 2 клику
-            print(name)
+            logger.debug("Name: {}".format(name))
 
     # Установка значений по умолчанию
     def set_default_fill(self):
         default_fill = self.ui.default_fill.currentData()
         delete_fill = self.ui.delete_fill.currentData()
         # TODO установка занчений по умолчанию
-        print(default_fill, delete_fill)
+        logger.debug("{}; {}".format(default_fill, delete_fill))
 
     # Вызов функции копирования
     def copy_button_clicked(self):
@@ -419,7 +395,7 @@ class duck_window(QtWidgets.QMainWindow):
             self.brush_button.click()
         self.drawState = 'copy'
         self.copyBuffer = copy.copy(self.mapviewer.tileSelection)
-        # print("copy")
+        logger.debug("Copy")
 
     # Вызов функции вырезания
     def cut_button_clicked(self):
@@ -427,7 +403,7 @@ class duck_window(QtWidgets.QMainWindow):
             self.brush_button.click()
         self.drawState = 'cut'
         self.copyBuffer = copy.copy(self.mapviewer.tileSelection)
-        # print("cut")
+        logger.debug("Cut")
 
     # Вызов функции вставки
     def insert_button_clicked(self):

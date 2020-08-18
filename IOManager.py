@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QFileDialog
@@ -54,8 +55,8 @@ def new_map(parent: QtWidgets.QWidget):
 
 
 def get_map_specifications(parent: QtWidgets.QWidget):
-    return specifications_of_map(parent.map)
+    return specifications_of_map(parent.map, parent.info_json['info'])
 
 
 def get_map_materials(parent: QtWidgets.QWidget):
-    return materials_of_map(parent.map)
+    return materials_of_map(parent.map, parent.info_json['info'])

@@ -1,74 +1,44 @@
 # mse_visual_map_editor_for_duckietown
-Приложение, предназначенное для редактирования карт симулятора duckietown.
+App for editing duckietown maps.
 
-## Запуск приложения
-### Необходимые пакеты
-* python 3.5
-* pyQt5 5.13
-### Запуск
-С помощью интерпретатора запустить main.py
+*Note: Editing 0-layer (tile layer) of structure [Confluence. Maps in Duckietown World](https://ethidsc.atlassian.net/wiki/spaces/DS/pages/448593943/Design+Document+Maps+in+Duckietown+World#2.1.-Structure)*
 
-## Сборка однопакетного приложения под конкретную ОС
+## Getting started
+### Requirements
+* python 3.5+
+* PyQt5 5.15
+``` bash
+# Installing python-dependencies
+python3 -m pip install -r requirements.txt
+```
+### Run
+``` bash
+# Run app
+python3 main.py
+```
+`./maps` contains examples of maps.
 
-## Перед сборкой приложения
-Для корректной сборки приложения должен быть установлен python(версия 3.5).
+## Multi language support
+[Wiki: Multi language support](https://github.com/moevm/mse_visual_map_editor_for_duckietown/wiki/Multi-language-support)
 
-Необходимо установить следующие библиотеки:
-* для **linux** 
+## IN PROGRESS...
+## Building a single-package application for a specific OS
+
+### Requirements
 ```bash
-pip3 install pyinstaller
-pip3 install PyQt5
+# Installing python-dependencies
+python3 -m pip install -r requirements.txt
 ```
-* для **windows**:
-```bash
-pip3 install pyinstaller
-pip3 install PyQt5
-pip3 install pypiwin32
-``` 
-### Использование виртуального окружения
-В целях экономии места можно использовать виртутальное окружение. 
-В нём установите библиотек и используйте приложение.
 
-Для запуска и установки используйте команды:
-```
-pip3 install virtualenv
-python3 -m virtualenv .venv
-source .venv/bin/activate
-```
-Для закрытия :
-```deactivate```
-
-## Сборка и запуск приложения
-В командной строке для **windows** \ в консоли для **linux** необходимо выполнить следующие действия:
-```git
-git clone https://github.com/moevm/mse_visual_map_editor_for_duckietown.git
-``` 
-Перейти в директорию репозитория и ввести команду:
+## Building and running the application
+### Build
 ```bash
 pyinstaller --onefile --noconsole main.py
 ```
-После этого в директории ```/dist``` будет сгенерирован исполняемый файл ```main.exe``` для Windows и ```main``` для Linux. 
-
-В случае, если pyinstaller не сможет получить доступ к какой-либо библиотеке, необходимо выполнить команду 
+### Run
 ```bash
-pyinstaller --onefile --paths [path] --noconsole main.py
-``` 
-где ```[path]``` - путь до библиотеки, например ```--paths D:\python35\Lib\site-packages\PyQt5\Qt\bin) ```.
-
-Необходимо перенести сгенерированный пакет в корень проекта с помощью GUI или команд:
-* для Linux:
-```mv dist/main main```
-* для Windows:
-``` move %CD%\dist\main.exe  %CD%```
-
-Приложение готово к запуску.
-
-
-## Удаление приложения
-Удалите бибилиотеки командами:
+# Move file to repository root directory
+mv dist/main main
+# Run app
+./main
 ```
-pip3 uninstall pyinstaller
-pip3 uninstall PyQt5
-```
-и удалите каталог с программой
-
