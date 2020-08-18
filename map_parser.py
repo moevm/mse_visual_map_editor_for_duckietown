@@ -9,9 +9,9 @@ from maptile import MapTile
 from mapobject import MapObject
 from PyQt5 import QtGui, QtCore
 from mapviewer import MapViewer
-from logger import get_logger
+import logging
 
-logger = get_logger()
+logger = logging.getLogger('root')
 
 
 rotation_val = {0: 'E', 90: 'S', 180: 'W', 270: 'N'}

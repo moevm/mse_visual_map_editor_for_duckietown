@@ -12,10 +12,9 @@ from PyQt5.QtWidgets import QMessageBox, QDesktopWidget
 from IOManager import *
 import functools, json , copy
 from infowindow import info_window
-from logger import get_logger
+import logging
 
-logger = get_logger()
-
+logger = logging.getLogger('root')
 
 # pyuic5 main_design.ui -o main_design.py
 
