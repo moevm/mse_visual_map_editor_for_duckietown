@@ -382,14 +382,14 @@ class duck_window(QtWidgets.QMainWindow):
             list.currentItem().setSelected(False)
         else:
             # TODO Добавление блока на карту по 2 клику
-            print(name)
+            logger.debug("Name: {}".format(name))
 
     # Установка значений по умолчанию
     def set_default_fill(self):
         default_fill = self.ui.default_fill.currentData()
         delete_fill = self.ui.delete_fill.currentData()
         # TODO установка занчений по умолчанию
-        print(default_fill, delete_fill)
+        logger.debug("{}; {}".format(default_fill, delete_fill))
 
     # Вызов функции копирования
     def copy_button_clicked(self):
