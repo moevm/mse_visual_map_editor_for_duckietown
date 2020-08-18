@@ -3,6 +3,9 @@ import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QTranslator
 from mainwindow import duck_window
+from logger import init_logger
+
+logger = init_logger()
 
 LANG_DIR = './resources/lang/qm'
 

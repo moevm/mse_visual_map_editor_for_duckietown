@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import codecs
-import logging
 
 import mapviewer
 import map
@@ -13,11 +12,12 @@ from PyQt5.QtWidgets import QMessageBox, QDesktopWidget
 from IOManager import *
 import functools, json , copy
 from infowindow import info_window
+import logging
 
+logger = logging.getLogger('root')
 
 # pyuic5 main_design.ui -o main_design.py
 
-log = logging.getLogger('root')
 _translate = QtCore.QCoreApplication.translate
 
 class duck_window(QtWidgets.QMainWindow):
@@ -70,7 +70,7 @@ class duck_window(QtWidgets.QMainWindow):
         if self.locale in elem['lang']:
             return elem['lang'][self.locale]
         else:
-            log.warning('duck_window.get_translation. No such locale: {}'.format(self.locale))
+            logger.debug("duck_window.get_translation. No such locale: {}".format(self.locale))
             return elem['lang']['en']
 
     def initUi(self):
@@ -219,10 +219,10 @@ class duck_window(QtWidgets.QMainWindow):
     # Действие по созданию новой карты
     def create_map_triggered(self):
         new_map(self)
-        print(self.map.tiles, self.map.items)
+        logger.debug("Length - {}; Items - {}".format(len(self.map.tiles), self.map.items))
         self.mapviewer.offsetX = self.mapviewer.offsetY = 0
         self.mapviewer.scene().update()
-        print("Creating new map")
+        logger.debug("Creating a new map")
 
     # Действия по открытию карты
     def open_map_triggered(self):
@@ -234,6 +234,7 @@ class duck_window(QtWidgets.QMainWindow):
     # Сохранение карты
     def save_map_triggered(self):
         save_map(self)
+        logger.debug("Save")
 
     # Сохранение карт с новым именем
     def save_map_as_triggered(self):
@@ -266,7 +267,6 @@ class duck_window(QtWidgets.QMainWindow):
             return
         if ret == QMessageBox.Save:
             save_map(self)
-        self.info.close()
         QtCore.QCoreApplication.instance().quit()
 
     # скрытие меню о блоках
@@ -380,14 +380,14 @@ class duck_window(QtWidgets.QMainWindow):
             list.currentItem().setSelected(False)
         else:
             # TODO Добавление блока на карту по 2 клику
-            print(name)
+            logger.debug("Name: {}".format(name))
 
     # Установка значений по умолчанию
     def set_default_fill(self):
         default_fill = self.ui.default_fill.currentData()
         delete_fill = self.ui.delete_fill.currentData()
         # TODO установка занчений по умолчанию
-        print(default_fill, delete_fill)
+        logger.debug("{}; {}".format(default_fill, delete_fill))
 
     # Вызов функции копирования
     def copy_button_clicked(self):
@@ -395,7 +395,7 @@ class duck_window(QtWidgets.QMainWindow):
             self.brush_button.click()
         self.drawState = 'copy'
         self.copyBuffer = copy.copy(self.mapviewer.tileSelection)
-        # print("copy")
+        logger.debug("Copy")
 
     # Вызов функции вырезания
     def cut_button_clicked(self):
@@ -403,7 +403,7 @@ class duck_window(QtWidgets.QMainWindow):
             self.brush_button.click()
         self.drawState = 'cut'
         self.copyBuffer = copy.copy(self.mapviewer.tileSelection)
-        # print("cut")
+        logger.debug("Cut")
 
     # Вызов функции вставки
     def insert_button_clicked(self):

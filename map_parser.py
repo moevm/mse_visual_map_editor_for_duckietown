@@ -9,6 +9,9 @@ from maptile import MapTile
 from mapobject import MapObject
 from PyQt5 import QtGui, QtCore
 from mapviewer import MapViewer
+import logging
+
+logger = logging.getLogger('root')
 
 
 rotation_val = {0: 'E', 90: 'S', 180: 'W', 270: 'N'}
@@ -207,7 +210,7 @@ def materials_of_map(map, specifications):
     result += '{}\n'.format(_translate("MainWindow", "Blocks"))
     result += get_map_elements(map)
     result += get_map_objects(map)
-    print(result)
+    logger.debug("{}".format(result))
     return result
 
 
@@ -219,7 +222,7 @@ def specifications_of_map(map, specifications):
 
     result += '      {}: {} {}\n'.format(_translate("MainWindow", "Road len"), road_length, _translate("MainWindow", "sm"))
     result += get_map_elements(map)
-    print(result)
+    logger.debug("{}".format(result))
     return result
 
 
@@ -327,7 +330,7 @@ def get_tiles(name):
     try:
         f = open(name, 'r')
     except IOError:
-        print(_translate("MainWindow", "Could not open file!"))
+        logger.debug("{}".format(_translate("MainWindow", "Could not open file!")))
         return None
 
     while True:
@@ -367,7 +370,7 @@ def get_objects(name):
     try:
         f = open(name, 'r')
     except IOError:
-        print(_translate("MainWindow", "Could not open file!"))
+        logger.debug("{}".format(_translate("MainWindow", "Could not open file!")))
         return None
 
     map_line = f.readline()
@@ -406,7 +409,7 @@ def get_tile_size(name):
     try:
         f = open(name, 'r')
     except IOError:
-        print(_translate("MainWindow", "Could not open file!"))
+        logger.debug("{}".format(_translate("MainWindow", "Could not open file!")))
         return None
 
     while True:
