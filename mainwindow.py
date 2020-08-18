@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import codecs
-import logging
 
 import mapviewer
 import map
@@ -20,7 +19,6 @@ logger = get_logger()
 
 # pyuic5 main_design.ui -o main_design.py
 
-log = logging.getLogger('root')
 _translate = QtCore.QCoreApplication.translate
 
 class duck_window(QtWidgets.QMainWindow):
@@ -73,7 +71,7 @@ class duck_window(QtWidgets.QMainWindow):
         if self.locale in elem['lang']:
             return elem['lang'][self.locale]
         else:
-            log.warning('duck_window.get_translation. No such locale: {}'.format(self.locale))
+            logger.debug("duck_window.get_translation. No such locale: {}".format(self.locale))
             return elem['lang']['en']
 
     def initUi(self):
@@ -222,11 +220,10 @@ class duck_window(QtWidgets.QMainWindow):
     # Действие по созданию новой карты
     def create_map_triggered(self):
         new_map(self)
-        print(self.map.tiles, self.map.items)
+        logger.debug("Length - {}; Items - {}".format(len(self.map.tiles), self.map.items))
         self.mapviewer.offsetX = self.mapviewer.offsetY = 0
         self.mapviewer.scene().update()
-        #  print("Creating new map")
-        logger.debug("Creating new map")
+        logger.debug("Creating a new map")
 
     # Действия по открытию карты
     def open_map_triggered(self):
