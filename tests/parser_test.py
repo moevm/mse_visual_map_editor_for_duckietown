@@ -69,21 +69,20 @@ class TestMapParser(unittest.TestCase):
 
     def test_map_to_yaml_1(self):
         map = DuckietownMap()
-        map.tiles = tiles_to_objects(get_tiles('../maps/regress_4way_adam.yaml'))
-        map.items = map_objects_to_objects(get_objects('../maps/regress_4way_adam.yaml'))
+        map.set_tile_layer(tiles_to_objects(get_tiles('../maps/regress_4way_adam.yaml')))
+        map.set_item_layer(map_objects_to_objects(get_objects('../maps/regress_4way_adam.yaml')))
 
         map_to_yaml(map, '../maps/test_result.yaml')
 
         new_map = DuckietownMap()
-        new_map.tiles = tiles_to_objects(get_tiles('../maps/test_result.yaml'))
-        new_map.items = map_objects_to_objects(get_objects('../maps/test_result.yaml'))
+        new_map.set_tile_layer(tiles_to_objects(get_tiles('../maps/test_result.yaml')))
+        new_map.set_item_layer(map_objects_to_objects(get_objects('../maps/test_result.yaml')))
 
-
-        for tile, new_tile in zip(np.array(map.tiles).flat, np.array(new_map.tiles).flat):
+        for tile, new_tile in zip(np.array(map.get_tile_layer()).flat, np.array(new_map.get_tile_layer()).flat):
             self.assertEqual(tile.kind, new_tile.kind)
             self.assertEqual(tile.rotation, new_tile.rotation)
 
-        for obj, new_obj in zip(map.items, new_map.items):
+        for obj, new_obj in zip(map.get_item_layer(), new_map.get_item_layer()):
             self.assertEqual(obj.kind, new_obj.kind)
             self.assertEqual(obj.position, new_obj.position)
             self.assertEqual(obj.rotation, new_obj.rotation)
@@ -93,20 +92,20 @@ class TestMapParser(unittest.TestCase):
 
     def test_map_to_yaml_2(self):
         map = DuckietownMap()
-        map.tiles = tiles_to_objects(get_tiles('../maps/test.yaml'))
-        map.items = map_objects_to_objects(get_objects('../maps/test.yaml'))
+        map.set_tile_layer(tiles_to_objects(get_tiles('../maps/test.yaml')))
+        map.set_item_layer(map_objects_to_objects(get_objects('../maps/test.yaml')))
 
         map_to_yaml(map, '../maps/test_result.yaml')
 
         new_map = DuckietownMap()
-        new_map.tiles = tiles_to_objects(get_tiles('../maps/test_result.yaml'))
-        new_map.items = map_objects_to_objects(get_objects('../maps/test_result.yaml'))
+        new_map.set_tile_layer(tiles_to_objects(get_tiles('../maps/test_result.yaml')))
+        new_map.set_item_layer(map_objects_to_objects(get_objects('../maps/test_result.yaml')))
 
-        for tile, new_tile in zip(np.array(map.tiles).flat, np.array(new_map.tiles).flat):
+        for tile, new_tile in zip(np.array(map.get_tile_layer()).flat, np.array(new_map.get_tile_layer()).flat):
             self.assertEqual(tile.kind, new_tile.kind)
             self.assertEqual(tile.rotation, new_tile.rotation)
 
-        for obj, new_obj in zip(map.items, new_map.items):
+        for obj, new_obj in zip(map.get_item_layer(), new_map.get_item_layer()):
             self.assertEqual(obj.kind, new_obj.kind)
             self.assertEqual(obj.position, new_obj.position)
             self.assertEqual(obj.rotation, new_obj.rotation)
@@ -117,37 +116,36 @@ class TestMapParser(unittest.TestCase):
     def test_map_to_yaml_without_objects(self):
 
         map = DuckietownMap()
-        map.tiles = tiles_to_objects(get_tiles('../maps/regress_4way_drivable.yaml'))
-        map.items = map_objects_to_objects(get_objects('../maps/regress_4way_drivable.yaml'))
+        map.set_tile_layer(tiles_to_objects(get_tiles('../maps/regress_4way_drivable.yaml')))
+        map.set_item_layer(map_objects_to_objects(get_objects('../maps/regress_4way_drivable.yaml')))
 
         map_to_yaml(map, '../maps/test_result.yaml')
 
         new_map = DuckietownMap()
-        new_map.tiles = tiles_to_objects(get_tiles('../maps/test_result.yaml'))
-        new_map.items = map_objects_to_objects(get_objects('../maps/test_result.yaml'))
+        new_map.set_tile_layer(tiles_to_objects(get_tiles('../maps/test_result.yaml')))
+        new_map.set_item_layer(map_objects_to_objects(get_objects('../maps/test_result.yaml')))
 
-        for tile, new_tile in zip(np.array(map.tiles).flat, np.array(new_map.tiles).flat):
+        for tile, new_tile in zip(np.array(map.get_tile_layer()).flat, np.array(new_map.get_tile_layer()).flat):
             self.assertEqual(tile.kind, new_tile.kind)
             self.assertEqual(tile.rotation, new_tile.rotation)
-        self.assertEqual(map.items, new_map.items)
+        self.assertEqual(map.get_item_layer(), new_map.get_item_layer())
 
     def test_map_to_yaml_without_yaml(self):
         map = DuckietownMap()
-        map.tiles = tiles_to_objects(get_tiles('../maps/regress_4way_adam.yaml'))
-        map.items = map_objects_to_objects(get_objects('../maps/regress_4way_adam.yaml'))
+        map.set_tile_layer(tiles_to_objects(get_tiles('../maps/regress_4way_adam.yaml')))
+        map.set_item_layer(map_objects_to_objects(get_objects('../maps/regress_4way_adam.yaml')))
 
         map_to_yaml(map, '../maps/test_result')
 
         new_map = DuckietownMap()
-        new_map.tiles = tiles_to_objects(get_tiles('../maps/test_result.yaml'))
-        new_map.items = map_objects_to_objects(get_objects('../maps/test_result.yaml'))
+        new_map.set_tile_layer(tiles_to_objects(get_tiles('../maps/test_result.yaml')))
+        new_map.set_item_layer(map_objects_to_objects(get_objects('../maps/test_result.yaml')))
 
-
-        for tile, new_tile in zip(np.array(map.tiles).flat, np.array(new_map.tiles).flat):
+        for tile, new_tile in zip(np.array(map.get_item_layer()).flat, np.array(new_map.get_item_layer()).flat):
             self.assertEqual(tile.kind, new_tile.kind)
             self.assertEqual(tile.rotation, new_tile.rotation)
 
-        for obj, new_obj in zip(map.items, new_map.items):
+        for obj, new_obj in zip(map.get_item_layer(), new_map.get_item_layer()):
             self.assertEqual(obj.kind, new_obj.kind)
             self.assertEqual(obj.position, new_obj.position)
             self.assertEqual(obj.rotation, new_obj.rotation)
