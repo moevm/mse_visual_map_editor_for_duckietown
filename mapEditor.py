@@ -151,22 +151,16 @@ class MapEditor:
         # deep copy
         backup = DuckietownMap()
         # Fill backup layers
-        #print(map_to_save.get_tile_layer())
         for layer_name in map_to_save.layer_list:
             backup.set_layer(layer_name, copy.deepcopy(map_to_save.get_layer(layer_name)))
         if len(self.memento) == self.memento.maxlen - 1:
             self.memento.popleft()
-        print(backup.get_tile_layer())
         self.memento.append(backup)
 
     def undo(self):
         if len(self.memento) == 0:
             return
         backup = self.memento.pop()
-        #print(backup.get_tile_layer())
         # Fill layers from backup
         for layer_name in backup.layer_list:
             self.map.set_layer(layer_name, backup.get_layer(layer_name))
-        #print(self.map.get_tile_layer())
-
-
