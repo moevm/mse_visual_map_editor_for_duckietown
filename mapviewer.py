@@ -138,21 +138,22 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
         globalTransform = QtGui.QTransform()
         globalTransform.translate(self.offsetX, self.offsetY)
         painter.setTransform(globalTransform, False)
-        for y in range(len(self.map.tiles)):
-            for x in range(len(self.map.tiles[y])):
+        tile_layer = self.map.get_tile_layer()
+        for y in range(len(tile_layer)):
+            for x in range(len(tile_layer[y])):
                 painter.scale(self.sc, self.sc)
                 painter.translate(x * self.map.gridSize, y * self.map.gridSize)
-                if self.map.tiles[y][x].rotation == 90:
+                if tile_layer[y][x].rotation == 90:
                     painter.rotate(90)
                     painter.translate(0, -self.map.gridSize)
-                elif self.map.tiles[y][x].rotation == 180:
+                elif tile_layer[y][x].rotation == 180:
                     painter.rotate(180)
                     painter.translate(-self.map.gridSize, -self.map.gridSize)
-                elif self.map.tiles[y][x].rotation == 270:
+                elif tile_layer[y][x].rotation == 270:
                     painter.rotate(270)
                     painter.translate(-self.map.gridSize, 0)
                 painter.drawImage(QtCore.QRectF(0, 0, self.map.gridSize, self.map.gridSize),
-                                  self.tileSprites[self.map.tiles[y][x].kind])
+                                  self.tileSprites[tile_layer[y][x].kind])
                 if self.tileSelection[0] <= x < self.tileSelection[2] and self.tileSelection[1] <= y < \
                         self.tileSelection[3]:
                     painter.setPen(QtGui.QColor('green'))
@@ -162,8 +163,9 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
                     painter.drawRect(QtCore.QRectF(0, 0, self.map.gridSize, self.map.gridSize))
                 painter.setTransform(globalTransform, False)
         # painter.scale(self.sc, self.sc)
-        if self.map.items:
-            for s in self.map.items:
+        item_layer = self.map.get_item_layer()
+        if self.map.get_item_layer():
+            for s in item_layer:
                 if self.objects.__contains__(s.kind):
                     painter.drawImage(
                         QtCore.QRectF(self.map.gridSize*self.sc * s.position['x'],

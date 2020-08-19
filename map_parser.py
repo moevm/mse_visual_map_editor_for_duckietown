@@ -32,8 +32,9 @@ def get_map_objects(map):
     tree = 0
     trafficlight = 0
     truck = 0
-    if map.items:
-        for object in map.items:
+    item_layer = map.get_item_layer()
+    if item_layer:
+        for object in item_layer:
             if object.kind == 'barrier':
                 barrier += 1
             elif object.kind == 'trafficlight':
@@ -97,9 +98,9 @@ def get_map_elements(map):
     count_of_3way = count_of_4way = 0
     count_of_floor = count_of_grass = count_of_asphalt = 0
 
-    for tile in np.array(map.tiles).flat:
+    for tile in np.array(map.get_tile_layer()).flat:
         if '4way' in tile.kind:
-            count_of_4way +=1
+            count_of_4way += 1
         elif '3way' in tile.kind:
             count_of_3way +=1
         elif 'curve' in tile.kind:
@@ -113,8 +114,9 @@ def get_map_elements(map):
         elif 'asphalt' in tile.kind:
             count_of_asphalt +=1
 
-    if map.items:
-        for object in map.items:
+    item_layer = map.get_item_layer()
+    if item_layer:
+        for object in item_layer:
             if object.kind == 'sign_4_way_intersect':
                 sign_4_way += 1
             elif object.kind == 'sign_right_T_intersect':
@@ -196,7 +198,7 @@ def materials_of_map(map, specifications):
     yellow = 0
     red = 0
 
-    for tile in np.array(map.tiles).flat:
+    for tile in np.array(map.get_tile_layer()).flat:
         white += specifications[tile.kind]['white']
         yellow += specifications[tile.kind]['yellow']
         red += specifications[tile.kind]['red']
@@ -217,7 +219,7 @@ def materials_of_map(map, specifications):
 def specifications_of_map(map, specifications):
     road_length = 0
     result = "{}\n{}\n".format(_translate("MainWindow", "Map characteristics"), _translate("MainWindow", "Roads"))
-    for tile in np.array(map.tiles).flat:
+    for tile in np.array(map.get_tile_layer()).flat:
         road_length += specifications[tile.kind]['length']
 
     result += '      {}: {} {}\n'.format(_translate("MainWindow", "Road len"), road_length, _translate("MainWindow", "sm"))
@@ -229,16 +231,19 @@ def specifications_of_map(map, specifications):
 def map_to_png(map, map_name):
     if '.png' not in map_name:
         map_name = map_name + '.png'
-    height = len(map.tiles)
-    width = len(map.tiles[0])
+    tile_layer = map.get_tile_layer()
+    item_layer = map.get_item_layer()
+
+    height = len(tile_layer)
+    width = len(tile_layer[0])
     mergedImage = QtGui.QImage(width * map.gridSize, height * map.gridSize, QtGui.QImage.Format_RGB32)
     pt = QtGui.QPainter(mergedImage)
     transform = QtGui.QTransform()
     transform.translate(0, 0)
     pt.setTransform(transform, False)
-    for y in range(len(map.tiles)):
-        for x in range(len(map.tiles[y])):
-            angle = map.tiles[y][x].rotation
+    for y in range(len(tile_layer)):
+        for x in range(len(tile_layer[y])):
+            angle = tile_layer[y][x].rotation
             pt.translate(x * map.gridSize, y * map.gridSize)
             pt.drawRect(QtCore.QRectF(0, 0, map.gridSize, map.gridSize))
             pt.rotate(angle)
@@ -249,11 +254,12 @@ def map_to_png(map, map_name):
             elif angle == 270:
                 pt.translate(-map.gridSize, 0)
             pt.drawImage(QtCore.QRectF(0, 0, map.gridSize, map.gridSize),
-                              MapViewer.tileSprites[map.tiles[y][x].kind])
+                              MapViewer.tileSprites[tile_layer[y][x].kind])
             pt.setTransform(transform, False)
 
-    if map.items:
-        for s in map.items:
+    item_layer = map.get_item_layer()
+    if item_layer:
+        for s in item_layer:
             if MapViewer.objects.__contains__(s.kind):
                 pt.drawImage(
                     QtCore.QRectF(map.gridSize * MapViewer.sc * s.position['x'],
@@ -271,7 +277,7 @@ def map_to_yaml(map, map_name):
         map_name = map_name + '.yaml'
     f = open(map_name, 'w')
     f.write('tiles:\n')
-    for tile_string in map.tiles:
+    for tile_string in map.get_tile_layer():
         f.write('- [')
         for tile in tile_string:
             f.write(tile.kind)
@@ -283,9 +289,10 @@ def map_to_yaml(map, map_name):
             if tile_string.index(tile) != len(tile_string) - 1:
                 f.write(' , ')
         f.write(']\n')
-    if map.items is not None:
+    item_layer = map.get_item_layer()
+    if item_layer:
         f.write('\nobjects:')
-        for map_object in map.items:
+        for map_object in item_layer:
             f.write('\n- ')
             f.write('kind: ' + map_object.kind)
             f.write('\n  pos: [' + str(map_object.position['x']) + ', ' + str(map_object.position['y']) + ']')

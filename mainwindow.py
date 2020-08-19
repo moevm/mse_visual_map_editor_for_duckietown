@@ -219,7 +219,7 @@ class duck_window(QtWidgets.QMainWindow):
     # Действие по созданию новой карты
     def create_map_triggered(self):
         new_map(self)
-        logger.debug("Length - {}; Items - {}".format(len(self.map.tiles), self.map.items))
+        logger.debug("Length - {}; Items - {}".format(len(self.map.get_tile_layer()), self.map.get_item_layer()))
         self.mapviewer.offsetX = self.mapviewer.offsetY = 0
         self.mapviewer.scene().update()
         logger.debug("Creating a new map")
@@ -436,14 +436,14 @@ class duck_window(QtWidgets.QMainWindow):
         else:
             self.drawState = ''
 
-
     def rotateSelectedTiles(self):
         self.editor.save(self.map)
         selection = self.mapviewer.tileSelection
+        tile_layer = self.map.get_tile_layer()
         if selection:
-            for i in range(max(selection[1], 0), min(selection[3], len(self.map.tiles))):
-                for j in range(max(selection[0], 0), min(selection[2], len(self.map.tiles[0]))):
-                    self.map.tiles[i][j].rotation = (self.map.tiles[i][j].rotation + 90) % 360
+            for i in range(max(selection[1], 0), min(selection[3], len(tile_layer))):
+                for j in range(max(selection[0], 0), min(selection[2], len(tile_layer[0]))):
+                    tile_layer[i][j].rotation = (tile_layer[i][j].rotation + 90) % 360
             self.mapviewer.scene().update()
 
     def trimClicked(self):
@@ -454,6 +454,7 @@ class duck_window(QtWidgets.QMainWindow):
     def selectionUpdate(self):
         selection = self.mapviewer.tileSelection
         filler = MapTile(self.ui.default_fill.currentData())
+        tile_layer = self.map.get_tile_layer()
         if self.drawState == 'brush':
             self.editor.save(self.map)
             self.editor.extendToFit(selection, selection[0], selection[1], MapTile(self.ui.delete_fill.currentData()))
@@ -464,9 +465,9 @@ class duck_window(QtWidgets.QMainWindow):
             if selection[1] < 0:
                 delta = -selection[1]
                 selection[3] += delta
-            for i in range(max(selection[0], 0), min(selection[2], len(self.map.tiles[0]))):
-                for j in range(max(selection[1], 0), min(selection[3], len(self.map.tiles))):
-                    self.map.tiles[j][i] = copy.copy(filler)
+            for i in range(max(selection[0], 0), min(selection[2], len(tile_layer[0]))):
+                for j in range(max(selection[1], 0), min(selection[3], len(tile_layer))):
+                    tile_layer[j][i] = copy.copy(filler)
         self.mapviewer.scene().update()
 
     # функция создания доп. информационного окна
