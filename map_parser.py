@@ -320,7 +320,7 @@ def tiles_to_objects(tiles):
 def map_objects_to_objects(map_objects):
     map_objects_array = []
     if not map_objects:
-        return None
+        return map_objects_array
     for object in map_objects:
         x, y = re.sub(r"[\[\]]", "", object['pos']).split(',')
         position = [float(x), float(y)]
