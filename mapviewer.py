@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from PyQt5.QtWidgets import QGraphicsView
+from PyQt5.QtWidgets import QGraphicsView, QDesktopWidget
 from PyQt5 import QtCore, QtGui, QtWidgets
 from map import DuckietownMap
 from maptile import MapTile
@@ -134,7 +134,7 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
     def drawBackground(self, painter: QtGui.QPainter, rect: QtCore.QRectF):
         painter.setRenderHint(QtGui.QPainter.Antialiasing, True)
         painter.resetTransform()
-        painter.fillRect(-2000, -1000, 4000, 2000, QtGui.QColor('darkGray'))
+        painter.fillRect(0, 0, self.size().width(), self.size().height(), QtGui.QColor('darkGray'))
         globalTransform = QtGui.QTransform()
         globalTransform.translate(self.offsetX, self.offsetY)
         painter.setTransform(globalTransform, False)
