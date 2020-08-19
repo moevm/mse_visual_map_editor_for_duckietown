@@ -219,7 +219,7 @@ class duck_window(QtWidgets.QMainWindow):
     # Действие по созданию новой карты
     def create_map_triggered(self):
         new_map(self)
-        logger.debug("Length - {}; Items - {}".format(len(self.map.get_tile_layer()), self.map.get_item_layer()))
+        logger.debug("Length - {}; Items - {}".format(len(self.map.get_tile_layer()), len(self.map.get_item_layer())))
         self.mapviewer.offsetX = self.mapviewer.offsetY = 0
         self.mapviewer.scene().update()
         logger.debug("Creating a new map")
