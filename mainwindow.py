@@ -20,6 +20,7 @@ TILE_TYPES = ('block', 'road')
 # pyuic5 main_design.ui -o main_design.py
 
 _translate = QtCore.QCoreApplication.translate
+EPS = .1 # step for move
 
 
 class duck_window(QtWidgets.QMainWindow):
@@ -32,6 +33,10 @@ class duck_window(QtWidgets.QMainWindow):
 
     def __init__(self, locale='en', elem_info="doc/info.json"):
         super().__init__()
+        # active items in editor
+        self.active_items = []
+
+
         # доп. окна для вывода информации
         self.author_window = info_window()
         self.param_window = info_window()
@@ -443,6 +448,30 @@ class duck_window(QtWidgets.QMainWindow):
         else:
             self.drawState = ''
 
+    def keyPressEvent(self, e):
+        selection = self.mapviewer.raw_selection
+        item_layer = self.map.get_item_layer()        
+        for item in item_layer:
+            x, y = item.position['x'], item.position['y']
+            if x > selection[0] and x < selection[2] and y > selection[1] and y < selection[3]:
+                if item not in self.active_items:
+                    self.active_items.append(item)
+        key = e.key()
+        if key == QtCore.Qt.Key_Q:
+            self.active_items = []
+        if self.active_items:
+            for item in self.active_items:
+                logger.debug("Name of item: {}; X - {}; Y - {};".format(item.kind, item.position['x'], item.position['y']))
+                if key == QtCore.Qt.Key_W:
+                    item.position['y'] -= EPS
+                elif key == QtCore.Qt.Key_S:
+                    item.position['y'] += EPS
+                elif key == QtCore.Qt.Key_A:
+                    item.position['x'] -= EPS
+                elif key == QtCore.Qt.Key_D:
+                    item.position['x'] += EPS
+            self.mapviewer.scene().update()
+ 
     def rotateSelectedTiles(self):
         self.editor.save(self.map)
         selection = self.mapviewer.tileSelection
