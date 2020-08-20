@@ -34,7 +34,7 @@ class DuckietownMap:
         :return: list
         """
         layer = self.get_layer(ITEM_LAYER_NAME)
-        if not layer:   # if layer doesn't exist, layer = None
+        if layer is None:   # if layer doesn't exist, layer = None
             self.set_item_layer([])
             layer = []
         return layer
