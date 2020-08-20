@@ -77,6 +77,8 @@ class duck_window(QtWidgets.QMainWindow):
         self.center()
         self.show()
 
+        self.active_items = []
+
         # инициализация объектов кнопок
         create_map = self.ui.create_new
         open_map = self.ui.open_map
@@ -436,6 +438,31 @@ class duck_window(QtWidgets.QMainWindow):
         else:
             self.drawState = ''
 
+    def keyPressEvent(self, e):
+        selection = self.mapviewer.tileSelection
+        item_layer = self.map.get_item_layer()        
+        for item in item_layer:
+            x, y = item.position['x'], item.position['y']
+            if x > selection[0] and x < selection[2] and y > selection[1] and y < selection[3]:
+                if item not in self.active_items:
+                    self.active_items.append(item)
+        eps = .1
+        key = e.key()
+        if key == QtCore.Qt.Key_Q:
+            self.active_items = []
+        if self.active_items:
+            for item in self.active_items:
+                logger.debug("Name of item: {}; X - {}; Y - {};".format(item.kind, item.position['x'], item.position['y']))
+                if key == QtCore.Qt.Key_W:
+                    item.position['y'] -= eps
+                elif key == QtCore.Qt.Key_S:
+                    item.position['y'] += eps
+                elif key == QtCore.Qt.Key_A:
+                    item.position['x'] -= eps
+                elif key == QtCore.Qt.Key_D:
+                    item.position['x'] += eps
+            self.mapviewer.scene().update()
+ 
     def rotateSelectedTiles(self):
         self.editor.save(self.map)
         selection = self.mapviewer.tileSelection
