@@ -10,6 +10,7 @@ from mapobject import MapObject
 from PyQt5 import QtGui, QtCore
 from mapviewer import MapViewer
 import logging
+import yaml
 
 logger = logging.getLogger('root')
 
@@ -322,8 +323,7 @@ def map_objects_to_objects(map_objects):
     if not map_objects:
         return map_objects_array
     for object in map_objects:
-        x, y = re.sub(r"[\[\]]", "", object['pos']).split(',')
-        position = [float(x), float(y)]
+        position = object['pos']
         rotation = float(object['rotate'])
         height = float(object['height'])
         optional = True if object['optional'] == 'true' else False
@@ -332,98 +332,50 @@ def map_objects_to_objects(map_objects):
     return map_objects_array
 
 
-def get_tiles(name):
-    tiles_array = []
-    try:
-        f = open(name, 'r')
-    except IOError:
-        logger.debug("{}".format(_translate("MainWindow", "Could not open file!")))
-        return None
-
-    while True:
-        map_line = f.readline()
-        if 'tiles:' in map_line != -1:
-            break
-
-    map_line = f.readline()
-    while map_line[0] == '-':
-        map_line = re.sub(r"[ \t\[\]\-\n]", "", map_line)
-        tiles = map_line.split(',')
-
-        tile_string = []
-        for tile in tiles:
-            if tile == "":
-                continue
-            tile_object = {}
-            if '/' in tile != -1:
-                kind, rotate = tile.split('/')
-                tile_object['kind'] = kind
+def get_tiles(map_yaml):
+    data = data_from_file(map_yaml).get('tiles')
+    for tiles in data:
+        for i in range(len(tiles)):
+            if '/' in tiles[i] != -1:
+                kind, rotate = tiles[i].split('/')
                 for angle, word in rotation_val.items():
                     if word == rotate:
-                        tile_object['rotate'] = angle
+                        tiles[i] = {'kind': kind, 'rotate': angle}
             else:
-                tile_object['kind'] = tile
-                tile_object['rotate'] = 0
-            tile_string.append(tile_object)
-        tiles_array.append(tile_string)
-        map_line = f.readline()
-
-    f.close()
-    return tiles_array
+                tiles[i] = {'kind': tiles[i], 'rotate': 0}
+            tiles.append(tiles[i])
+    return data
 
 
-def get_objects(name):
-    objects_array = []
+def get_objects(map_yaml):
+    data = data_from_file(map_yaml).get('objects')
+    if data is not None:
+        for value in data:
+            keys = value.keys()
+            if 'optional' not in keys:
+                value['optional'] = 'false'
+            if 'static' not in keys:
+                value['static'] = 'True'
+    return data
+
+
+# def get_tile_size(map_yaml):
+#     return data_from_file(map_yaml).get('tile_size')
+
+
+last_data = None
+last_map = None
+
+
+def data_from_file(map_yaml):
+    global last_data, last_map
+    if last_map == map_yaml:
+        return last_data
     try:
-        f = open(name, 'r')
+        with open(map_yaml, 'r') as file:
+            last_data = yaml.safe_load(file)
+        last_map = map_yaml
+        return last_data
     except IOError:
         logger.debug("{}".format(_translate("MainWindow", "Could not open file!")))
         return None
-
-    map_line = f.readline()
-    while map_line:
-        if 'objects:' in map_line != -1:
-            break
-        map_line = f.readline()
-
-    if not map_line:
-        f.close()
-        return None
-
-    while map_line[0] != 't':
-        if map_line[0] == '-':
-            map_object = {}
-            while True:
-                map_line = re.sub(r"[ \t\n-]", "", map_line)
-                splits_line = map_line.split(':')
-                map_object[splits_line[0]] = splits_line[1]
-                map_line = f.readline()
-
-                if map_line[0] == '-' or map_line[0] == 't' or map_line[0] == "\n":
-                    if 'optional' not in map_object:
-                        map_object['optional'] = 'false'
-                    if 'static' not in map_object:
-                        map_object['static'] = 'True'
-                    objects_array.append(map_object)
-                    break
-        else:
-            map_line = f.readline()
-    f.close()
-    return objects_array
-
-
-def get_tile_size(name):
-    try:
-        f = open(name, 'r')
-    except IOError:
-        logger.debug("{}".format(_translate("MainWindow", "Could not open file!")))
-        return None
-
-    while True:
-        map_line = f.readline()
-        if 'tile_size:' in map_line != -1:
-            break
-    map_line = map_line.split(':')
-
-    f.close()
-    return float(map_line[1])

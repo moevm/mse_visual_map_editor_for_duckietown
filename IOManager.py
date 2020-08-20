@@ -19,7 +19,7 @@ def open_map(parent: QtWidgets.QWidget):
         parent.map.name = input_map
         parent.map.set_tile_layer(tiles_to_objects(get_tiles(input_map)))
         parent.map.set_item_layer(map_objects_to_objects(get_objects(input_map)))
-        parent.map.gridSize = 100 * get_tile_size(input_map)
+        parent.map.gridSize = 100 * data_from_file(input_map).get('tile_size')
 
 
 def save_map_as(parent: QtWidgets.QWidget):

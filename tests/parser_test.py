@@ -16,7 +16,7 @@ class TestMapParser(unittest.TestCase):
                                {'kind': '3way_left', 'rotate': 180}, {'kind': 'straight', 'rotate': 180},
                                {'kind': 'curve_left', 'rotate': 270}],
                               [{'kind': 'straight', 'rotate': 90}, {'kind': 'asphalt', 'rotate': 0},
-                               {'kind': 'straight', 'rotate': 270}, {'kind': 'asphalt', 'rotate': 0},
+                               # {'kind': 'straight', 'rotate': 270}, {'kind': 'asphalt', 'rotate': 0},
                                {'kind': 'straight', 'rotate': 270}],
                               [{'kind': '3way_left', 'rotate': 90}, {'kind': 'straight', 'rotate': 180},
                                {'kind': '4way', 'rotate': 0}, {'kind': 'straight', 'rotate': 0},
@@ -41,11 +41,11 @@ class TestMapParser(unittest.TestCase):
         self.assertEqual(objects_array, None)
 
     def test_tile_size(self):
-        tile_size = get_tile_size('../maps/small_loop.yaml')
+        tile_size = data_from_file('../maps/small_loop.yaml').get('tile_size')
         self.assertEqual(tile_size, 0.585)
 
     def test_empty_file(self):
-        tile_size = get_tile_size('urrr.yaml')
+        tile_size = data_from_file('urrr.yaml').get('tile_size')
         self.assertEqual(tile_size, None)
 
     def test_tiles_to_objects(self):
