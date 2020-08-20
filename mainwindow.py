@@ -15,10 +15,12 @@ from infowindow import info_window
 import logging
 
 logger = logging.getLogger('root')
+TILE_TYPES = ('block', 'road')
 
 # pyuic5 main_design.ui -o main_design.py
 
 _translate = QtCore.QCoreApplication.translate
+
 
 class duck_window(QtWidgets.QMainWindow):
     map = None
