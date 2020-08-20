@@ -382,6 +382,7 @@ class duck_window(QtWidgets.QMainWindow):
             item_ui_list.currentItem().setSelected(False)
         else:
             if item_type in TILE_TYPES:
+                self.ui.default_fill.setCurrentText(self.get_translation(self.info_json['info'][item_name])['name'])
                 logger.debug("Set {} for brush".format(item_name))
             else:
                 self.map.add_item(MapObject(item_name))
