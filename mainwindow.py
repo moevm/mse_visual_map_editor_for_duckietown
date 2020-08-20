@@ -19,6 +19,7 @@ logger = logging.getLogger('root')
 # pyuic5 main_design.ui -o main_design.py
 
 _translate = QtCore.QCoreApplication.translate
+EPS = .1 # step for move
 
 class duck_window(QtWidgets.QMainWindow):
     map = None
@@ -30,6 +31,10 @@ class duck_window(QtWidgets.QMainWindow):
 
     def __init__(self, locale='en', elem_info="doc/info.json"):
         super().__init__()
+        # active items in editor
+        self.active_items = []
+
+
         # доп. окна для вывода информации
         self.author_window = info_window()
         self.param_window = info_window()
@@ -76,8 +81,6 @@ class duck_window(QtWidgets.QMainWindow):
     def initUi(self):
         self.center()
         self.show()
-
-        self.active_items = []
 
         # инициализация объектов кнопок
         create_map = self.ui.create_new
@@ -446,7 +449,6 @@ class duck_window(QtWidgets.QMainWindow):
             if x > selection[0] and x < selection[2] and y > selection[1] and y < selection[3]:
                 if item not in self.active_items:
                     self.active_items.append(item)
-        eps = .1
         key = e.key()
         if key == QtCore.Qt.Key_Q:
             self.active_items = []
@@ -454,13 +456,13 @@ class duck_window(QtWidgets.QMainWindow):
             for item in self.active_items:
                 logger.debug("Name of item: {}; X - {}; Y - {};".format(item.kind, item.position['x'], item.position['y']))
                 if key == QtCore.Qt.Key_W:
-                    item.position['y'] -= eps
+                    item.position['y'] -= EPS
                 elif key == QtCore.Qt.Key_S:
-                    item.position['y'] += eps
+                    item.position['y'] += EPS
                 elif key == QtCore.Qt.Key_A:
-                    item.position['x'] -= eps
+                    item.position['x'] -= EPS
                 elif key == QtCore.Qt.Key_D:
-                    item.position['x'] += eps
+                    item.position['x'] += EPS
             self.mapviewer.scene().update()
  
     def rotateSelectedTiles(self):
