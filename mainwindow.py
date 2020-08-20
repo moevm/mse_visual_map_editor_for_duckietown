@@ -15,10 +15,12 @@ from infowindow import info_window
 import logging
 
 logger = logging.getLogger('root')
+TILE_TYPES = ('block', 'road')
 
 # pyuic5 main_design.ui -o main_design.py
 
 _translate = QtCore.QCoreApplication.translate
+
 
 class duck_window(QtWidgets.QMainWindow):
     map = None
@@ -372,15 +374,20 @@ class duck_window(QtWidgets.QMainWindow):
 
     # 2й клик также перехватывается одинарным
     def item_list_double_clicked(self):
-        list = self.ui.block_list
-        name = list.currentItem().data(0x0100)
-        type = list.currentItem().data(0x0101)
+        item_ui_list = self.ui.block_list
+        item_name = item_ui_list.currentItem().data(0x0100)
+        item_type = item_ui_list.currentItem().data(0x0101)
 
-        if name == "separator":
-            list.currentItem().setSelected(False)
+        if item_name == "separator":
+            item_ui_list.currentItem().setSelected(False)
         else:
-            # TODO Добавление блока на карту по 2 клику
-            logger.debug("Name: {}".format(name))
+            if item_type in TILE_TYPES:
+                self.ui.default_fill.setCurrentText(self.get_translation(self.info_json['info'][item_name])['name'])
+                logger.debug("Set {} for brush".format(item_name))
+            else:
+                self.map.add_item(MapObject(item_name))
+                self.mapviewer.scene().update()
+                logger.debug("Add {} to map".format(item_name))
 
     # Установка значений по умолчанию
     def set_default_fill(self):
