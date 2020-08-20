@@ -439,7 +439,7 @@ class duck_window(QtWidgets.QMainWindow):
             self.drawState = ''
 
     def keyPressEvent(self, e):
-        selection = self.mapviewer.tileSelection
+        selection = self.mapviewer.raw_selection
         item_layer = self.map.get_item_layer()        
         for item in item_layer:
             x, y = item.position['x'], item.position['y']
