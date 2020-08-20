@@ -164,7 +164,7 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
                 painter.setTransform(globalTransform, False)
         # painter.scale(self.sc, self.sc)
         item_layer = self.map.get_item_layer()
-        if self.map.get_item_layer():
+        if item_layer:
             for s in item_layer:
                 if self.objects.__contains__(s.kind):
                     painter.drawImage(
