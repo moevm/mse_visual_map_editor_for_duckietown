@@ -574,6 +574,7 @@ class duck_window(QtWidgets.QMainWindow):
             for i in range(max(selection[0], 0), min(selection[2], len(tile_layer[0]))):
                 for j in range(max(selection[1], 0), min(selection[3], len(tile_layer))):
                     tile_layer[j][i] = copy.copy(filler)
+        self.update_layer_tree()
         self.mapviewer.scene().update()
 
     # функция создания доп. информационного окна
