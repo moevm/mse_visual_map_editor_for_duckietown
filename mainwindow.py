@@ -373,8 +373,14 @@ class duck_window(QtWidgets.QMainWindow):
             layer_item = QtGui.QStandardItem(layer_name)
             root_item.appendRow(layer_item)
             if layer_name == map.TILE_LAYER_NAME:
-                continue
-            layer_elements = utils.count_elements([elem.kind for elem in self.map.get_layer(layer_name)])
+                tile_elements = []
+                tile_layers = self.map.get_layer(layer_name)
+                for row in tile_layers:
+                    for tile in row:
+                        tile_elements.append(tile.kind)
+                layer_elements = utils.count_elements(tile_elements)
+            else:
+                layer_elements = utils.count_elements([elem.kind for elem in self.map.get_layer(layer_name)])
             for kind, counter in layer_elements.most_common():
                 item = QtGui.QStandardItem("{} ({})".format(self.get_translation(self.info_json['info'][kind])['name'], counter))
                 layer_item.appendRow(item)
