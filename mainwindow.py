@@ -66,6 +66,7 @@ class duck_window(QtWidgets.QMainWindow):
         self.initUi()
 
         init_map(self)
+        self.update_layer_tree()
 
     def get_translation(self, elem):
         """Gets info about the element based on self.locale
@@ -187,7 +188,6 @@ class duck_window(QtWidgets.QMainWindow):
 
         # Setup Layer Tree menu
         self.ui.layer_tree.setModel(QtGui.QStandardItemModel())  # set item model for tree
-        self.update_layer_tree()
 
         # Настройка меню Блоки
         block_list_widget = self.ui.block_list
