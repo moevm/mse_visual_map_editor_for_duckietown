@@ -13,6 +13,7 @@ from IOManager import *
 import functools, json , copy
 from infowindow import info_window
 import logging
+import utils
 
 logger = logging.getLogger('root')
 TILE_TYPES = ('block', 'road')
@@ -184,6 +185,11 @@ class duck_window(QtWidgets.QMainWindow):
         tool_bar.addAction(c1)
         tool_bar.addAction(c2)
 
+        # Setup Layer Tree menu
+        model = QtGui.QStandardItemModel()
+        model.setHorizontalHeaderLabels(['Name'])
+        self.ui.layer_tree.setModel(model)  # set item model for tree
+
         # Настройка меню Блоки
         block_list_widget = self.ui.block_list
         block_list_widget.itemClicked.connect(self.item_list_clicked)
@@ -234,6 +240,7 @@ class duck_window(QtWidgets.QMainWindow):
         self.mapviewer.offsetX = self.mapviewer.offsetY = 0
         self.mapviewer.scene().update()
         logger.debug("Creating a new map")
+        self.update_layer_tree()
 
     # Действия по открытию карты
     def open_map_triggered(self):
@@ -241,6 +248,7 @@ class duck_window(QtWidgets.QMainWindow):
         open_map(self)
         self.mapviewer.offsetX = self.mapviewer.offsetY = 0
         self.mapviewer.scene().update()
+        self.update_layer_tree()
 
     # Сохранение карты
     def save_map_triggered(self):
@@ -322,6 +330,8 @@ class duck_window(QtWidgets.QMainWindow):
         self.ui.change_map.setChecked(False)
         event.accept()
 
+    # Layer window
+
     def toggle_layer_window(self):
         """
         Toggle layers window by `View -> Layers`
@@ -342,6 +352,32 @@ class duck_window(QtWidgets.QMainWindow):
         """
         self.ui.change_layer.setChecked(False)
         event.accept()
+
+    def layer_tree_clicked(self):
+        pass
+
+    def layer_tree_double_clicked(self):
+        pass
+
+    def update_layer_tree(self):
+        """
+        Update layer tree.
+        Show layer's elements as children in hierarchy (except tile layer)
+        :return: -
+        """
+        layer_tree_view = self.ui.layer_tree
+        root_item = layer_tree_view.model().invisibleRootItem()
+        for layer_name in self.map.layer_list:
+            layer_item = QtGui.QStandardItem(layer_name)
+            root_item.appendRow(layer_item)
+            if layer_name == map.TILE_LAYER_NAME:
+                continue
+            layer_elements = utils.count_elements([elem.kind for elem in self.map.get_layer(layer_name)])
+            for kind, counter in layer_elements.most_common():
+                item = QtGui.QStandardItem("{} ({})".format(self.get_translation(self.info_json['info'][kind])['name'], counter))
+                layer_item.appendRow(item)
+            layer_item.sortChildren(0)
+        layer_tree_view.expandAll()
 
     # MessageBox для выхода
     def quit_MessageBox(self):
@@ -417,6 +453,7 @@ class duck_window(QtWidgets.QMainWindow):
             else:
                 self.map.add_item(MapObject(item_name))
                 self.mapviewer.scene().update()
+                self.update_layer_tree()
                 logger.debug("Add {} to map".format(item_name))
 
     # Установка значений по умолчанию
