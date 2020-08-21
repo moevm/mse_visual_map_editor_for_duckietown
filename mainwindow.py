@@ -186,9 +186,8 @@ class duck_window(QtWidgets.QMainWindow):
         tool_bar.addAction(c2)
 
         # Setup Layer Tree menu
-        model = QtGui.QStandardItemModel()
-        model.setHorizontalHeaderLabels(['Name'])
-        self.ui.layer_tree.setModel(model)  # set item model for tree
+        self.ui.layer_tree.setModel(QtGui.QStandardItemModel())  # set item model for tree
+        self.update_layer_tree()
 
         # Настройка меню Блоки
         block_list_widget = self.ui.block_list
@@ -366,6 +365,9 @@ class duck_window(QtWidgets.QMainWindow):
         :return: -
         """
         layer_tree_view = self.ui.layer_tree
+        item_model = layer_tree_view.model()
+        item_model.clear()
+        item_model.setHorizontalHeaderLabels(['Name'])
         root_item = layer_tree_view.model().invisibleRootItem()
         for layer_name in self.map.layer_list:
             layer_item = QtGui.QStandardItem(layer_name)
