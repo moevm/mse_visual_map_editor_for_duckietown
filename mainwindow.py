@@ -97,11 +97,13 @@ class duck_window(QtWidgets.QMainWindow):
         change_blocks = self.ui.change_blocks
         change_info = self.ui.change_info
         change_map = self.ui.change_map
+        change_layer = self.ui.change_layer
 
         # инициализация плавающих блоков
         block_widget = self.ui.block_widget
         info_widget = self.ui.info_widget
         map_info_widget = self.ui.map_info_widget
+        layer_info_widget = self.ui.layer_info_widget
 
         # сигнал от viewer'а
         self.mapviewer.selectionChanged.connect(self.selectionUpdate)
@@ -120,10 +122,12 @@ class duck_window(QtWidgets.QMainWindow):
         change_blocks.toggled.connect(self.change_blocks_toggled)
         change_info.toggled.connect(self.change_info_toggled)
         change_map.toggled.connect(self.change_map_toggled)
+        change_layer.toggled.connect(self.toggle_layer_window)
 
         block_widget.closeEvent = functools.partial(self.blocks_event)
         info_widget.closeEvent = functools.partial(self.info_event)
         map_info_widget.closeEvent = functools.partial(self.map_event)
+        layer_info_widget.closeEvent = functools.partial(self.close_layer_window_event)
 
         # настройка QToolBar
         tool_bar = self.ui.tool_bar
@@ -316,6 +320,27 @@ class duck_window(QtWidgets.QMainWindow):
     # изменение состояния кнопки при закрытии
     def map_event(self, event):
         self.ui.change_map.setChecked(False)
+        event.accept()
+
+    def toggle_layer_window(self):
+        """
+        Toggle layers window by `View -> Layers`
+        :return: -
+        """
+        block = self.ui.layer_info_widget
+        if self.ui.change_layer.isChecked():
+            block.show()
+            block.setFloating(False)
+        else:
+            block.close()
+
+    def close_layer_window_event(self, event):
+        """
+        Reset flag `View -> Layers` when closing layers window
+        :param event: closeEvent
+        :return: -
+        """
+        self.ui.change_layer.setChecked(False)
         event.accept()
 
     # MessageBox для выхода
