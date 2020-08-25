@@ -10,32 +10,6 @@ from map import DuckietownMap
 
 class TestMapParser(unittest.TestCase):
 
-    def test_map_tiles(self):
-        tiles_array = get_tiles('../maps/4way.yaml')
-        result_tiles_array = [[{'kind': 'curve_left', 'rotate': 180}, {'kind': 'straight', 'rotate': 180},
-                               {'kind': '3way_left', 'rotate': 180}, {'kind': 'straight', 'rotate': 180},
-                               {'kind': 'curve_left', 'rotate': 270}],
-                              [{'kind': 'straight', 'rotate': 90}, {'kind': 'asphalt', 'rotate': 0},
-                               # {'kind': 'straight', 'rotate': 270}, {'kind': 'asphalt', 'rotate': 0},
-                               {'kind': 'straight', 'rotate': 270}],
-                              [{'kind': '3way_left', 'rotate': 90}, {'kind': 'straight', 'rotate': 180},
-                               {'kind': '4way', 'rotate': 0}, {'kind': 'straight', 'rotate': 0},
-                               {'kind': '3way_left', 'rotate': 270}],
-                              [{'kind': 'straight', 'rotate': 90}, {'kind': 'asphalt', 'rotate': 0},
-                               {'kind': 'straight', 'rotate': 90}, {'kind': 'asphalt', 'rotate': 0},
-                               {'kind': 'straight', 'rotate': 270}],
-                              [{'kind': 'curve_left', 'rotate': 90}, {'kind': 'straight', 'rotate': 0},
-                               {'kind': '3way_left', 'rotate': 0}, {'kind': 'straight', 'rotate': 0},
-                               {'kind': 'curve_left', 'rotate': 0}]]
-        self.assertEqual(tiles_array, result_tiles_array)
-
-    def test_map_objects(self):
-        objects_array = get_objects('../maps/4way.yaml')
-        result_objects_array = [
-            {'kind': 'trafficlight', 'pos': '[2.2,2.2]', 'rotate': '45', 'height': '0.4', 'optional': 'true',
-             'static': 'True'}]
-        self.assertEqual(objects_array, result_objects_array)
-
     def test_empty_map_objects(self):
         objects_array = get_objects('../maps/small_loop.yaml')
         self.assertEqual(objects_array, None)
@@ -43,10 +17,6 @@ class TestMapParser(unittest.TestCase):
     def test_tile_size(self):
         tile_size = data_from_file('../maps/small_loop.yaml').get('tile_size')
         self.assertEqual(tile_size, 0.585)
-
-    def test_empty_file(self):
-        tile_size = data_from_file('urrr.yaml').get('tile_size')
-        self.assertEqual(tile_size, None)
 
     def test_tiles_to_objects(self):
         tiles_objects_array = tiles_to_objects(get_tiles('../maps/test.yaml'))
