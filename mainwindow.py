@@ -556,6 +556,8 @@ class duck_window(QtWidgets.QMainWindow):
         self.editor.save(self.map)
         self.editor.trimBorders(True,True,True,True,MapTile(self.ui.delete_fill.currentData()))
         self.mapviewer.scene().update()
+        self.update_layer_tree()
+
 
     def selectionUpdate(self):
         selection = self.mapviewer.tileSelection
