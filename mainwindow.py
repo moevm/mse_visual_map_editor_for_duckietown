@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import QMessageBox, QDesktopWidget
 from IOManager import *
 import functools, json , copy
 from infowindow import info_window
+from layers.layer_type import LayerType
 import logging
 import utils
 
@@ -235,7 +236,7 @@ class duck_window(QtWidgets.QMainWindow):
     # Действие по созданию новой карты
     def create_map_triggered(self):
         new_map(self)
-        logger.debug("Length - {}; Items - {}".format(len(self.map.get_tile_layer()), len(self.map.get_item_layer())))
+        logger.debug("Length - {}; Items - {}".format(len(self.map.get_tile_layer().data), len(self.map.get_item_layer().data)))
         self.mapviewer.offsetX = self.mapviewer.offsetY = 0
         self.mapviewer.scene().update()
         logger.debug("Creating a new map")
@@ -369,18 +370,17 @@ class duck_window(QtWidgets.QMainWindow):
         item_model.clear()
         item_model.setHorizontalHeaderLabels(['Name'])
         root_item = layer_tree_view.model().invisibleRootItem()
-        for layer_name in self.map.layer_list:
-            layer_item = QtGui.QStandardItem(layer_name)
+        for layer in self.map.layers:
+            layer_item = QtGui.QStandardItem(layer.name)
             root_item.appendRow(layer_item)
-            if layer_name == map.TILE_LAYER_NAME:
+            if layer.type == LayerType.TILES:
                 tile_elements = []
-                tile_layers = self.map.get_layer(layer_name)
-                for row in tile_layers:
+                for row in layer.data:
                     for tile in row:
                         tile_elements.append(tile.kind)
                 layer_elements = utils.count_elements(tile_elements)
             else:
-                layer_elements = utils.count_elements([elem.kind for elem in self.map.get_layer(layer_name)])
+                layer_elements = utils.count_elements([elem.kind for elem in layer.data])
             for kind, counter in layer_elements.most_common():
                 item = QtGui.QStandardItem("{} ({})".format(self.get_translation(self.info_json['info'][kind])['name'], counter))
                 layer_item.appendRow(item)
@@ -520,7 +520,7 @@ class duck_window(QtWidgets.QMainWindow):
 
     def keyPressEvent(self, e):
         selection = self.mapviewer.raw_selection
-        item_layer = self.map.get_item_layer()        
+        item_layer = self.map.get_item_layer().data
         for item in item_layer:
             x, y = item.position['x'], item.position['y']
             if x > selection[0] and x < selection[2] and y > selection[1] and y < selection[3]:
@@ -545,7 +545,7 @@ class duck_window(QtWidgets.QMainWindow):
     def rotateSelectedTiles(self):
         self.editor.save(self.map)
         selection = self.mapviewer.tileSelection
-        tile_layer = self.map.get_tile_layer()
+        tile_layer = self.map.get_tile_layer().data
         if selection:
             for i in range(max(selection[1], 0), min(selection[3], len(tile_layer))):
                 for j in range(max(selection[0], 0), min(selection[2], len(tile_layer[0]))):
@@ -560,7 +560,7 @@ class duck_window(QtWidgets.QMainWindow):
     def selectionUpdate(self):
         selection = self.mapviewer.tileSelection
         filler = MapTile(self.ui.default_fill.currentData())
-        tile_layer = self.map.get_tile_layer()
+        tile_layer = self.map.get_tile_layer().data
         if self.drawState == 'brush':
             self.editor.save(self.map)
             self.editor.extendToFit(selection, selection[0], selection[1], MapTile(self.ui.delete_fill.currentData()))
