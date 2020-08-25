@@ -32,7 +32,7 @@ def get_map_objects(map):
     tree = 0
     trafficlight = 0
     truck = 0
-    item_layer = map.get_item_layer()
+    item_layer = map.get_item_layer().data
     if item_layer:
         for object in item_layer:
             if object.kind == 'barrier':
@@ -98,7 +98,7 @@ def get_map_elements(map):
     count_of_3way = count_of_4way = 0
     count_of_floor = count_of_grass = count_of_asphalt = 0
 
-    for tile in np.array(map.get_tile_layer()).flat:
+    for tile in np.array(map.get_tile_layer().data).flat:
         if '4way' in tile.kind:
             count_of_4way += 1
         elif '3way' in tile.kind:
@@ -114,7 +114,7 @@ def get_map_elements(map):
         elif 'asphalt' in tile.kind:
             count_of_asphalt +=1
 
-    item_layer = map.get_item_layer()
+    item_layer = map.get_item_layer().data
     if item_layer:
         for object in item_layer:
             if object.kind == 'sign_4_way_intersect':
@@ -154,7 +154,7 @@ def get_map_elements(map):
     result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Number of grass"), count_of_grass, _translate("MainWindow", "pcs"))
     result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Number of asphalt"), count_of_asphalt, _translate("MainWindow", "pcs"))
     result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Number of floor"), count_of_floor, _translate("MainWindow", "pcs"))
-    
+
     result +='{}\n'.format(_translate("MainWindow", "Signs"))
     if sign_4_way:
         result += '{}{}: {} {}\n'.format(padding, _translate("MainWindow", "Crossroad"), sign_4_way, _translate("MainWindow", "pcs"))
@@ -198,7 +198,7 @@ def materials_of_map(map, specifications):
     yellow = 0
     red = 0
 
-    for tile in np.array(map.get_tile_layer()).flat:
+    for tile in np.array(map.get_tile_layer().data).flat:
         white += specifications[tile.kind]['white']
         yellow += specifications[tile.kind]['yellow']
         red += specifications[tile.kind]['red']
@@ -219,7 +219,7 @@ def materials_of_map(map, specifications):
 def specifications_of_map(map, specifications):
     road_length = 0
     result = "{}\n{}\n".format(_translate("MainWindow", "Map characteristics"), _translate("MainWindow", "Roads"))
-    for tile in np.array(map.get_tile_layer()).flat:
+    for tile in np.array(map.get_tile_layer().data).flat:
         road_length += specifications[tile.kind]['length']
 
     result += '      {}: {} {}\n'.format(_translate("MainWindow", "Road len"), road_length, _translate("MainWindow", "sm"))
@@ -231,8 +231,9 @@ def specifications_of_map(map, specifications):
 def map_to_png(map, map_name):
     if '.png' not in map_name:
         map_name = map_name + '.png'
-    tile_layer = map.get_tile_layer()
-    item_layer = map.get_item_layer()
+    # TODO: take into account visibility and others layers
+    tile_layer = map.get_tile_layer().data
+    item_layer = map.get_item_layer().data
 
     height = len(tile_layer)
     width = len(tile_layer[0])
@@ -257,7 +258,7 @@ def map_to_png(map, map_name):
                               MapViewer.tileSprites[tile_layer[y][x].kind])
             pt.setTransform(transform, False)
 
-    item_layer = map.get_item_layer()
+    item_layer = map.get_item_layer().data
     if item_layer:
         for s in item_layer:
             if MapViewer.objects.__contains__(s.kind):
@@ -273,11 +274,12 @@ def map_to_png(map, map_name):
 
 
 def map_to_yaml(map, map_name):
+    # TODO: layers
     if '.yaml' not in map_name:
         map_name = map_name + '.yaml'
     f = open(map_name, 'w')
     f.write('tiles:\n')
-    for tile_string in map.get_tile_layer():
+    for tile_string in map.get_tile_layer().data:
         f.write('- [')
         for tile in tile_string:
             f.write(tile.kind)
@@ -289,7 +291,7 @@ def map_to_yaml(map, map_name):
             if tile_string.index(tile) != len(tile_string) - 1:
                 f.write(' , ')
         f.write(']\n')
-    item_layer = map.get_item_layer()
+    item_layer = map.get_item_layer().data
     if item_layer:
         f.write('\nobjects:')
         for map_object in item_layer:
