@@ -313,6 +313,13 @@ def tiles_to_objects(tiles):
     for tile_string in tiles:
         tiles_object_string = []
         for tile in tile_string:
+            if '/' in tile != -1:
+                kind, rotate = tile.split('/')
+                for angle, word in rotation_val.items():
+                    if word == rotate:
+                        tile = {'kind': kind, 'rotate': angle}
+            else:
+                tile = {'kind': tile, 'rotate': 0}
             tiles_object_string.append(MapTile(tile['kind'], tile['rotate']))
         tiles_objects_array.append(tiles_object_string)
     return tiles_objects_array
@@ -323,44 +330,13 @@ def map_objects_to_objects(map_objects):
     if not map_objects:
         return map_objects_array
     for object in map_objects:
-        position = object['pos']
-        rotation = float(object['rotate'])
-        height = float(object['height'])
-        optional = True if object['optional'] == 'true' else False
-        static = True if object['static'] == 'True' else False
-        map_objects_array.append(MapObject(object['kind'], position, rotation, height, optional, static))
+        if 'optional' not in object:
+            object['optional'] = False
+        if 'static' not in object:
+            object['static'] = True
+        map_objects_array.append(MapObject(kind=object['kind'], position=object['pos'], rotation=object['rotate'],
+                                           height=object['height'], optional=object['optional'], static=object['static']))
     return map_objects_array
-
-
-def get_tiles(map_yaml):
-    data = data_from_file(map_yaml).get('tiles')
-    for tiles in data:
-        for i in range(len(tiles)):
-            if '/' in tiles[i] != -1:
-                kind, rotate = tiles[i].split('/')
-                for angle, word in rotation_val.items():
-                    if word == rotate:
-                        tiles[i] = {'kind': kind, 'rotate': angle}
-            else:
-                tiles[i] = {'kind': tiles[i], 'rotate': 0}
-            tiles.append(tiles[i])
-    return data
-
-
-def get_objects(map_yaml):
-    data = data_from_file(map_yaml).get('objects')
-    if data is not None:
-        for value in data:
-            keys = value.keys()
-            if 'optional' not in keys:
-                value['optional'] = 'false'
-            if 'static' not in keys:
-                value['static'] = 'True'
-    return data
-
-
-# def get_tile_size(map_yaml):
-#     return data_from_file(map_yaml).get('tile_size')
 
 
 last_data = None
