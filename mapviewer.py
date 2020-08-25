@@ -128,7 +128,7 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
         globalTransform = QtGui.QTransform()
         globalTransform.translate(self.offsetX, self.offsetY)
         painter.setTransform(globalTransform, False)
-        tile_layer = self.map.get_tile_layer()
+        tile_layer = self.map.get_tile_layer().data
         for y in range(len(tile_layer)):
             for x in range(len(tile_layer[y])):
                 painter.scale(self.sc, self.sc)
@@ -153,7 +153,7 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
                     painter.drawRect(QtCore.QRectF(0, 0, self.map.gridSize, self.map.gridSize))
                 painter.setTransform(globalTransform, False)
         # painter.scale(self.sc, self.sc)
-        item_layer = self.map.get_item_layer()
+        item_layer = self.map.get_item_layer().data
         if item_layer:
             for s in item_layer:
                 if self.objects.__contains__(s.kind):
