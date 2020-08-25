@@ -461,8 +461,8 @@ class duck_window(QtWidgets.QMainWindow):
             else:
                 self.map.add_item(MapObject(item_name))
                 self.mapviewer.scene().update()
-                self.update_layer_tree()
                 logger.debug("Add {} to map".format(item_name))
+            self.update_layer_tree()
 
     # Установка значений по умолчанию
     def set_default_fill(self):
@@ -510,6 +510,7 @@ class duck_window(QtWidgets.QMainWindow):
     def undo_button_clicked(self):
         self.editor.undo()
         self.mapviewer.scene().update()
+        self.update_layer_tree()
 
     # Включение режима кисти
     def brush_mode(self):
