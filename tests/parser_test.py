@@ -11,7 +11,7 @@ from map import DuckietownMap
 class TestMapParser(unittest.TestCase):
 
     def test_empty_map_objects(self):
-        objects_array = get_objects('../maps/small_loop.yaml')
+        objects_array = data_from_file('../maps/small_loop.yaml').get('objects')
         self.assertEqual(objects_array, None)
 
     def test_tile_size(self):
@@ -19,7 +19,7 @@ class TestMapParser(unittest.TestCase):
         self.assertEqual(tile_size, 0.585)
 
     def test_tiles_to_objects(self):
-        tiles_objects_array = tiles_to_objects(get_tiles('../maps/test.yaml'))
+        tiles_objects_array = tiles_to_objects(data_from_file('../maps/test.yaml').get('tiles'))
         new_tiles_objects_array = [[MapTile('curve_left', 180), MapTile('straight', 180)],
                                    [MapTile('straight', 90), MapTile('asphalt', 0)]]
         for tile, new_tile in zip(np.array(tiles_objects_array).flat, np.array(new_tiles_objects_array).flat):
@@ -27,7 +27,7 @@ class TestMapParser(unittest.TestCase):
             self.assertEqual(tile.rotation, new_tile.rotation)
 
     def test_map_objects_to_objects(self):
-        map_objects_array = map_objects_to_objects(get_objects('../maps/test.yaml'))
+        map_objects_array = map_objects_to_objects(data_from_file('../maps/test.yaml').get('objects'))
         objects_array = [MapObject('trafficlight', [2.2, 2.2], 45, 0.4, True, False)]
         for obj, new_obj in zip(map_objects_array, objects_array):
             self.assertEqual(obj.kind, new_obj.kind)
@@ -39,14 +39,14 @@ class TestMapParser(unittest.TestCase):
 
     def test_map_to_yaml_1(self):
         map = DuckietownMap()
-        map.set_tile_layer(tiles_to_objects(get_tiles('../maps/regress_4way_adam.yaml')))
-        map.set_item_layer(map_objects_to_objects(get_objects('../maps/regress_4way_adam.yaml')))
+        map.set_tile_layer(tiles_to_objects(data_from_file('../maps/regress_4way_adam.yaml').get('tiles')))
+        map.set_item_layer(map_objects_to_objects(data_from_file('../maps/regress_4way_adam.yaml').get('objects')))
 
         map_to_yaml(map, '../maps/test_result.yaml')
 
         new_map = DuckietownMap()
-        new_map.set_tile_layer(tiles_to_objects(get_tiles('../maps/test_result.yaml')))
-        new_map.set_item_layer(map_objects_to_objects(get_objects('../maps/test_result.yaml')))
+        new_map.set_tile_layer(tiles_to_objects(data_from_file('../maps/test_result.yaml').get('tiles')))
+        new_map.set_item_layer(map_objects_to_objects(data_from_file('../maps/test_result.yaml').get('objetcs')))
 
         for tile, new_tile in zip(np.array(map.get_tile_layer()).flat, np.array(new_map.get_tile_layer()).flat):
             self.assertEqual(tile.kind, new_tile.kind)
@@ -62,14 +62,14 @@ class TestMapParser(unittest.TestCase):
 
     def test_map_to_yaml_2(self):
         map = DuckietownMap()
-        map.set_tile_layer(tiles_to_objects(get_tiles('../maps/test.yaml')))
-        map.set_item_layer(map_objects_to_objects(get_objects('../maps/test.yaml')))
+        map.set_tile_layer(tiles_to_objects(data_from_file('../maps/test.yaml').get('tiles')))
+        map.set_item_layer(map_objects_to_objects(data_from_file('../maps/test.yaml').get('objects')))
 
         map_to_yaml(map, '../maps/test_result.yaml')
 
         new_map = DuckietownMap()
-        new_map.set_tile_layer(tiles_to_objects(get_tiles('../maps/test_result.yaml')))
-        new_map.set_item_layer(map_objects_to_objects(get_objects('../maps/test_result.yaml')))
+        new_map.set_tile_layer(tiles_to_objects(data_from_file('../maps/test_result.yaml').get('tiles')))
+        new_map.set_item_layer(map_objects_to_objects(data_from_file('../maps/test_result.yaml').get('objects')))
 
         for tile, new_tile in zip(np.array(map.get_tile_layer()).flat, np.array(new_map.get_tile_layer()).flat):
             self.assertEqual(tile.kind, new_tile.kind)
@@ -86,14 +86,14 @@ class TestMapParser(unittest.TestCase):
     def test_map_to_yaml_without_objects(self):
 
         map = DuckietownMap()
-        map.set_tile_layer(tiles_to_objects(get_tiles('../maps/regress_4way_drivable.yaml')))
-        map.set_item_layer(map_objects_to_objects(get_objects('../maps/regress_4way_drivable.yaml')))
+        map.set_tile_layer(tiles_to_objects(data_from_file('../maps/regress_4way_drivable.yaml').get('tiles')))
+        map.set_item_layer(map_objects_to_objects(data_from_file('../maps/regress_4way_drivable.yaml').get('objects')))
 
         map_to_yaml(map, '../maps/test_result.yaml')
 
         new_map = DuckietownMap()
-        new_map.set_tile_layer(tiles_to_objects(get_tiles('../maps/test_result.yaml')))
-        new_map.set_item_layer(map_objects_to_objects(get_objects('../maps/test_result.yaml')))
+        new_map.set_tile_layer(tiles_to_objects(data_from_file('../maps/test_result.yaml').get('tiles')))
+        new_map.set_item_layer(map_objects_to_objects(data_from_file('../maps/test_result.yaml').get('objects')))
 
         for tile, new_tile in zip(np.array(map.get_tile_layer()).flat, np.array(new_map.get_tile_layer()).flat):
             self.assertEqual(tile.kind, new_tile.kind)
@@ -102,14 +102,14 @@ class TestMapParser(unittest.TestCase):
 
     def test_map_to_yaml_without_yaml(self):
         map = DuckietownMap()
-        map.set_tile_layer(tiles_to_objects(get_tiles('../maps/regress_4way_adam.yaml')))
-        map.set_item_layer(map_objects_to_objects(get_objects('../maps/regress_4way_adam.yaml')))
+        map.set_tile_layer(tiles_to_objects(data_from_file('../maps/regress_4way_adam.yaml').get('tiles')))
+        map.set_item_layer(map_objects_to_objects(data_from_file('../maps/regress_4way_adam.yaml').get('objects')))
 
         map_to_yaml(map, '../maps/test_result')
 
         new_map = DuckietownMap()
-        new_map.set_tile_layer(tiles_to_objects(get_tiles('../maps/test_result.yaml')))
-        new_map.set_item_layer(map_objects_to_objects(get_objects('../maps/test_result.yaml')))
+        new_map.set_tile_layer(tiles_to_objects(data_from_file('../maps/test_result.yaml').get('tiles')))
+        new_map.set_item_layer(map_objects_to_objects(data_from_file('../maps/test_result.yaml').get('objects')))
 
         for tile, new_tile in zip(np.array(map.get_item_layer()).flat, np.array(new_map.get_item_layer()).flat):
             self.assertEqual(tile.kind, new_tile.kind)
