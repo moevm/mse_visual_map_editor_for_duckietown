@@ -5,8 +5,9 @@ import re
 
 import numpy as np
 
-from maptile import MapTile
-from mapobject import MapObject
+#from maptile import MapTile
+from classes.mapTile import MapTile
+from classes.mapObjects import MapBaseObject as MapObject
 from PyQt5 import QtGui, QtCore
 from mapviewer import MapViewer
 import logging

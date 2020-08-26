@@ -2,8 +2,6 @@
 from PyQt5.QtWidgets import QGraphicsView
 from PyQt5 import QtCore, QtGui, QtWidgets
 from map import DuckietownMap
-from maptile import MapTile
-
 
 class MapViewer(QGraphicsView, QtWidgets.QWidget):
     map = None
