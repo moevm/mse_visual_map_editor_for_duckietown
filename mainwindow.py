@@ -4,7 +4,6 @@ import codecs
 import mapviewer
 import map
 
-#from maptile import MapTile
 from classes.mapTile import MapTile
 from mapEditor import MapEditor
 from main_design import *

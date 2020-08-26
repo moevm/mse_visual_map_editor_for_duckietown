@@ -3,10 +3,8 @@ import unittest
 import numpy as np
 
 from map_parser import *
-#from maptile import MapTile
 from classes.mapTile import MapTile
 from classes.mapObjects import BaseEditorClass as MapObject
-#from mapobject import MapObject
 from map import DuckietownMap
 
 
