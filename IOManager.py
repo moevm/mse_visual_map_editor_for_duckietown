@@ -45,7 +45,7 @@ def export_png(parent: QtWidgets.QWidget):
     if parent.map.get_tile_layer():
         output_map = QFileDialog.getSaveFileName(parent, 'Save file', '.', filter='PNG file (*.png)')[0]
         if output_map:
-            map_to_png(parent.map, output_map)
+            map_to_png(parent.mapviewer, output_map)
 
 
 def new_map(parent: QtWidgets.QWidget):
