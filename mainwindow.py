@@ -460,7 +460,7 @@ class duck_window(QtWidgets.QMainWindow):
                 self.ui.default_fill.setCurrentText(self.get_translation(self.info_json['info'][item_name])['name'])
                 logger.debug("Set {} for brush".format(item_name))
             else:
-                self.map.add_item(MapObject(item_name))
+                self.map.add_item(MapObject(item_name)) # TODO: need to understand what's the type and create desired class, not general
                 self.mapviewer.scene().update()
                 self.update_layer_tree()
                 logger.debug("Add {} to map".format(item_name))
