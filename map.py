@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from layers.map_layer import MapLayer
-from layers.layer_type import LayerType
+from layers.layer_type import LayerType, LAYER_TYPE_WITH_OBJECTS
 
 import logging
 
@@ -56,6 +56,27 @@ class DuckietownMap:
             if layer.type == layer_type:
                 return layer
         return None
+
+    def get_object_layers(self, only_visible=False):
+        """
+        Get layers with layer_type, that supports object placement.
+        Layer types define by LAYER_TYPE_WITH_OBJECTS.
+        If only_visible is True, return only visible layers
+        :return: generator w/ layers
+        """
+        for layer in self.layers:
+            if layer.type in LAYER_TYPE_WITH_OBJECTS and layer.visible:
+                yield layer
+
+    def get_objects_from_layers(self, only_visible=False):
+        """
+        Get all objects from layers in map
+        If only_visible is True, return only objects from visible layers
+        :return: generator w/ objects
+        """
+        for layer in self.get_object_layers(only_visible):
+            for layer_object in layer.get_objects():
+                yield layer_object
 
     # Setters
 

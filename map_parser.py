@@ -229,49 +229,26 @@ def specifications_of_map(map, specifications):
     return result
 
 
-def map_to_png(map, map_name):
+def map_to_png(map_viewer: MapViewer, map_name):
     if '.png' not in map_name:
         map_name = map_name + '.png'
-    # TODO: take into account visibility and others layers
-    tile_layer = map.get_tile_layer().data
-    item_layer = map.get_item_layer().data
-
-    height = len(tile_layer)
-    width = len(tile_layer[0])
-    mergedImage = QtGui.QImage(width * map.gridSize, height * map.gridSize, QtGui.QImage.Format_RGB32)
-    pt = QtGui.QPainter(mergedImage)
+    tile_layer_data = map_viewer.map.get_tile_layer().data
+    height = len(tile_layer_data)
+    width = len(tile_layer_data[0])
+    mergedImage = QtGui.QImage(width * map_viewer.map.gridSize, height * map_viewer.map.gridSize, QtGui.QImage.Format_RGB32)
+    painter = QtGui.QPainter(mergedImage)
     transform = QtGui.QTransform()
     transform.translate(0, 0)
-    pt.setTransform(transform, False)
-    for y in range(len(tile_layer)):
-        for x in range(len(tile_layer[y])):
-            angle = tile_layer[y][x].rotation
-            pt.translate(x * map.gridSize, y * map.gridSize)
-            pt.drawRect(QtCore.QRectF(0, 0, map.gridSize, map.gridSize))
-            pt.rotate(angle)
-            if angle == 90:
-                pt.translate(0, -map.gridSize)
-            elif angle == 180:
-                pt.translate(-map.gridSize, -map.gridSize)
-            elif angle == 270:
-                pt.translate(-map.gridSize, 0)
-            pt.drawImage(QtCore.QRectF(0, 0, map.gridSize, map.gridSize),
-                              MapViewer.tileSprites[tile_layer[y][x].kind])
-            pt.setTransform(transform, False)
-
-    item_layer = map.get_item_layer().data
-    if item_layer:
-        for s in item_layer:
-            if MapViewer.objects.__contains__(s.kind):
-                pt.drawImage(
-                    QtCore.QRectF(map.gridSize * MapViewer.sc * s.position['x'],
-                                  map.gridSize * MapViewer.sc * s.position['y'],
-                                  map.gridSize * MapViewer.sc / 2, map.gridSize * MapViewer.sc / 2),
-                    MapViewer.objects[s.kind])
-    pt.resetTransform()
+    painter.setTransform(transform, False)
+    # Draw tile layer
+    map_viewer.draw_tiles(tile_layer_data, painter, transform)
+    # Draw objects
+    for layer in map_viewer.map.get_object_layers(only_visible=True):
+        map_viewer.draw_objects(layer.get_objects(), painter)
+    painter.resetTransform()
 
     mergedImage.save(map_name, "png")
-    pt.end()
+    painter.end()
 
 
 def map_to_yaml(map, map_name):

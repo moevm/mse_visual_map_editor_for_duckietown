@@ -125,25 +125,41 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
         painter.setRenderHint(QtGui.QPainter.Antialiasing, True)
         painter.resetTransform()
         painter.fillRect(0, 0, self.size().width(), self.size().height(), QtGui.QColor('darkGray'))
-        globalTransform = QtGui.QTransform()
-        globalTransform.translate(self.offsetX, self.offsetY)
-        painter.setTransform(globalTransform, False)
-        tile_layer = self.map.get_tile_layer().data
-        for y in range(len(tile_layer)):
-            for x in range(len(tile_layer[y])):
+        global_transform = QtGui.QTransform()
+        global_transform.translate(self.offsetX, self.offsetY)
+        painter.setTransform(global_transform, False)
+
+        # Draw tile layer
+        tile_layer = self.map.get_tile_layer()
+        if tile_layer.visible:
+            self.draw_tiles(tile_layer.data, painter, global_transform)
+        # painter.scale(self.sc, self.sc)
+        # Draw layer w/ objects
+        for layer in self.map.get_object_layers(only_visible=True):
+            self.draw_objects(layer.get_objects(), painter)
+
+        painter.resetTransform()
+        painter.setPen(QtGui.QColor('black'))
+        if self.lmbPressed:
+            painter.drawRect(0 + self.mouseStartX, 0 + self.mouseStartY
+                             , self.mouseCurX - self.mouseStartX, self.mouseCurY - self.mouseStartY)
+
+    def draw_tiles(self, layer_data, painter, global_transform):
+        for y in range(len(layer_data)):
+            for x in range(len(layer_data[y])):
                 painter.scale(self.sc, self.sc)
                 painter.translate(x * self.map.gridSize, y * self.map.gridSize)
-                if tile_layer[y][x].rotation == 90:
+                if layer_data[y][x].rotation == 90:
                     painter.rotate(90)
                     painter.translate(0, -self.map.gridSize)
-                elif tile_layer[y][x].rotation == 180:
+                elif layer_data[y][x].rotation == 180:
                     painter.rotate(180)
                     painter.translate(-self.map.gridSize, -self.map.gridSize)
-                elif tile_layer[y][x].rotation == 270:
+                elif layer_data[y][x].rotation == 270:
                     painter.rotate(270)
                     painter.translate(-self.map.gridSize, 0)
                 painter.drawImage(QtCore.QRectF(0, 0, self.map.gridSize, self.map.gridSize),
-                                  self.tileSprites[tile_layer[y][x].kind])
+                                  self.tileSprites[layer_data[y][x].kind])
                 if self.tileSelection[0] <= x < self.tileSelection[2] and self.tileSelection[1] <= y < \
                         self.tileSelection[3]:
                     painter.setPen(QtGui.QColor('green'))
@@ -151,19 +167,12 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
                 else:
                     painter.setPen(QtGui.QColor('white'))
                     painter.drawRect(QtCore.QRectF(0, 0, self.map.gridSize, self.map.gridSize))
-                painter.setTransform(globalTransform, False)
-        # painter.scale(self.sc, self.sc)
-        item_layer = self.map.get_item_layer().data
-        if item_layer:
-            for s in item_layer:
-                if self.objects.__contains__(s.kind):
-                    painter.drawImage(
-                        QtCore.QRectF(self.map.gridSize*self.sc * s.position['x'],
-                                      self.map.gridSize*self.sc * s.position['y'],
-                                      self.map.gridSize*self.sc /2, self.map.gridSize*self.sc /2),
-                        self.objects[s.kind])
-        painter.resetTransform()
-        painter.setPen(QtGui.QColor('black'))
-        if self.lmbPressed:
-            painter.drawRect(0 + self.mouseStartX, 0 + self.mouseStartY
-                             , self.mouseCurX - self.mouseStartX, self.mouseCurY - self.mouseStartY)
+                painter.setTransform(global_transform, False)
+
+    def draw_objects(self, layer_data, painter):
+        for layer_object in layer_data:
+            painter.drawImage(
+                QtCore.QRectF(self.map.gridSize * self.sc * layer_object.position['x'],
+                              self.map.gridSize * self.sc * layer_object.position['y'],
+                              self.map.gridSize * self.sc / 2, self.map.gridSize * self.sc / 2),
+                self.objects[layer_object.kind]) if layer_object.kind in self.objects else None

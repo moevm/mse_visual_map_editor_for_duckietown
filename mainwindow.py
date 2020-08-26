@@ -236,7 +236,7 @@ class duck_window(QtWidgets.QMainWindow):
     # Действие по созданию новой карты
     def create_map_triggered(self):
         new_map(self)
-        logger.debug("Length - {}; Items - {}".format(len(self.map.get_tile_layer().data), len(self.map.get_item_layer().data)))
+        logger.debug("Length - {}".format(len(self.map.get_tile_layer().data)))
         self.mapviewer.offsetX = self.mapviewer.offsetY = 0
         self.mapviewer.scene().update()
         logger.debug("Creating a new map")
@@ -520,7 +520,7 @@ class duck_window(QtWidgets.QMainWindow):
 
     def keyPressEvent(self, e):
         selection = self.mapviewer.raw_selection
-        item_layer = self.map.get_item_layer().data
+        item_layer = self.map.get_objects_from_layers() # TODO: add self.current_layer for editing only it's objects?
         for item in item_layer:
             x, y = item.position['x'], item.position['y']
             if x > selection[0] and x < selection[2] and y > selection[1] and y < selection[3]:
