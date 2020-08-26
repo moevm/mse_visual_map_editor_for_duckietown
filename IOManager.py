@@ -8,8 +8,10 @@ from map_parser import *
 def init_map(parent: QtWidgets.QWidget):
     input_map = './maps/empty.yaml'
     if new_map:
-        parent.map.set_tile_layer(tiles_to_objects(get_tiles(input_map)))
-        parent.map.set_item_layer(map_objects_to_objects(get_objects(input_map)))
+        map_info = data_from_file(input_map)
+        parent.map.set_tile_layer(tiles_to_objects((map_info['tiles'])))
+        param = map_info['objects'] if 'objects' in map_info else None
+        parent.map.set_item_layer(map_objects_to_objects(param))
         parent.map.gridSize = 58.5
 
 
@@ -17,9 +19,11 @@ def open_map(parent: QtWidgets.QWidget):
     input_map = QFileDialog.getOpenFileName(parent, 'Open file', '.', filter='YAML file (*.yaml)')[0]
     if input_map:
         parent.map.name = input_map
-        parent.map.set_tile_layer(tiles_to_objects(get_tiles(input_map)))
-        parent.map.set_item_layer(map_objects_to_objects(get_objects(input_map)))
-        parent.map.gridSize = 100 * get_tile_size(input_map)
+        map_info = data_from_file(input_map)
+        parent.map.set_tile_layer(tiles_to_objects((map_info['tiles'])))
+        param = map_info['objects'] if 'objects' in map_info else None
+        parent.map.set_item_layer(map_objects_to_objects(param))
+        parent.map.gridSize = 100 * map_info['tile_size']
 
 
 def save_map_as(parent: QtWidgets.QWidget):
@@ -49,8 +53,10 @@ def new_map(parent: QtWidgets.QWidget):
     input_map = './maps/empty.yaml'
     if new_map_file:
         parent.map.name = new_map_file
-        parent.map.set_tile_layer(tiles_to_objects(get_tiles(input_map)))
-        parent.map.set_item_layer(map_objects_to_objects(get_objects(input_map)))
+        map_info = data_from_file(input_map)
+        parent.map.set_tile_layer(tiles_to_objects((map_info['tiles'])))
+        param = map_info['objects'] if 'objects' in map_info else None
+        parent.map.set_item_layer(map_objects_to_objects(param))
         map_to_yaml(parent.map, new_map_file)
 
 
