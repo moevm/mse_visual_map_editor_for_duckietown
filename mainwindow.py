@@ -499,12 +499,14 @@ class duck_window(QtWidgets.QMainWindow):
             self.editor.moveSelection(self.copyBuffer, self.mapviewer.tileSelection[0], self.mapviewer.tileSelection[1],
                                       MapTile(self.ui.delete_fill.currentData()))
         self.mapviewer.scene().update()
+        self.update_layer_tree()
 
     # Вызов функции удаления
     def delete_button_clicked(self):
         self.editor.save(self.map)
         self.editor.deleteSelection(self.mapviewer.tileSelection, MapTile(self.ui.delete_fill.currentData()))
         self.mapviewer.scene().update()
+        self.update_layer_tree()
 
     # Вызов функции отката
     def undo_button_clicked(self):
