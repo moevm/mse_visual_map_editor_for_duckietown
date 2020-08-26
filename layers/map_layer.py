@@ -1,4 +1,8 @@
-from layers.layer_type import LayerType
+from layers.layer_type import LayerType, LAYER_TYPE_WITH_OBJECTS
+
+import logging
+
+logger = logging.getLogger('root')
 
 
 class MapLayer:
@@ -46,3 +50,16 @@ class MapLayer:
             return layer_data
         else:
             return process_data(self.data)
+
+    def get_objects(self):
+        """
+        Get layer's objects
+        If layer_type doesn't support objects return empty generator TODO: add exceptions
+        :return: generator
+        """
+        if self.type not in LAYER_TYPE_WITH_OBJECTS:
+            logger.info("Layer type {} doesn't support objects. Allowed types: {}".format(self.type, LAYER_TYPE_WITH_OBJECTS))
+            yield from ()
+        else:
+            for layer_object in self.data:
+                yield layer_object
