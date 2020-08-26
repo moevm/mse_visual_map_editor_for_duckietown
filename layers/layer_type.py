@@ -8,3 +8,6 @@ class LayerType(Enum):
     WATCHTOWERS = 'watchtowers'
     REGIONS = 'regions'
     ITEMS = 'items'
+
+    def __str__(self):
+        return self.value
