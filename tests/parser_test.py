@@ -48,11 +48,11 @@ class TestMapParser(unittest.TestCase):
         new_map.set_tile_layer(tiles_to_objects(data_from_file('../maps/test_result.yaml').get('tiles')))
         new_map.set_item_layer(map_objects_to_objects(data_from_file('../maps/test_result.yaml').get('objetcs')))
 
-        for tile, new_tile in zip(np.array(map.get_tile_layer()).flat, np.array(new_map.get_tile_layer()).flat):
+        for tile, new_tile in zip(np.array(map.get_tile_layer().data).flat, np.array(new_map.get_tile_layer().data).flat):
             self.assertEqual(tile.kind, new_tile.kind)
             self.assertEqual(tile.rotation, new_tile.rotation)
 
-        for obj, new_obj in zip(map.get_item_layer(), new_map.get_item_layer()):
+        for obj, new_obj in zip(map.get_item_layer().data, new_map.get_item_layer().data):
             self.assertEqual(obj.kind, new_obj.kind)
             self.assertEqual(obj.position, new_obj.position)
             self.assertEqual(obj.rotation, new_obj.rotation)
@@ -71,11 +71,11 @@ class TestMapParser(unittest.TestCase):
         new_map.set_tile_layer(tiles_to_objects(data_from_file('../maps/test_result.yaml').get('tiles')))
         new_map.set_item_layer(map_objects_to_objects(data_from_file('../maps/test_result.yaml').get('objects')))
 
-        for tile, new_tile in zip(np.array(map.get_tile_layer()).flat, np.array(new_map.get_tile_layer()).flat):
+        for tile, new_tile in zip(np.array(map.get_tile_layer().data).flat, np.array(new_map.get_tile_layer().data).flat):
             self.assertEqual(tile.kind, new_tile.kind)
             self.assertEqual(tile.rotation, new_tile.rotation)
 
-        for obj, new_obj in zip(map.get_item_layer(), new_map.get_item_layer()):
+        for obj, new_obj in zip(map.get_item_layer().data, new_map.get_item_layer().data):
             self.assertEqual(obj.kind, new_obj.kind)
             self.assertEqual(obj.position, new_obj.position)
             self.assertEqual(obj.rotation, new_obj.rotation)
@@ -95,10 +95,10 @@ class TestMapParser(unittest.TestCase):
         new_map.set_tile_layer(tiles_to_objects(data_from_file('../maps/test_result.yaml').get('tiles')))
         new_map.set_item_layer(map_objects_to_objects(data_from_file('../maps/test_result.yaml').get('objects')))
 
-        for tile, new_tile in zip(np.array(map.get_tile_layer()).flat, np.array(new_map.get_tile_layer()).flat):
+        for tile, new_tile in zip(np.array(map.get_tile_layer().data).flat, np.array(new_map.get_tile_layer().data).flat):
             self.assertEqual(tile.kind, new_tile.kind)
             self.assertEqual(tile.rotation, new_tile.rotation)
-        self.assertEqual(map.get_item_layer(), new_map.get_item_layer())
+        self.assertEqual(map.get_item_layer().data, new_map.get_item_layer().data)
 
     def test_map_to_yaml_without_yaml(self):
         map = DuckietownMap()
@@ -111,11 +111,11 @@ class TestMapParser(unittest.TestCase):
         new_map.set_tile_layer(tiles_to_objects(data_from_file('../maps/test_result.yaml').get('tiles')))
         new_map.set_item_layer(map_objects_to_objects(data_from_file('../maps/test_result.yaml').get('objects')))
 
-        for tile, new_tile in zip(np.array(map.get_item_layer()).flat, np.array(new_map.get_item_layer()).flat):
+        for tile, new_tile in zip(np.array(map.get_item_layer().data).flat, np.array(new_map.get_item_layer().data).flat):
             self.assertEqual(tile.kind, new_tile.kind)
             self.assertEqual(tile.rotation, new_tile.rotation)
 
-        for obj, new_obj in zip(map.get_item_layer(), new_map.get_item_layer()):
+        for obj, new_obj in zip(map.get_item_layer().data, new_map.get_item_layer().data):
             self.assertEqual(obj.kind, new_obj.kind)
             self.assertEqual(obj.position, new_obj.position)
             self.assertEqual(obj.rotation, new_obj.rotation)
