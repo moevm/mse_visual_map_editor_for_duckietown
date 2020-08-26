@@ -63,7 +63,7 @@ class DuckietownMap:
         """
         Set tile layer's data
         :param layer: list(list)
-        :return: -
+        :return: bool, return False if layer doesn't exist, else True
         """
         self.set_layer_data_by_type(LayerType.TILES, layer)
 
@@ -71,7 +71,7 @@ class DuckietownMap:
         """
         Set item layer's data
         :param layer: list
-        :return: -
+        :return: bool, return False if layer doesn't exist, else True
         """
         self.set_layer_data_by_type(LayerType.ITEMS, layer)
 
@@ -80,13 +80,13 @@ class DuckietownMap:
         Set layer's data by name
         :param layer_name: name of layer
         :param layer_data: list
-        :return: -
+        :return: bool, return False if layer doesn't exist, else True
         """
         layer = self.get_layer_by_name(layer_name)
         if layer:
             return self.set_layer_data_by_type(layer.type, layer_data)
         else:
-            logger.info("Layer with name '{}' doesn't exists".format(layer_name))
+            logger.info("Layer with name '{}' doesn't exist".format(layer_name))
             return False
 
     def set_layer_data_by_type(self, layer_type: LayerType, layer_data: list):
@@ -94,14 +94,14 @@ class DuckietownMap:
         Set layer's data by name
         :param layer_type: type of layer
         :param layer_data: list
-        :return: -
+        :return: bool, return False if layer doesn't exist, else True
         """
         layer = self.get_layer_by_type(layer_type)
         if layer:
             layer.data = layer_data
             return True
         else:
-            logger.info("Layer with type '{}' doesn't exists".format(layer_type))
+            logger.info("Layer with type '{}' doesn't exist".format(layer_type))
             return False
 
     def set_layer(self, new_layer: MapLayer):
@@ -114,6 +114,13 @@ class DuckietownMap:
     # Creating layer
 
     def add_layer_from_data(self, layer_type: LayerType, layer_data=None, layer_name=''):
+        """
+        Add layer to map from layer_type and layer_data
+        :param layer_type: LayerType
+        :param layer_data: list
+        :param layer_name: str
+        :return: bool, return False, if layer with such LayerType already exists, else True
+        """
         if self.get_layer_by_type(layer_type):
             logger.info("Layer with type '{}' already exists.\nTo set new layer data use "
                         "set_layer_data/set_layer_data_by_type.\nTo set new layer name use "
@@ -123,6 +130,11 @@ class DuckietownMap:
             return self.add_layer(MapLayer(layer_type, layer_data if layer_data else [], layer_name))
 
     def add_layer(self, layer: MapLayer):
+        """
+        Add layer to map
+        :param layer: MapLayer
+        :return: bool, return False, if layer with such LayerType already exists, else True
+        """
         if self.get_layer_by_type(layer.type):
             logger.info("Layer with type '{}' already exists.\nTo set new layer data use "
                         "set_layer_data/set_layer_data_by_type.\nTo set new layer name use "
@@ -148,13 +160,13 @@ class DuckietownMap:
         (Doesn't add elements to tile_layer due to different structure)
         :param layer_name: name of layer
         :param elem: MapObject. Note: after adding specific layers, it can change
-        :return: bool. If layer doesn't exist - False,
+        :return: bool, return False if layer doesn't exist, else True
         """
         layer = self.get_layer_by_name(layer_name).type
         if layer is not None:
             return self.add_elem_to_layer_by_type(layer.type, elem)
         else:
-            logger.info("Layer with name '{}' doesn't exists".format(layer_name))
+            logger.info("Layer with name '{}' doesn't exist".format(layer_name))
             return False
 
     def add_elem_to_layer_by_type(self, layer_type: LayerType, elem):
@@ -163,7 +175,7 @@ class DuckietownMap:
         (Doesn't add elements to tile_layer due to different structure)
         :param layer_type: type of layer
         :param elem: MapObject. Note: after adding specific layers, it can change
-        :return: bool. If layer doesn't exist - False,
+        :return: bool, return False if layer doesn't exist, else True
         """
         if layer_type == LayerType.TILES:
             logger.warning("Don't use this method for tile layer.")
@@ -173,5 +185,5 @@ class DuckietownMap:
             layer.add_elem(elem)
             return True
         else:
-            logger.info("Layer with type '{}' doesn't exists".format(layer_type))
+            logger.info("Layer with type '{}' doesn't exist".format(layer_type))
             return False
