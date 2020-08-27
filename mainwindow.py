@@ -4,7 +4,7 @@ import codecs
 import mapviewer
 import map
 
-from maptile import MapTile
+from classes.mapTile import MapTile
 from mapEditor import MapEditor
 from main_design import *
 from PyQt5 import QtWidgets, QtGui, QtCore
@@ -15,6 +15,7 @@ from infowindow import info_window
 from layers.layer_type import LayerType
 import logging
 import utils
+from classes.mapObjects import MapBaseObject as MapObject
 
 logger = logging.getLogger('root')
 TILE_TYPES = ('block', 'road')
@@ -459,7 +460,7 @@ class duck_window(QtWidgets.QMainWindow):
                 self.ui.default_fill.setCurrentText(self.get_translation(self.info_json['info'][item_name])['name'])
                 logger.debug("Set {} for brush".format(item_name))
             else:
-                self.map.add_item(MapObject(item_name))
+                self.map.add_item(MapObject(item_name)) # TODO: need to understand what's the type and create desired class, not general
                 self.mapviewer.scene().update()
                 self.update_layer_tree()
                 logger.debug("Add {} to map".format(item_name))

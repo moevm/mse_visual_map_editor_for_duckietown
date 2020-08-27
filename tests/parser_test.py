@@ -3,8 +3,8 @@ import unittest
 import numpy as np
 
 from map_parser import *
-from maptile import MapTile
-from mapobject import MapObject
+from classes.mapTile import MapTile
+from classes.mapObjects import BaseEditorClass as MapObject
 from map import DuckietownMap
 
 
@@ -28,7 +28,7 @@ class TestMapParser(unittest.TestCase):
 
     def test_map_objects_to_objects(self):
         map_objects_array = map_objects_to_objects(data_from_file('../maps/test.yaml').get('objects'))
-        objects_array = [MapObject('trafficlight', [2.2, 2.2], 45, 0.4, True, False)]
+        objects_array = [MapObject('trafficlight', position=[2.2, 2.2], rotation=45, height=0.4, optional=True, static=False)]
         for obj, new_obj in zip(map_objects_array, objects_array):
             self.assertEqual(obj.kind, new_obj.kind)
             self.assertEqual(obj.position, new_obj.position)
