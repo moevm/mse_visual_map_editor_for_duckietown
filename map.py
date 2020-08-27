@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from layers.map_layer import MapLayer
-from layers.layer_type import LayerType, LAYER_TYPE_WITH_OBJECTS
+from layers.layer_type import LayerType
+import layers.relations as layer_relations
 
 import logging
 
@@ -65,7 +66,7 @@ class DuckietownMap:
         :return: generator w/ layers
         """
         for layer in self.layers:
-            if layer.type in LAYER_TYPE_WITH_OBJECTS and layer.visible:
+            if layer.type in layer_relations.LAYER_TYPE_WITH_OBJECTS and layer.visible:
                 yield layer
 
     def get_objects_from_layers(self, only_visible=False):
@@ -208,3 +209,19 @@ class DuckietownMap:
         else:
             logger.info("Layer with type '{}' doesn't exist".format(layer_type))
             return False
+
+    def add_objects_to_map(self, objects, info_about_objects):
+        for map_object in objects:
+            object_type = info_about_objects[map_object['kind']]['type']
+            layer_type = layer_relations.get_layer_type_by_object_type(object_type)
+            map_object = MapLayer.create_layer_object(object_type, map_object)
+            if not self.get_layer_by_type(layer_type):
+                self.add_layer_from_data(layer_type, [map_object])
+            else:
+                self.add_elem_to_layer_by_type(layer_type, map_object)
+    
+    def clear_objects_layers(self):
+        for layer in self.layers:
+            if layer.type in layer_relations.LAYER_TYPE_WITH_OBJECTS:
+                layer.data = []
+            
