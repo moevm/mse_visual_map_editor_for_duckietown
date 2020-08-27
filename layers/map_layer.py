@@ -1,4 +1,7 @@
-from layers.layer_type import LayerType, LAYER_TYPE_WITH_OBJECTS
+from layers.layer_type import LayerType
+from layers.relations import get_class_by_object_type
+from layers.relations import LAYER_TYPE_WITH_OBJECTS
+
 
 import logging
 
@@ -63,3 +66,7 @@ class MapLayer:
         else:
             for layer_object in self.data:
                 yield layer_object
+
+    @staticmethod
+    def create_layer_object(object_type, object_data):
+        return get_class_by_object_type(object_type)(object_data)
