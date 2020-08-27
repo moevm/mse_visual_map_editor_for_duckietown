@@ -100,7 +100,7 @@ class MapEditor:
                 tile_layer[j].append(copy.copy(backgroundTile))
         return
 
-        # Удаляет линии по краям, если все плитки в линии - фоновые
+        #  Removes lines at the edges if all tiles in the row are background
         # TO TEST
 
     def trimBorders(self, trimUp: bool, trimRight: bool, trimDown: bool, trimLeft: bool, backgroundTile):

@@ -15,12 +15,12 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
     rmbPrevPos = [0, 0]
     mouseStartX, mouseStartY = 0, 0
     mouseCurX, mouseCurY = 0, 0
-    # Хранит верхнюю левую и нижнюю правую координаты выделения мышью (в тч нулевого размера) в виде индексов массива
-    # Если выделение выходит за пределы массива слева, содержит -1
-    # Если за пределы справа - ширину/высоту
+    #  Stores the top left and bottom right coordinates of the selected area (including zero size areas) as array indexes
+    #  If the selection is outside the array to the left, contains -1
+    #  If the selection is outside the array to the right - width / height
     tileSelection = [0] * 4
     selectionChanged = QtCore.pyqtSignal()
-    lmbClicked = QtCore.pyqtSignal(int, int)  # координаты клика в виде индекса нажатой плитки
+    lmbClicked = QtCore.pyqtSignal(int, int)  #  click coordinates as an index of the clicked tile
 
     def __init__(self):
         QGraphicsView.__init__(self)
