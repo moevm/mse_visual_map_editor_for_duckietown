@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 from .baseClass import BaseEditorClass
 
+
 class MapBaseObject(BaseEditorClass):
-    def __init__(self, kind, position=(.0, .0), rotation=0, height=1, optional=False, static=True):
-        BaseEditorClass.__init__(self, kind, rotation)
+    def __init__(self, init_info):
+        BaseEditorClass.__init__(self, init_info)
         self.position = {}
-        self.position['x'], self.position['y'] = position
-        self.height = height
-        self.optional = optional
-        self.static = static
+        self.position['x'], self.position['y'] = init_info['pos']
+        self.height = init_info['height']
+        self.optional = init_info['optional']
+        self.static = init_info['static']
 
     def __iter__(self):
         yield from {
@@ -17,30 +18,30 @@ class MapBaseObject(BaseEditorClass):
             'position': self.position,
             'rotation': self.rotation,
             'optional': self.optional,
-            'static' : self.static
+            'static': self.static
         }.items()
 
 
 class SignObject(MapBaseObject):
 
-    def __init__(self, kind, **kwargs):
-        MapBaseObject.__init__(self, kind, **kwargs)
+    def __init__(self, init_info):
+        MapBaseObject.__init__(self, init_info)
 
 
 class CityObject(MapBaseObject):
 
-    def __init__(self, kind, **kwargs):
-        MapBaseObject.__init__(self, kind, **kwargs)
+    def __init__(self, init_info):
+        MapBaseObject.__init__(self, init_info)
 
 
 class WatchTowerObject(MapBaseObject):
 
-    def __init__(self, kind, **kwargs):
-        MapBaseObject.__init__(self, kind, **kwargs)
-        self.hostname = kwargs["hostname"]
+    def __init__(self, init_info):
+        MapBaseObject.__init__(self, init_info)
+        self.hostname = init_info["hostname"]
 
 
 class GroundAprilTagObject(MapBaseObject):
 
-    def __init__(self, kind, **kwargs):
-        MapBaseObject.__init__(self, kind, **kwargs)    
+    def __init__(self, init_info):
+        MapBaseObject.__init__(self, init_info)
