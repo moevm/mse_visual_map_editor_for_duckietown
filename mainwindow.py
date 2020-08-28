@@ -523,7 +523,9 @@ class duck_window(QtWidgets.QMainWindow):
         selection = self.mapviewer.raw_selection
         item_layer = self.map.get_objects_from_layers() # TODO: add self.current_layer for editing only it's objects?
         for item in item_layer:
-            x, y = item.position['x'], item.position['y']
+            shift = item.height / 2
+            x = item.position['x'] + shift
+            y = item.position['y'] + shift
             if x > selection[0] and x < selection[2] and y > selection[1] and y < selection[3]:
                 if item not in self.active_items:
                     self.active_items.append(item)
