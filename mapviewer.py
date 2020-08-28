@@ -10,6 +10,8 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
     offsetX = 0
     offsetY = 0
     sc = 1
+    min_size = 20
+    max_size = 40
     rmbPressed = False
     lmbPressed = False
     rmbPrevPos = [0, 0]
@@ -167,10 +169,12 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
                     painter.drawRect(QtCore.QRectF(0, 0, self.map.gridSize, self.map.gridSize))
                 painter.setTransform(global_transform, False)
 
+
     def draw_objects(self, layer_data, painter):
         for layer_object in layer_data:
+            width_height = max(min(self.map.gridSize * self.sc * layer_object.height * 10, self.max_size), self.min_size)
             painter.drawImage(
                 QtCore.QRectF(self.map.gridSize * self.sc * layer_object.position['x'],
                               self.map.gridSize * self.sc * layer_object.position['y'],
-                              self.map.gridSize * self.sc / 2, self.map.gridSize * self.sc / 2),
+                              width_height, width_height),
                 self.objects[layer_object.kind]) if layer_object.kind in self.objects else None
