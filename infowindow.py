@@ -21,7 +21,7 @@ class Ui_info_widget(object):
         info_widget.setWindowTitle(_translate("MainWindow", "Reference"))
 
 
-# класс для доплнительного информационного окна
+#  Class for info_window
 class info_window(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super(info_window, self).__init__(parent)

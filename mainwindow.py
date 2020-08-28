@@ -40,12 +40,12 @@ class duck_window(QtWidgets.QMainWindow):
         self.active_items = []
 
 
-        # доп. окна для вывода информации
+        #  additional windows for displaying information
         self.author_window = info_window()
         self.param_window = info_window()
         self.mater_window = info_window()
 
-        # кнопка для кисти и переопределение события закрытия
+        #  The brush button / override the closeEvent
         self.brush_button = QtWidgets.QToolButton()
         self.closeEvent = functools.partial(self.quit_program_event)
 
@@ -88,7 +88,7 @@ class duck_window(QtWidgets.QMainWindow):
         self.center()
         self.show()
 
-        # инициализация объектов кнопок
+        #  Initialize button objects
         create_map = self.ui.create_new
         open_map = self.ui.open_map
         save_map = self.ui.save_map
@@ -103,16 +103,16 @@ class duck_window(QtWidgets.QMainWindow):
         change_map = self.ui.change_map
         change_layer = self.ui.change_layer
 
-        # инициализация плавающих блоков
+        #  Initialize floating blocks
         block_widget = self.ui.block_widget
         info_widget = self.ui.info_widget
         map_info_widget = self.ui.map_info_widget
         layer_info_widget = self.ui.layer_info_widget
 
-        # сигнал от viewer'а
+        #  Signal from viewer
         self.mapviewer.selectionChanged.connect(self.selectionUpdate)
 
-        # подключение действий к кнопкам
+        #  Assign actions to buttons
         create_map.triggered.connect(self.create_map_triggered)
         open_map.triggered.connect(self.open_map_triggered)
         save_map.triggered.connect(self.save_map_triggered)
@@ -133,7 +133,7 @@ class duck_window(QtWidgets.QMainWindow):
         map_info_widget.closeEvent = functools.partial(self.map_event)
         layer_info_widget.closeEvent = functools.partial(self.close_layer_window_event)
 
-        # настройка QToolBar
+        #  QToolBar setting
         tool_bar = self.ui.tool_bar
 
         a1 = QtWidgets.QAction(QtGui.QIcon("img/icons/new.png"), _translate("MainWindow", "New map"), self)
@@ -191,16 +191,16 @@ class duck_window(QtWidgets.QMainWindow):
         # Setup Layer Tree menu
         self.ui.layer_tree.setModel(QtGui.QStandardItemModel())  # set item model for tree
 
-        # Настройка меню Блоки
+        #  Customize the Blocks menu
         block_list_widget = self.ui.block_list
         block_list_widget.itemClicked.connect(self.item_list_clicked)
         block_list_widget.itemDoubleClicked.connect(self.item_list_double_clicked)
 
-        # Настройка меню Редактор карты
+        #  Customize the Map Editor menu
         default_fill = self.ui.default_fill
         delete_fill = self.ui.delete_fill
 
-        # Заполнение списка
+        #  Fill out the list
         categories = self.info_json['categories']
         information = self.info_json['info']
         for group in categories:
@@ -234,7 +234,7 @@ class duck_window(QtWidgets.QMainWindow):
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
-    # Действие по созданию новой карты
+    #  Create a new map
     def create_map_triggered(self):
         new_map(self)
         logger.debug("Length - {}".format(len(self.map.get_tile_layer().data)))
@@ -243,7 +243,7 @@ class duck_window(QtWidgets.QMainWindow):
         logger.debug("Creating a new map")
         self.update_layer_tree()
 
-    # Действия по открытию карты
+    #  Open map
     def open_map_triggered(self):
         self.editor.save(self.map)
         open_map(self)
@@ -251,36 +251,36 @@ class duck_window(QtWidgets.QMainWindow):
         self.mapviewer.scene().update()
         self.update_layer_tree()
 
-    # Сохранение карты
+    #  Save map
     def save_map_triggered(self):
         save_map(self)
         logger.debug("Save")
 
-    # Сохранение карт с новым именем
+    #  Save map as
     def save_map_as_triggered(self):
         save_map_as(self)
 
-    # Экспорт в png
+    #  Export to png
     def export_png_triggered(self):
         export_png(self)
 
-    # Подсчёт характеристик карт
+    #  Calculate map characteristics
     def calc_param_triggered(self):
 
         text = get_map_specifications(self)
         self.show_info(self.param_window, _translate("MainWindow", "Map characteristics"), text)
 
-    # Расчёт требуемых материалов
+    #  Calculate map materials
     def calc_materials_triggered(self):
         text = get_map_materials(self)
         self.show_info(self.mater_window, _translate("MainWindow", "Map material"), text)
 
-    # Вывод справки по работе с программой
+    #  Help: About
     def about_author_triggered(self):
         text = "Authors:\n alskaa;\n dihindee;\n ovc-serega;\n HardonCollider.\n\n Contact us on github!"
         self.show_info(self.author_window, "About", text)
 
-    # Выход из программы
+    #  Exit
     def exit_triggered(self):
         ret = self.quit_MessageBox()
         if ret == QMessageBox.Cancel:
@@ -289,7 +289,7 @@ class duck_window(QtWidgets.QMainWindow):
             save_map(self)
         QtCore.QCoreApplication.instance().quit()
 
-    # скрытие меню о блоках
+    #  Hide Block menu
     def change_blocks_toggled(self):
         block = self.ui.block_widget
         if self.ui.change_blocks.isChecked():
@@ -298,12 +298,12 @@ class duck_window(QtWidgets.QMainWindow):
         else:
             block.close()
 
-    # изменение состояния кнопки при закрытии
+    #  Change button state
     def blocks_event(self, event):
         self.ui.change_blocks.setChecked(False)
         event.accept()
 
-    # скрытие меню информации
+    #  Hide information menu
     def change_info_toggled(self):
         block = self.ui.info_widget
         if self.ui.change_info.isChecked():
@@ -312,12 +312,12 @@ class duck_window(QtWidgets.QMainWindow):
         else:
             block.close()
 
-    # изменение состояния кнопки при закрытии
+    #  Change button state
     def info_event(self, event):
         self.ui.change_info.setChecked(False)
         event.accept()
 
-    # скрытие меню о свойствах карты
+    #  Hide the menu about map properties
     def change_map_toggled(self):
         block = self.ui.map_info_widget
         if self.ui.change_map.isChecked():
@@ -326,7 +326,7 @@ class duck_window(QtWidgets.QMainWindow):
         else:
             block.close()
 
-    # изменение состояния кнопки при закрытии
+    #  Change button state
     def map_event(self, event):
         self.ui.change_map.setChecked(False)
         event.accept()
@@ -388,7 +388,7 @@ class duck_window(QtWidgets.QMainWindow):
             layer_item.sortChildren(0)
         layer_tree_view.expandAll()
 
-    # MessageBox для выхода
+    #  MessageBox to exit
     def quit_MessageBox(self):
         reply = QMessageBox(self)
         reply.setIcon(QMessageBox.Question)
@@ -400,7 +400,7 @@ class duck_window(QtWidgets.QMainWindow):
         ret = reply.exec()
         return ret
 
-    # Событие выхода из программы
+    #  Program exit event
     def quit_program_event(self, event):
         ret = self.quit_MessageBox()
         if ret == QMessageBox.Cancel:
@@ -409,14 +409,14 @@ class duck_window(QtWidgets.QMainWindow):
         if ret == QMessageBox.Save:
             save_map(self)
 
-        # закрытие доп. диалоговых окон
+        #  Close additional dialog boxes
         self.author_window.exit()
         self.param_window.exit()
         self.mater_window.exit()
 
         event.accept()
 
-    # обработка клика по элементу из списка списку
+    #  Handle a click on an item from a list to a list
     def item_list_clicked(self):
         list = self.ui.block_list
         name = list.currentItem().data(0x0100)
@@ -447,7 +447,7 @@ class duck_window(QtWidgets.QMainWindow):
                 text += " {}: {} {}\n".format(_translate("MainWindow", "White"), elem["white"], _translate("MainWindow", "sm"))
             info_browser.setText(text)
 
-    # 2й клик также перехватывается одинарным
+    #  Double click initiates as single click action
     def item_list_double_clicked(self):
         item_ui_list = self.ui.block_list
         item_name = item_ui_list.currentItem().data(0x0100)
@@ -465,14 +465,14 @@ class duck_window(QtWidgets.QMainWindow):
                 self.update_layer_tree()
                 logger.debug("Add {} to map".format(item_name))
 
-    # Установка значений по умолчанию
+    #  Reset to default values
     def set_default_fill(self):
         default_fill = self.ui.default_fill.currentData()
         delete_fill = self.ui.delete_fill.currentData()
         # TODO установка занчений по умолчанию
         logger.debug("{}; {}".format(default_fill, delete_fill))
 
-    # Вызов функции копирования
+    #  Copy
     def copy_button_clicked(self):
         if self.brush_button.isChecked():
             self.brush_button.click()
@@ -480,7 +480,7 @@ class duck_window(QtWidgets.QMainWindow):
         self.copyBuffer = copy.copy(self.mapviewer.tileSelection)
         logger.debug("Copy")
 
-    # Вызов функции вырезания
+    #  Cut
     def cut_button_clicked(self):
         if self.brush_button.isChecked():
             self.brush_button.click()
@@ -488,7 +488,7 @@ class duck_window(QtWidgets.QMainWindow):
         self.copyBuffer = copy.copy(self.mapviewer.tileSelection)
         logger.debug("Cut")
 
-    # Вызов функции вставки
+    #  Paste
     def insert_button_clicked(self):
         if len(self.copyBuffer) == 0:
             return
@@ -501,18 +501,18 @@ class duck_window(QtWidgets.QMainWindow):
                                       MapTile(self.ui.delete_fill.currentData()))
         self.mapviewer.scene().update()
 
-    # Вызов функции удаления
+    #  Delete
     def delete_button_clicked(self):
         self.editor.save(self.map)
         self.editor.deleteSelection(self.mapviewer.tileSelection, MapTile(self.ui.delete_fill.currentData()))
         self.mapviewer.scene().update()
 
-    # Вызов функции отката
+    #  Undo
     def undo_button_clicked(self):
         self.editor.undo()
         self.mapviewer.scene().update()
 
-    # Включение режима кисти
+    #  Brush mode
     def brush_mode(self):
         if self.brush_button.isChecked():
             self.drawState = 'brush'
