@@ -447,7 +447,6 @@ class duck_window(QtWidgets.QMainWindow):
                 text += " {}: {} {}\n".format(_translate("MainWindow", "White"), elem["white"], _translate("MainWindow", "sm"))
             info_browser.setText(text)
 
-    # 2й клик также перехватывается одинарным
     #  Double click initiates as single click action
     def item_list_double_clicked(self):
         item_ui_list = self.ui.block_list
