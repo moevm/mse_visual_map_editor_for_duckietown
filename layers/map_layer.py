@@ -28,7 +28,6 @@ class MapLayer:
         :param elem: elem for adding
         :return: -
         """
-        print(elem)
         self.data.append(elem)
 
     def get_processed_layer_data(self):

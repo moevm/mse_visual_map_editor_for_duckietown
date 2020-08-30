@@ -172,12 +172,7 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
                 painter.setTransform(global_transform, False)
 
     def draw_objects(self, layer_data, painter):
-        print(layer_data)
         for layer_object in layer_data:
-            print(layer_object.kind)
-            print(layer_object.position)
-            print(layer_object.kind in self.objects)
-            print(self.objects[layer_object.kind])
             painter.drawImage(
                 QtCore.QRectF(self.map.gridSize * self.sc * layer_object.position['x'],
                               self.map.gridSize * self.sc * layer_object.position['y'],
