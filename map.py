@@ -203,6 +203,7 @@ class DuckietownMap:
             logger.warning("Don't use this method for tile layer.")
             return False
         layer = self.get_layer_by_type(layer_type)
+        print(layer)
         if layer is not None:  # layer can exist, but be empty. get_layer_by_name/get_layer_by_type return None, if layer doesn't exist
             layer.add_elem(elem)
             return True
@@ -213,11 +214,14 @@ class DuckietownMap:
     def add_objects_to_map(self, objects, info_about_objects):
         for map_object in objects:
             object_type = info_about_objects[map_object['kind']]['type']
+            print(object_type)
             layer_type = layer_relations.get_layer_type_by_object_type(object_type)
             map_object = MapLayer.create_layer_object(object_type, map_object)
+            print(map_object)
             if not self.get_layer_by_type(layer_type):
                 self.add_layer_from_data(layer_type, [map_object])
             else:
+                print('else')
                 self.add_elem_to_layer_by_type(layer_type, map_object)
     
     def clear_objects_layers(self):

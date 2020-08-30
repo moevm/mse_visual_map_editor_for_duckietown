@@ -65,6 +65,7 @@
             },
             "id": "info",
             "elements": [
+                "watchtower",
                 "sign_oneway_right",
                 "sign_oneway_left",
                 "sign_4_way_intersect",
@@ -626,6 +627,20 @@
                 }
             },
             "icon": "img/signs/sign_oneway_left.png"
+        },
+        "watchtower": {
+            "type": "sign",
+            "lang": {
+                "ru": {
+                    "name": "вышка",
+                    "info": "test watchtower"
+                },
+                "en": {
+                    "name": "watchtower",
+                    "info": "test1 watchtower"
+                }
+            },
+            "icon": "img/objects/watchtower.png"
         },
         "empty": {
             "lang": {

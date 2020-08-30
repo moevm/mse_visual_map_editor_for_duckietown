@@ -45,6 +45,10 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
         self.tileSprites['floor'] = QtGui.QImage()
         self.tileSprites['floor'].load('./img/tiles/floor.png')
 
+        # watchtower
+        self.objects['watchtower'] = QtGui.QImage()
+        self.objects['watchtower'].load('./img/objects/watchtower.png')
+
         sign_names = ['sign_stop', 'sign_yield', 'sign_no_right_turn', 'sign_no_left_turn', 'sign_do_not_enter',
                       'sign_oneway_right', 'sign_oneway_left', 'sign_4_way_intersect', 'sign_right_T_intersect',
                       'sign_left_T_intersect', 'sign_T_intersection', 'sign_pedestrian', 'sign_t_light_ahead',
@@ -168,7 +172,12 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
                 painter.setTransform(global_transform, False)
 
     def draw_objects(self, layer_data, painter):
+        print(layer_data)
         for layer_object in layer_data:
+            print(layer_object.kind)
+            print(layer_object.position)
+            print(layer_object.kind in self.objects)
+            print(self.objects[layer_object.kind])
             painter.drawImage(
                 QtCore.QRectF(self.map.gridSize * self.sc * layer_object.position['x'],
                               self.map.gridSize * self.sc * layer_object.position['y'],
