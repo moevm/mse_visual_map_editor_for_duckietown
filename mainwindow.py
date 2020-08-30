@@ -462,8 +462,8 @@ class duck_window(QtWidgets.QMainWindow):
             else:
                 self.map.add_item(MapObject(item_name)) # TODO: need to understand what's the type and create desired class, not general
                 self.mapviewer.scene().update()
-                self.update_layer_tree()
                 logger.debug("Add {} to map".format(item_name))
+            self.update_layer_tree()
 
     #  Reset to default values
     def set_default_fill(self):
@@ -500,17 +500,20 @@ class duck_window(QtWidgets.QMainWindow):
             self.editor.moveSelection(self.copyBuffer, self.mapviewer.tileSelection[0], self.mapviewer.tileSelection[1],
                                       MapTile(self.ui.delete_fill.currentData()))
         self.mapviewer.scene().update()
+        self.update_layer_tree()
 
     #  Delete
     def delete_button_clicked(self):
         self.editor.save(self.map)
         self.editor.deleteSelection(self.mapviewer.tileSelection, MapTile(self.ui.delete_fill.currentData()))
         self.mapviewer.scene().update()
+        self.update_layer_tree()
 
     #  Undo
     def undo_button_clicked(self):
         self.editor.undo()
         self.mapviewer.scene().update()
+        self.update_layer_tree()
 
     #  Brush mode
     def brush_mode(self):
@@ -557,6 +560,8 @@ class duck_window(QtWidgets.QMainWindow):
         self.editor.save(self.map)
         self.editor.trimBorders(True,True,True,True,MapTile(self.ui.delete_fill.currentData()))
         self.mapviewer.scene().update()
+        self.update_layer_tree()
+
 
     def selectionUpdate(self):
         selection = self.mapviewer.tileSelection
@@ -575,6 +580,7 @@ class duck_window(QtWidgets.QMainWindow):
             for i in range(max(selection[0], 0), min(selection[2], len(tile_layer[0]))):
                 for j in range(max(selection[1], 0), min(selection[3], len(tile_layer))):
                     tile_layer[j][i] = copy.copy(filler)
+        self.update_layer_tree()
         self.mapviewer.scene().update()
 
     # функция создания доп. информационного окна
