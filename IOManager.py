@@ -11,7 +11,8 @@ def init_map(parent: QtWidgets.QWidget):
         map_info = data_from_file(input_map)
         parent.map.set_tile_layer(tiles_to_objects((map_info['tiles'])))
         param = map_info['objects'] if 'objects' in map_info else None
-        parent.map.set_item_layer(map_objects_to_objects(param))
+        parent.map.clear_objects_layers()
+        parent.map.add_objects_to_map(map_objects_to_objects(param), parent.info_json['info'])
         parent.map.gridSize = 58.5
 
 
@@ -22,7 +23,8 @@ def open_map(parent: QtWidgets.QWidget):
         map_info = data_from_file(input_map)
         parent.map.set_tile_layer(tiles_to_objects((map_info['tiles'])))
         param = map_info['objects'] if 'objects' in map_info else None
-        parent.map.set_item_layer(map_objects_to_objects(param))
+        parent.map.clear_objects_layers()
+        parent.map.add_objects_to_map(map_objects_to_objects(param), parent.info_json['info'])
         parent.map.gridSize = 100 * map_info['tile_size']
 
 

@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
-import codecs
-import json
-import re
-
 import numpy as np
 
 from classes.mapTile import MapTile
-from classes.mapObjects import MapBaseObject as MapObject
 from PyQt5 import QtGui, QtCore
 from mapviewer import MapViewer
 import logging
@@ -308,13 +303,12 @@ def map_objects_to_objects(map_objects):
     map_objects_array = []
     if not map_objects:
         return map_objects_array
-    for object in map_objects:
-        if 'optional' not in object:
-            object['optional'] = False
-        if 'static' not in object:
-            object['static'] = True
-        map_objects_array.append(MapObject(kind=object['kind'], position=object['pos'], rotation=object['rotate'],
-                                           height=object['height'], optional=object['optional'], static=object['static']))
+    for map_object in map_objects:
+        if 'optional' not in map_object:
+            map_object['optional'] = False
+        if 'static' not in map_object:
+            map_object['static'] = True
+        map_objects_array.append(map_object)
     return map_objects_array
 
 

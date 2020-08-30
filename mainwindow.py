@@ -16,6 +16,7 @@ from layers.layer_type import LayerType
 import logging
 import utils
 from classes.mapObjects import MapBaseObject as MapObject
+from layers.relations import get_layer_type_by_object_type
 
 logger = logging.getLogger('root')
 TILE_TYPES = ('block', 'road')
@@ -460,7 +461,11 @@ class duck_window(QtWidgets.QMainWindow):
                 self.ui.default_fill.setCurrentText(self.get_translation(self.info_json['info'][item_name])['name'])
                 logger.debug("Set {} for brush".format(item_name))
             else:
-                self.map.add_item(MapObject(item_name)) # TODO: need to understand what's the type and create desired class, not general
+                self.map.add_objects_to_map([dict(kind=item_name,pos=(.0, .0), rotate=0, height=1,
+                                                  optional=False, static=True)], self.info_json['info'])
+                # TODO: need to understand what's the type and create desired class, not general
+                # also https://github.com/moevm/mse_visual_map_editor_for_duckietown/issues/122
+                # (for args, that can be edited and be different between classes)
                 self.mapviewer.scene().update()
                 logger.debug("Add {} to map".format(item_name))
             self.update_layer_tree()

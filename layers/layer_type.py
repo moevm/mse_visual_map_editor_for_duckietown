@@ -11,6 +11,3 @@ class LayerType(Enum):
 
     def __str__(self):
         return self.value
-
-
-LAYER_TYPE_WITH_OBJECTS = (LayerType.TRAFFIC_SIGNS, LayerType.GROUND_APRILTAG, LayerType.WATCHTOWERS, LayerType.ITEMS)
