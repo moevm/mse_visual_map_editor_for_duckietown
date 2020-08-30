@@ -65,7 +65,6 @@
             },
             "id": "info",
             "elements": [
-                "watchtower",
                 "sign_oneway_right",
                 "sign_oneway_left",
                 "sign_4_way_intersect",
@@ -112,6 +111,20 @@
                 "truck",
                 "bus",
                 "building"
+            ]
+        },
+        {
+            "lang": {
+                "ru": {
+                    "name": "Вышки"
+                },
+                "en": {
+                    "name": "watchtowers"
+                }
+            },
+            "id": "watchower",
+            "elements": [
+                "watchtower"
             ]
         }
     ],
@@ -629,7 +642,7 @@
             "icon": "img/signs/sign_oneway_left.png"
         },
         "watchtower": {
-            "type": "sign",
+            "type": "watchtower",
             "lang": {
                 "ru": {
                     "name": "вышка",

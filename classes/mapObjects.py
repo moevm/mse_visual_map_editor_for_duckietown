@@ -38,7 +38,7 @@ class WatchTowerObject(MapBaseObject):
 
     def __init__(self, init_info):
         MapBaseObject.__init__(self, init_info)
-        self.hostname = init_info["hostname"]
+        self.hostname = init_info["hostname"] if "hostname" in init_info else "watchtower02" # TODO: How to init hostname?
 
 
 class GroundAprilTagObject(MapBaseObject):
