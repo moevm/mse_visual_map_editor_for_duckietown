@@ -2,6 +2,8 @@
 from PyQt5.QtWidgets import QGraphicsView
 from PyQt5 import QtCore, QtGui, QtWidgets
 from map import DuckietownMap
+from utils import get_list_dir_with_path
+
 
 class MapViewer(QGraphicsView, QtWidgets.QWidget):
     map = None
@@ -44,6 +46,12 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
         self.tileSprites['grass'].load('./img/tiles/grass.png')
         self.tileSprites['floor'] = QtGui.QImage()
         self.tileSprites['floor'].load('./img/tiles/floor.png')
+
+        # apriltags
+        for filename, file_path in get_list_dir_with_path('./img/apriltags'):  # TODO: dir paths from config
+            object_name = filename.split('.')[0]
+            self.objects[object_name] = QtGui.QImage()
+            self.objects[object_name].load(file_path)
 
         # watchtower
         self.objects['watchtower'] = QtGui.QImage()
