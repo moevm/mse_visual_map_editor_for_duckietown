@@ -126,6 +126,21 @@
             "elements": [
                 "watchtower"
             ]
+        },
+        {
+            "lang": {
+                "ru": {
+                    "name": "Apriltags"
+                },
+                "en": {
+                    "name": "Apriltags"
+                }
+            },
+            "id": "apriltag",
+            "elements": [
+                "apriltag_300",
+                "apriltag_301"
+            ]
         }
     ],
     "info": {
@@ -654,6 +669,34 @@
                 }
             },
             "icon": "img/objects/watchtower.png"
+        },
+        "apriltag_300": {
+            "type": "apriltag",
+            "lang": {
+                "ru": {
+                    "name": "Apriltag300",
+                    "info": "Apriltag300_ru"
+                },
+                "en": {
+                    "name": "Apriltag300",
+                    "info": "Apriltag300_en"
+                }
+            },
+            "icon": "img/apriltags/apriltag_300.png"
+        },
+        "apriltag_301": {
+            "type": "apriltag",
+            "lang": {
+                "ru": {
+                    "name": "Apriltag301",
+                    "info": "Apriltag301_ru"
+                },
+                "en": {
+                    "name": "Apriltag301",
+                    "info": "Apriltag301_en"
+                }
+            },
+            "icon": "img/apriltags/apriltag_301.png"
         },
         "empty": {
             "lang": {
