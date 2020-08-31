@@ -35,7 +35,7 @@ class duck_window(QtWidgets.QMainWindow):
     drawState = ''
     copyBuffer = [[]]
 
-    def __init__(self, locale='en', elem_info="doc/info.json"):
+    def __init__(self, args, elem_info="doc/info.json"):
         super().__init__()
         # active items in editor
         self.active_items = []
@@ -53,6 +53,10 @@ class duck_window(QtWidgets.QMainWindow):
         # Set locale
         self.locale = locale
         
+
+        # Set debug mode
+        self.debug_mode = args.d
+
         # Load element's info
         self.info_json = json.load(codecs.open(elem_info, "r", "utf-8"))
 
@@ -284,12 +288,17 @@ class duck_window(QtWidgets.QMainWindow):
 
     #  Exit
     def exit_triggered(self):
-        ret = self.quit_MessageBox()
-        if ret == QMessageBox.Cancel:
-            return
-        if ret == QMessageBox.Save:
-            save_map(self)
+        self.save_before_exit()
         QtCore.QCoreApplication.instance().quit()
+
+    # Save map before exit
+    def save_before_exit(self):
+        if not self.debug_mode:
+            ret = self.quit_MessageBox()
+            if ret == QMessageBox.Cancel:
+                return
+            if ret == QMessageBox.Save:
+                save_map(self)
 
     #  Hide Block menu
     def change_blocks_toggled(self):
@@ -404,12 +413,7 @@ class duck_window(QtWidgets.QMainWindow):
 
     #  Program exit event
     def quit_program_event(self, event):
-        ret = self.quit_MessageBox()
-        if ret == QMessageBox.Cancel:
-            event.ignore()
-            return
-        if ret == QMessageBox.Save:
-            save_map(self)
+        self.save_before_exit()
 
         #  Close additional dialog boxes
         self.author_window.exit()
