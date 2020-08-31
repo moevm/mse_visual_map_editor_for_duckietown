@@ -278,7 +278,8 @@ class duck_window(QtWidgets.QMainWindow):
 
     #  Help: About
     def about_author_triggered(self):
-        text = "Authors:\n alskaa;\n dihindee;\n ovc-serega;\n HardonCollider.\n\n Contact us on github!"
+        text = "Authors:\n alskaa;\n dihindee;\n ovc-serega;\n HadronCollider;\n light5551;\n snush.\n\n Contact us " \
+               "on github! "
         self.show_info(self.author_window, "About", text)
 
     #  Exit
