@@ -49,7 +49,6 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
 
         # apriltags
         for filename, file_path in get_list_dir_with_path('./img/apriltags'):  # TODO: dir paths from config
-            print(filename, file_path)
             object_name = filename.split('.')[0]
             self.objects[object_name] = QtGui.QImage()
             self.objects[object_name].load(file_path)
