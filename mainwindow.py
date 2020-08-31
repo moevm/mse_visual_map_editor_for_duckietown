@@ -40,7 +40,6 @@ class duck_window(QtWidgets.QMainWindow):
         # active items in editor
         self.active_items = []
 
-
         #  additional windows for displaying information
         self.author_window = info_window()
         self.param_window = info_window()
@@ -51,8 +50,7 @@ class duck_window(QtWidgets.QMainWindow):
         self.closeEvent = functools.partial(self.quit_program_event)
 
         # Set locale
-        self.locale = locale
-        
+        self.locale = args.locale
 
         # Set debug mode
         self.debug_mode = args.d
