@@ -112,6 +112,20 @@
                 "bus",
                 "building"
             ]
+        },
+        {
+            "lang": {
+                "ru": {
+                    "name": "Вышки"
+                },
+                "en": {
+                    "name": "watchtowers"
+                }
+            },
+            "id": "watchower",
+            "elements": [
+                "watchtower"
+            ]
         }
     ],
     "info": {
@@ -626,6 +640,20 @@
                 }
             },
             "icon": "img/signs/sign_oneway_left.png"
+        },
+        "watchtower": {
+            "type": "watchtower",
+            "lang": {
+                "ru": {
+                    "name": "вышка",
+                    "info": "test watchtower"
+                },
+                "en": {
+                    "name": "watchtower",
+                    "info": "test1 watchtower"
+                }
+            },
+            "icon": "img/objects/watchtower.png"
         },
         "empty": {
             "lang": {
