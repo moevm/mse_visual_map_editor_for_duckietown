@@ -33,11 +33,10 @@ def main(app_args):
 if __name__ == '__main__':
     available_locales = get_available_translations(LANG_DIR)
     parser = ArgumentParser()
-    parser.add_argument('-d', action="store_true", help="Debug mode")
-    parser.add_argument('-l', choices=available_locales, default='en', help="App locale")
+    parser.add_argument('-d', '--debug', action="store_true", help="Debug mode")
+    parser.add_argument('-l', '--locale', choices=available_locales, default='en', help="App locale")
 
     args = parser.parse_args()
-    args.locale = args.l
-    args.locale_path = available_locales[args.l]
+    args.locale_path = available_locales[args.locale]
 
     main(args)

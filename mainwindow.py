@@ -53,7 +53,7 @@ class duck_window(QtWidgets.QMainWindow):
         self.locale = args.locale
 
         # Set debug mode
-        self.debug_mode = args.d
+        self.debug_mode = args.debug
 
         # Load element's info
         self.info_json = json.load(codecs.open(elem_info, "r", "utf-8"))
