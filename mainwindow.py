@@ -8,7 +8,7 @@ from classes.mapTile import MapTile
 from mapEditor import MapEditor
 from main_design import *
 from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtWidgets import QMessageBox, QDesktopWidget
+from PyQt5.QtWidgets import QMessageBox, QDesktopWidget, QFormLayout, QVBoxLayout, QLineEdit, QGroupBox, QLabel
 from IOManager import *
 import functools, json , copy
 from infowindow import info_window
@@ -574,8 +574,42 @@ class duck_window(QtWidgets.QMainWindow):
                     item.position['x'] -= EPS
                 elif key == QtCore.Qt.Key_D:
                     item.position['x'] += EPS
+                elif key == QtCore.Qt.Key_E:
+                    if len(self.active_items) == 1:
+                        self.create_form(self.active_items[0])
+                    else:
+                        logger.debug("I can't edit more than one object!")
             self.mapviewer.scene().update()
  
+    def create_form(self, active_object):
+        def accept():
+            active_object.position['x'] = float(x_edit.text()) 
+            active_object.position['y'] = float(y_edit.text())
+            dialog.close()
+            self.mapviewer.scene().update()
+        def reject():
+            dialog.close()
+        dialog = QtWidgets.QDialog(self)
+        dialog.setWindowTitle('Change attribute of object')
+        # buttonbox
+        buttonBox = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel)
+        buttonBox.accepted.connect(accept)   
+        buttonBox.rejected.connect(reject) 
+        # form
+        formGroupBox = QGroupBox("Change attribute's object: {}".format(active_object.kind))
+        x_edit = QLineEdit(str(active_object.position['x']))
+        y_edit = QLineEdit(str(active_object.position['y']))
+        layout = QFormLayout()
+        layout.addRow(QLabel("X"), x_edit)
+        layout.addRow(QLabel("Y"), y_edit)
+        formGroupBox.setLayout(layout)
+        # layout
+        mainLayout = QVBoxLayout() 
+        mainLayout.addWidget(formGroupBox)
+        mainLayout.addWidget(buttonBox)
+        dialog.setLayout(mainLayout)
+        dialog.exec_()
+    
     def rotateSelectedTiles(self):
         self.editor.save(self.map)
         selection = self.mapviewer.tileSelection
