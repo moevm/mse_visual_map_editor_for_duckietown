@@ -34,7 +34,6 @@ class duck_window(QtWidgets.QMainWindow):
     editor = None
     drawState = ''
     copyBuffer = [[]]
-
     def __init__(self, locale='en', elem_info="doc/info.json"):
         super().__init__()
         # active items in editor
@@ -376,13 +375,19 @@ class duck_window(QtWidgets.QMainWindow):
             if not layer:
                 logger.debug("Not found layer: {}".format(item.text()))
                 return
+            
             layer.visible = not layer.visible
+            logger.debug('Layer: {}; visible: {}'.format(item.text(), layer.visible))
             self.map.set_layer(layer)
             self.mapviewer.scene().update()
             
         layer_tree_view = self.ui.layer_tree
         item_model = layer_tree_view.model()
         item_model.clear()
+        try:
+            item_model.itemChanged.disconnect()
+        except TypeError:
+            pass # only 1st time in update_layer_tree
         item_model.itemChanged.connect(signal_check_state)
         item_model.setHorizontalHeaderLabels(['Name'])
         root_item = layer_tree_view.model().invisibleRootItem()
