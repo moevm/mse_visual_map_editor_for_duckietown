@@ -34,7 +34,7 @@ class duck_window(QtWidgets.QMainWindow):
     editor = None
     drawState = ''
     copyBuffer = [[]]
-
+    
     def __init__(self, args, elem_info="doc/info.json"):
         super().__init__()
         # active items in editor
@@ -375,13 +375,35 @@ class duck_window(QtWidgets.QMainWindow):
         Show layer's elements as children in hierarchy (except tile layer)
         :return: -
         """
+        def signal_check_state(item):
+            """
+            update visible state of layer.
+            :return: -
+            """
+            layer = self.map.get_layer_by_name(item.text())
+            if not layer:
+                logger.debug("Not found layer: {}".format(item.text()))
+                return
+            
+            layer.visible = not layer.visible
+            logger.debug('Layer: {}; visible: {}'.format(item.text(), layer.visible))
+            self.map.set_layer(layer)
+            self.mapviewer.scene().update()
+            
         layer_tree_view = self.ui.layer_tree
         item_model = layer_tree_view.model()
         item_model.clear()
+        try:
+            item_model.itemChanged.disconnect()
+        except TypeError:
+            pass # only 1st time in update_layer_tree
+        item_model.itemChanged.connect(signal_check_state)
         item_model.setHorizontalHeaderLabels(['Name'])
         root_item = layer_tree_view.model().invisibleRootItem()
         for layer in self.map.layers:
             layer_item = QtGui.QStandardItem(layer.name)
+            layer_item.setCheckable(True)
+            layer_item.setCheckState(QtCore.Qt.Checked if layer.visible else QtCore.Qt.Unchecked)
             root_item.appendRow(layer_item)
             if layer.type == LayerType.TILES:
                 tile_elements = []
