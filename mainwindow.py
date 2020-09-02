@@ -35,11 +35,10 @@ class duck_window(QtWidgets.QMainWindow):
     drawState = ''
     copyBuffer = [[]]
 
-    def __init__(self, locale='en', elem_info="doc/info.json"):
+    def __init__(self, args, elem_info="doc/info.json"):
         super().__init__()
         # active items in editor
         self.active_items = []
-
 
         #  additional windows for displaying information
         self.author_window = info_window()
@@ -51,8 +50,11 @@ class duck_window(QtWidgets.QMainWindow):
         self.closeEvent = functools.partial(self.quit_program_event)
 
         # Set locale
-        self.locale = locale
-        
+        self.locale = args.locale
+
+        # Set debug mode
+        self.debug_mode = args.debug
+
         # Load element's info
         self.info_json = json.load(codecs.open(elem_info, "r", "utf-8"))
 
@@ -278,17 +280,23 @@ class duck_window(QtWidgets.QMainWindow):
 
     #  Help: About
     def about_author_triggered(self):
-        text = "Authors:\n alskaa;\n dihindee;\n ovc-serega;\n HardonCollider.\n\n Contact us on github!"
+        text = "Authors:\n alskaa;\n dihindee;\n ovc-serega;\n HadronCollider;\n light5551;\n snush.\n\n Contact us " \
+               "on github! "
         self.show_info(self.author_window, "About", text)
 
     #  Exit
     def exit_triggered(self):
-        ret = self.quit_MessageBox()
-        if ret == QMessageBox.Cancel:
-            return
-        if ret == QMessageBox.Save:
-            save_map(self)
+        self.save_before_exit()
         QtCore.QCoreApplication.instance().quit()
+
+    # Save map before exit
+    def save_before_exit(self):
+        if not self.debug_mode:
+            ret = self.quit_MessageBox()
+            if ret == QMessageBox.Cancel:
+                return
+            if ret == QMessageBox.Save:
+                save_map(self)
 
     #  Hide Block menu
     def change_blocks_toggled(self):
@@ -403,12 +411,7 @@ class duck_window(QtWidgets.QMainWindow):
 
     #  Program exit event
     def quit_program_event(self, event):
-        ret = self.quit_MessageBox()
-        if ret == QMessageBox.Cancel:
-            event.ignore()
-            return
-        if ret == QMessageBox.Save:
-            save_map(self)
+        self.save_before_exit()
 
         #  Close additional dialog boxes
         self.author_window.exit()
