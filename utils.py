@@ -19,3 +19,6 @@ def get_list_dir(dir_path):
 
 
 def get_list_dir_with_path(dir_path): return [(filename, join(dir_path, filename)) for filename in get_list_dir(dir_path)]
+
+
+def get_available_translations(lang_dir_path): return {filename[len('lang_'):-len('.qm')]: path  for filename, path in get_list_dir_with_path(lang_dir_path)}
