@@ -347,7 +347,7 @@
             "type": "block",
             "length": 61,
             "yellow": 15,
-            "icon": "img/tiles/three_way_left.png",
+            "icon": "img/tiles/3way_left.png",
             "white": 81
         },
         "sign_right_T_intersect": {
@@ -393,7 +393,7 @@
             "type": "block",
             "length": 61,
             "yellow": 15,
-            "icon": "img/tiles/three_way_left.png",
+            "icon": "img/tiles/3way_right.png",
             "white": 81
         },
         "sign_T_intersection": {
@@ -467,7 +467,7 @@
             "type": "block",
             "length": 61,
             "yellow": 20,
-            "icon": "img/tiles/four_way_center.png",
+            "icon": "img/tiles/4way.png",
             "white": 40
         },
         "sign_no_left_turn": {
