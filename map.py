@@ -2,7 +2,6 @@
 from layers.map_layer import MapLayer
 from layers.layer_type import LayerType
 import layers.relations as layer_relations
-from itertools import filterfalse
 import logging
 
 logger = logging.getLogger('root')
