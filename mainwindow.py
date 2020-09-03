@@ -8,7 +8,7 @@ from classes.mapTile import MapTile
 from mapEditor import MapEditor
 from main_design import *
 from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtWidgets import QMessageBox, QDesktopWidget, QFormLayout, QVBoxLayout, QLineEdit, QGroupBox, QLabel
+from PyQt5.QtWidgets import QMessageBox, QDesktopWidget, QFormLayout, QVBoxLayout, QLineEdit, QCheckBox, QGroupBox, QLabel
 from IOManager import *
 import functools, json , copy
 from infowindow import info_window
@@ -583,12 +583,24 @@ class duck_window(QtWidgets.QMainWindow):
  
     def create_form(self, active_object):
         def accept():
-            active_object.position['x'] = float(x_edit.text()) 
-            active_object.position['y'] = float(y_edit.text())
+            for attr_name, attr in editable_attrs.items():
+                if attr_name == 'position':
+                    active_object.position['x'] = float(edit_obj['x'].text())
+                    active_object.position['y'] = float(edit_obj['y'].text())
+                    continue
+                if type(attr) == bool:
+                    active_object.__setattr__(attr_name, edit_obj[attr_name].isChecked())
+                    continue
+                if type(attr) == float:
+                    active_object.__setattr__(attr_name, float(edit_obj[attr_name].text()))
+                else:
+                    active_object.__setattr__(attr_name, edit_obj[attr_name].text())
             dialog.close()
             self.mapviewer.scene().update()
+
         def reject():
             dialog.close()
+
         dialog = QtWidgets.QDialog(self)
         dialog.setWindowTitle('Change attribute of object')
         # buttonbox
@@ -597,11 +609,30 @@ class duck_window(QtWidgets.QMainWindow):
         buttonBox.rejected.connect(reject) 
         # form
         formGroupBox = QGroupBox("Change attribute's object: {}".format(active_object.kind))
-        x_edit = QLineEdit(str(active_object.position['x']))
-        y_edit = QLineEdit(str(active_object.position['y']))
+
         layout = QFormLayout()
-        layout.addRow(QLabel("X"), x_edit)
-        layout.addRow(QLabel("Y"), y_edit)
+        editable_attrs = active_object.get_editable_attrs()
+        edit_obj = {}
+        for attr_name in sorted(editable_attrs):
+            attr = editable_attrs[attr_name]
+            if attr_name == 'position':
+                x_edit = QLineEdit(str(attr['x']))
+                y_edit = QLineEdit(str(attr['y']))
+                edit_obj['x'] = x_edit
+                edit_obj['y'] = y_edit
+                layout.addRow(QLabel("{}.X".format(attr_name)), x_edit)
+                layout.addRow(QLabel("{}.Y".format(attr_name)), y_edit)
+                continue
+            if type(attr) == bool:
+                check = QCheckBox()
+                check.setChecked(attr)
+                edit_obj[attr_name] = check
+                layout.addRow(QLabel(attr_name), check)
+                continue
+            edit = QLineEdit(str(attr))
+            edit_obj[attr_name] = edit
+            layout.addRow(QLabel(attr_name), edit)
+
         formGroupBox.setLayout(layout)
         # layout
         mainLayout = QVBoxLayout() 
