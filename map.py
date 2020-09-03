@@ -2,7 +2,7 @@
 from layers.map_layer import MapLayer
 from layers.layer_type import LayerType
 import layers.relations as layer_relations
-
+from itertools import filterfalse
 import logging
 
 logger = logging.getLogger('root')
@@ -221,7 +221,5 @@ class DuckietownMap:
                 self.add_elem_to_layer_by_type(layer_type, map_object)
     
     def clear_objects_layers(self):
-        for layer in self.layers:
-            if layer.type in layer_relations.LAYER_TYPE_WITH_OBJECTS:
-                layer.data = []
-            
+        self.layers = list(filterfalse(lambda x: x.type != LayerType.TILES, self.layers))
+   
