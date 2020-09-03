@@ -221,5 +221,5 @@ class DuckietownMap:
                 self.add_elem_to_layer_by_type(layer_type, map_object)
     
     def clear_objects_layers(self):
-        self.layers = list(filterfalse(lambda x: x.type != LayerType.TILES, self.layers))
+        self.layers = [self.get_layer_by_type(LayerType.TILES)]
    
