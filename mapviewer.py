@@ -155,8 +155,9 @@ class MapViewer(QGraphicsView, QtWidgets.QWidget):
 
     def draw_objects(self, layer_data, painter):
         for layer_object in layer_data:
+            width, height = self.map.gridSize * self.sc / 2, self.map.gridSize * self.sc / 2
             painter.drawImage(
-                QtCore.QRectF(self.map.gridSize * self.sc * layer_object.position['x'],
-                              self.map.gridSize * self.sc * layer_object.position['y'],
-                              self.map.gridSize * self.sc / 2, self.map.gridSize * self.sc / 2),
+                QtCore.QRectF(self.map.gridSize * self.sc * layer_object.position['x'] - width/2,
+                              self.map.gridSize * self.sc * layer_object.position['y'] - height/2,
+                              width, height),
                 self.objects[layer_object.kind]) if layer_object.kind in self.objects else None
